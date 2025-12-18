@@ -9,9 +9,15 @@ pawsmatch/
 ├── .env                  # Environment variables (not tracked in git)
 ├── .python-version       # Python version specification
 ├── README.md             # This file
+├── app/                  # Main application source code
+│   ├── data/
+│   │   ├── mockData.ts   # Mock data exports for development
+│   │   └── pets.json     # Dog profiles data
+│   └── types/
+│       └── pet.ts        # Pet type definitions
 └── asset-generation/     # Scripts for generating app assets
     ├── main.py           # Script to generate dog profiles using Gemini AI
-    ├── pets.json         # Generated dog profiles data
+    ├── pets.json         # Generated dog profiles data (source)
     ├── pyproject.toml    # Project configuration and dependencies
     └── uv.lock           # Dependency lock file
 ```
@@ -82,5 +88,42 @@ Each dog profile in `asset-generation/pets.json` follows this format:
   "id": 1,
   "name": "Max",
   "bio": "Soy un perrito lleno de energía y muy sociable con otros animales.\nBusco un hogar con patio grande donde pueda correr y jugar.\nSeré tu compañero de aventuras más leal desde el primer día."
+}
+```
+
+## Coding Standards
+
+### Types
+
+Use `export interface` with PascalCase naming:
+
+```typescript
+export interface Pet {
+  id: number;
+  name: string;
+  bio: string;
+}
+```
+
+### Services
+
+Use `export const` with async arrow functions and explicit Promise return types:
+
+```typescript
+export const fetchPets = async (): Promise<Pet[]> => {
+  const res = await fetch('/api/pets');
+  if (!res.ok) throw new Error('Failed');
+  return res.json();
+}
+```
+
+### Custom Hooks
+
+Use `export const` with arrow functions and destructured return objects:
+
+```typescript
+export const usePets = () => {
+  const [pets, setPets] = useState<Pet[]>([]);
+  return { pets, isEmpty: pets.length === 0 };
 }
 ```
