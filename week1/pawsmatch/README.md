@@ -7,18 +7,18 @@ A dog adoption web app that presents dog profiles with a "Like" (to adopt) or "P
 ```
 pawsmatch/
 ├── .env                  # Environment variables (not tracked in git)
-├── .env.example          # Example environment file
 ├── .python-version       # Python version specification
-├── generate_pets.py      # Script to generate dog profiles using Gemini AI
-├── pets.json             # Generated dog profiles data
-├── pyproject.toml        # Project configuration and dependencies
 ├── README.md             # This file
-└── uv.lock               # Dependency lock file
+└── asset-generation/     # Scripts for generating app assets
+    ├── main.py           # Script to generate dog profiles using Gemini AI
+    ├── pets.json         # Generated dog profiles data
+    ├── pyproject.toml    # Project configuration and dependencies
+    └── uv.lock           # Dependency lock file
 ```
 
 ## Data Generation Process
 
-The `generate_pets.py` script uses Google's Gemini AI to generate dog profiles:
+The `asset-generation/main.py` script uses Google's Gemini AI to generate dog profiles:
 
 1. **API Configuration**: The script loads the `GOOGLE_API_KEY` from a `.env` file using `python-dotenv`
 2. **AI Generation**: Uses the `gemini-3-flash-preview` model via the `google-genai` library
@@ -31,12 +31,12 @@ The `generate_pets.py` script uses Google's Gemini AI to generate dog profiles:
 ### Running the Data Generation Script
 
 ```bash
-# Create .env file with your API key
-cp .env.example .env
-# Edit .env and add your GOOGLE_API_KEY
+# Create .env file with your API key in the root pawsmatch folder
+# Add your GOOGLE_API_KEY to .env
 
-# Run the script
-uv run python generate_pets.py
+# Navigate to asset-generation and run the script
+cd asset-generation
+uv run python main.py
 ```
 
 ## Stack
@@ -60,25 +60,22 @@ uv run python generate_pets.py
    cd pawsmatch
    ```
 
-3. Install dependencies:
+3. Create environment file in the pawsmatch root:
    ```bash
-   uv sync
-   ```
-
-4. Create environment file:
-   ```bash
-   cp .env.example .env
    # Add your GOOGLE_API_KEY to .env
+   echo "GOOGLE_API_KEY=your_key_here" > .env
    ```
 
-5. Generate pet data:
+4. Install dependencies and generate pet data:
    ```bash
-   uv run python generate_pets.py
+   cd asset-generation
+   uv sync
+   uv run python main.py
    ```
 
 ## Sample Data
 
-Each dog profile in `pets.json` follows this format:
+Each dog profile in `asset-generation/pets.json` follows this format:
 
 ```json
 {
