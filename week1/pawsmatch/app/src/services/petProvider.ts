@@ -50,8 +50,7 @@ export const fetchRandomPetProfile = async (): Promise<PetProfile> => {
     // 4. Merge and return
     return {
         ...randomPet,
-        //imageUrl,
-        photo: imageUrl,
+        imageUrl,
     };
 };
 
