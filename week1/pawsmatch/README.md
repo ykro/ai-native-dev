@@ -4,9 +4,9 @@
 
 ![PawsMatch Demo](assets/demo.webp)
 
-PawsMatch es una aplicación de adopción de mascotas diseñada para conectar familias amorosas con mascotas que necesitan un hogar. La aplicación presenta un diseño cálido y amigable con un stack tecnológico moderno y una experiencia de usuario premium, mobile-first.
+PawsMatch is a pet adoption application designed to connect loving families with pets in need of a home. The application features a warm and friendly design with a modern technical stack and a premium, mobile-first user experience.
 
-> **Idioma**: Toda la interfaz está en español (es-GT).
+> **Language**: The UI is fully localized in Spanish (es-GT).
 
 ## Tech Stack
 
@@ -22,8 +22,8 @@ PawsMatch es una aplicación de adopción de mascotas diseñada para conectar fa
 The project follows a standard React directory structure in the `app/` folder:
 
 - `app/src/components/`: Reusable UI components.
-  - [`PetCard.tsx`](app/src/components/PetCard.tsx): Tarjeta de mascota con estilo glassmorphism, interacciones de arrastre y indicadores animados de Me Gusta/Pasar.
-  - [`AdoptionConfirmation.tsx`](app/src/components/AdoptionConfirmation.tsx): Pantalla de confirmación de adopción con información del refugio, datos de contacto y opciones para agendar visita.
+  - [`PetCard.tsx`](app/src/components/PetCard.tsx): Swipeable pet card with glassmorphism styling, drag-based interactions, and animated Like/Pass indicators.
+  - [`AdoptionConfirmation.tsx`](app/src/components/AdoptionConfirmation.tsx): Adoption confirmation screen with shelter info, contact details, and visit scheduling options.
 - `app/src/hooks/`: Custom React hooks for shared logic.
   - [`usePetStack.ts`](app/src/hooks/usePetStack.ts): Manages the pre-fetch buffer for zero-latency pet card transitions.
 - `app/src/services/`: API and data fetching services.
@@ -56,21 +56,21 @@ The project follows a standard React directory structure in the `app/` folder:
 - **Icon Animations**: Playful logo animation adds personality.
 
 ### Adoption Flow
-La aplicación implementa un flujo completo de adopción con múltiples pantallas:
+The app implements a complete adoption flow with multiple screens:
 
 ```
-┌─────────────┐     Adoptar     ┌─────────────────────┐     Agendar     ┌─────────────────┐
-│   Browse    │ ───────────────▶│ Adoption Info       │ ───────────────▶│    Success      │
-│  (Swipe)    │                 │ (Contacto/Horarios) │                 │ (Confirmación)  │
+┌─────────────┐      Adopt      ┌─────────────────────┐    Schedule     ┌─────────────────┐
+│   Browse    │ ───────────────▶│   Adoption Info     │ ───────────────▶│    Success      │
+│  (Swipe)    │                 │ (Contact/Schedule)  │                 │ (Confirmation)  │
 └─────────────┘                 └─────────────────────┘                 └─────────────────┘
       ▲                                   │                                      │
-      │          Seguir Viendo            │         Seguir Explorando            │
+      │           Keep Browsing           │          Continue Browsing           │
       └───────────────────────────────────┴──────────────────────────────────────┘
 ```
 
-1. **Browse**: Pantalla principal con tarjetas deslizables (swipe derecha = Me Gusta, izquierda = Pasar)
-2. **Adoption Info**: Detalles del refugio, teléfono, correo y horarios de visita
-3. **Success**: Confirmación de visita agendada con opción de continuar explorando
+1. **Browse**: Main screen with swipeable cards (swipe right = Like, left = Pass)
+2. **Adoption Info**: Shelter details, phone, email, and visiting hours
+3. **Success**: Visit confirmation with option to continue exploring
 
 ## Design System
 
