@@ -50,9 +50,9 @@ export function PetCard({ pet, onLike, onPass, isLoading = false }: PetCardProps
                 x: exitDirection === 'right' ? 500 : exitDirection === 'left' ? -500 : 0
             }}
             exit={{
-                x: exitDirection === 'right' ? 500 : -500,
+                x: exitDirection === 'right' ? 500 : exitDirection === 'left' ? -500 : 0,
                 opacity: 0,
-                scale: 0.8,
+                scale: exitDirection ? 0.8 : 0.95,
                 transition: { duration: 0.3 }
             }}
             transition={{

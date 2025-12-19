@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { fetchRandomPetProfile, type PetProfile } from '../services/petProvider';
 
 const BUFFER_SIZE = 3;
@@ -6,9 +6,14 @@ const BUFFER_SIZE = 3;
 export function usePetStack() {
     const [stack, setStack] = useState<PetProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const initialized = useRef(false);
 
     // Initialize the stack
     useEffect(() => {
+        // Prevent double initialization in StrictMode
+        if (initialized.current) return;
+        initialized.current = true;
+
         const initStack = async () => {
             setIsLoading(true);
             try {
