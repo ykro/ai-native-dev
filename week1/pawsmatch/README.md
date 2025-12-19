@@ -191,3 +191,4 @@ To ensure a zero-latency "app-like" experience, we implemented a **Pre-fetch Sta
 - **Buffer**: We maintain a buffer of 3 upcoming pets in memory (`usePetStack.ts`).
 - **Background Fetching**: As the user swipes (clicks Pass/Adopt), the next card is instantly available from memory. A background request is triggered to replenish the stack.
 - **Image Pre-loading**: The application renders a generic hidden `<img>` element for the *next* pet in the stack. This forces the browser to download and cache the image before it's ever shown to the user, eliminating pop-in and layout shifts.
+- **StrictMode Compatible**: Uses `useRef` guards to prevent double initialization in React 18+ StrictMode during development.
