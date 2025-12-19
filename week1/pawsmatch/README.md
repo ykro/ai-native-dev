@@ -2,6 +2,8 @@
 
 ![PawsMatch Home](assets/screenshot.png)
 
+![PawsMatch Demo](assets/demo.webp)
+
 PawsMatch is a pet adoption application designed to connect loving families with pets in need of a home. The application features a warm and friendly design with a modern technical stack.
 
 ## Tech Stack
@@ -16,8 +18,10 @@ PawsMatch is a pet adoption application designed to connect loving families with
 The project follows a standard React directory structure in the `app/` folder:
 
 - `app/src/components/`: Reusable UI components.
+  - [`PetCard.tsx`](file:///Users/ykro/code/ai-native-dev/week1/pawsmatch/app/src/components/PetCard.tsx): Displays individual pet profiles with image, bio, and interaction buttons.
 - `app/src/hooks/`: Custom React hooks for shared logic.
 - `app/src/services/`: API and data fetching services.
+  - [`petProvider.ts`](file:///Users/ykro/code/ai-native-dev/week1/pawsmatch/app/src/services/petProvider.ts): Handles integration with The Dog API and maps remote images to local pet bios.
 - `app/src/types/`: TypeScript interfaces and type definitions.
 - `app/src/data/`: Static assets and mock data.
 
@@ -61,3 +65,74 @@ To generate fresh mock data for the application, use the provided Python script 
     python main.py
     ```
 4.  The script will generate a new `pets.json` file. Copy this file to `app/src/data/pets.json` to update the app data.
+
+## Pet Provider Implementation Analysis
+
+### 1. Local Data Source of Truth
+Based on `src/types/pet.ts` and `src/data/pets.json`, our local data structure is:
+
+**Interface (`src/types/pet.ts`):**
+```typescript
+interface Pet {
+  id: number;
+  name: string;
+  bio: string;
+}
+```
+
+**Data (`src/data/pets.json`):**
+Array of `Pet` objects, e.g.:
+```json
+{
+  "id": 1,
+  "name": "Max",
+  "bio": "Soy un golden retriever..."
+}
+```
+
+### 2. API Integration Strategy
+**Target API:** `https://dog.ceo/api/breeds/image/random`
+
+**Response Structure:**
+The API returns a JSON object where the image URL is located in the `message` property.
+
+- **JSON Path:** `$.message`
+- **Example Response:**
+  ```json
+  {
+      "message": "https://images.dog.ceo/breeds/terrier-welsh/lucy.jpg",
+      "status": "success"
+  }
+  ```
+
+### 3. Mapping Logic
+To create a complete pet profile, we will merge the static text data with the dynamic image data:
+
+1.  **Fetch Random Image:** Call `fetch('https://dog.ceo/api/breeds/image/random')`.
+2.  **Extract URL:** Parse JSON and access `data.message`.
+3.  **Select Text Data:** Randomly select one `Pet` object from the local `pets.json` array.
+4.  **Merge:** Create a unified object containing the local `id`, `name`, `bio` and the remote `imageUrl`.
+
+### 4. TypeScript Interface
+We will extend the existing `Pet` interface to include the image URL. This ensures backward compatibility while accommodating the new data.
+
+```typescript
+import { Pet } from '../types/pet';
+
+export interface PetProfile extends Pet {
+  imageUrl: string;
+}
+
+// API Response type for internal use
+interface DogApiResponse {
+  message: string;
+  status: string;
+}
+```
+
+### 5. Error Handling Strategy
+We will implement a resilient strategy to handle API failures:
+
+- **Primary Error Handling:** Wrap the API call in a `try-catch` block.
+- **Failover:** If the API request fails (network error, non-200 status, or malformed JSON), the system will fallback to a default "placeholder" image URL (e.g., a local asset or a reliable public placeholder like `https://images.dog.ceo/breeds/retriever-golden/n02099601_3004.jpg`).
+- **User Feedback:** Fails should be logged to the console for debugging, but the user UI should effectively show the pet with a default image rather than an error state, preserving the "warm and friendly" experience.
