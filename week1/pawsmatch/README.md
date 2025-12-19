@@ -4,7 +4,9 @@
 
 ![PawsMatch Demo](assets/demo.webp)
 
-PawsMatch is a pet adoption application designed to connect loving families with pets in need of a home. The application features a warm and friendly design with a modern technical stack.
+PawsMatch es una aplicación de adopción de mascotas diseñada para conectar familias amorosas con mascotas que necesitan un hogar. La aplicación presenta un diseño cálido y amigable con un stack tecnológico moderno y una experiencia de usuario premium, mobile-first.
+
+> **Idioma**: Toda la interfaz está en español (es-GT).
 
 ## Tech Stack
 
@@ -12,25 +14,71 @@ PawsMatch is a pet adoption application designed to connect loving families with
 - **React (v19+)**: A JavaScript library for building user interfaces with a focus on component-based architecture.
 - **Tailwind CSS (v4+)**: Utility-first CSS framework with a CSS-first configuration and high-performance engine.
 - **TypeScript**: Static typing for enhanced developer experience and code reliability.
+- **Framer Motion**: Production-ready motion library for React, powering smooth swipe animations and micro-interactions.
+- **Lucide React**: Beautiful, consistent icon library with tree-shaking support.
 
 ## Architecture
 
 The project follows a standard React directory structure in the `app/` folder:
 
 - `app/src/components/`: Reusable UI components.
-  - [`PetCard.tsx`](file:///Users/ykro/code/ai-native-dev/week1/pawsmatch/app/src/components/PetCard.tsx): Displays individual pet profiles with image, bio, and interaction buttons.
+  - [`PetCard.tsx`](app/src/components/PetCard.tsx): Tarjeta de mascota con estilo glassmorphism, interacciones de arrastre y indicadores animados de Me Gusta/Pasar.
+  - [`AdoptionConfirmation.tsx`](app/src/components/AdoptionConfirmation.tsx): Pantalla de confirmación de adopción con información del refugio, datos de contacto y opciones para agendar visita.
 - `app/src/hooks/`: Custom React hooks for shared logic.
+  - [`usePetStack.ts`](app/src/hooks/usePetStack.ts): Manages the pre-fetch buffer for zero-latency pet card transitions.
 - `app/src/services/`: API and data fetching services.
-  - [`petProvider.ts`](file:///Users/ykro/code/ai-native-dev/week1/pawsmatch/app/src/services/petProvider.ts): Handles integration with The Dog API and maps remote images to local pet bios.
+  - [`petProvider.ts`](app/src/services/petProvider.ts): Handles integration with The Dog API and maps remote images to local pet bios.
 - `app/src/types/`: TypeScript interfaces and type definitions.
 - `app/src/data/`: Static assets and mock data.
+
+## UI/UX Features
+
+### Mobile-First Design
+- **Responsive Layout**: Optimized for mobile devices with safe-area inset support for notched displays.
+- **Touch-Optimized**: Large touch targets, swipe gestures, and haptic-feeling animations.
+- **Dynamic Viewport**: Uses `dvh` units to handle mobile browser chrome properly.
+
+### Glassmorphism Design System
+- **Frosted Glass Effects**: Semi-transparent backgrounds with `backdrop-blur` for depth.
+- **Layered Transparency**: Multiple opacity levels create visual hierarchy.
+- **Soft Shadows**: Subtle shadow casting enhances the floating card aesthetic.
+
+### Swipe Interactions (Powered by Framer Motion)
+- **Drag-to-Swipe**: Cards can be dragged left (Pass) or right (Like) with natural physics.
+- **Visual Feedback**: Dynamic "LIKE" and "PASS" badges appear based on swipe direction.
+- **Spring Animations**: Cards snap back or fly off-screen with satisfying spring physics.
+- **Rotation Effect**: Cards tilt naturally as they're dragged, mimicking physical cards.
+
+### Micro-Interactions
+- **Button Hover States**: Subtle scale and shadow transitions on interactive elements.
+- **Loading States**: Smooth spinner animations during data fetching.
+- **Entry Animations**: Cards and UI elements fade and slide into view.
+- **Icon Animations**: Playful logo animation adds personality.
+
+### Adoption Flow
+La aplicación implementa un flujo completo de adopción con múltiples pantallas:
+
+```
+┌─────────────┐     Adoptar     ┌─────────────────────┐     Agendar     ┌─────────────────┐
+│   Browse    │ ───────────────▶│ Adoption Info       │ ───────────────▶│    Success      │
+│  (Swipe)    │                 │ (Contacto/Horarios) │                 │ (Confirmación)  │
+└─────────────┘                 └─────────────────────┘                 └─────────────────┘
+      ▲                                   │                                      │
+      │          Seguir Viendo            │         Seguir Explorando            │
+      └───────────────────────────────────┴──────────────────────────────────────┘
+```
+
+1. **Browse**: Pantalla principal con tarjetas deslizables (swipe derecha = Me Gusta, izquierda = Pasar)
+2. **Adoption Info**: Detalles del refugio, teléfono, correo y horarios de visita
+3. **Success**: Confirmación de visita agendada con opción de continuar explorando
 
 ## Design System
 
 PawsMatch uses a "warm and friendly" color palette configured in `app/src/index.css` using Tailwind CSS 4's `@theme` block. This includes:
 - **Warm Palette**: Earthy oranges and browns for a cozy feel.
 - **Friendly Palette**: Soft greens for growth and positivity.
-- **Typography**: Focused on readability and a premium aesthetic using modern sans-serif fonts.
+- **Primary Palette**: Sunny yellows for energy and optimism.
+- **Typography**: Clean, modern sans-serif fonts (Inter/SF Pro) for readability and a premium aesthetic.
 
 ## Getting Started
 
@@ -136,3 +184,10 @@ We will implement a resilient strategy to handle API failures:
 - **Primary Error Handling:** Wrap the API call in a `try-catch` block.
 - **Failover:** If the API request fails (network error, non-200 status, or malformed JSON), the system will fallback to a default "placeholder" image URL (e.g., a local asset or a reliable public placeholder like `https://images.dog.ceo/breeds/retriever-golden/n02099601_3004.jpg`).
 - **User Feedback:** Fails should be logged to the console for debugging, but the user UI should effectively show the pet with a default image rather than an error state, preserving the "warm and friendly" experience.
+
+### 6. Performance Strategy: Pre-fetch Stack
+To ensure a zero-latency "app-like" experience, we implemented a **Pre-fetch Stack** architecture:
+
+- **Buffer**: We maintain a buffer of 3 upcoming pets in memory (`usePetStack.ts`).
+- **Background Fetching**: As the user swipes (clicks Pass/Adopt), the next card is instantly available from memory. A background request is triggered to replenish the stack.
+- **Image Pre-loading**: The application renders a generic hidden `<img>` element for the *next* pet in the stack. This forces the browser to download and cache the image before it's ever shown to the user, eliminating pop-in and layout shifts.
