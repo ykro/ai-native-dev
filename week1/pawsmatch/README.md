@@ -1,129 +1,63 @@
 # PawsMatch
 
-A dog adoption web app that presents dog profiles with a "Like" (to adopt) or "Pass" interface, similar to popular matching apps.
+![PawsMatch Home](assets/screenshot.png)
 
-## Project Structure
+PawsMatch is a pet adoption application designed to connect loving families with pets in need of a home. The application features a warm and friendly design with a modern technical stack.
 
-```
-pawsmatch/
-├── .env                  # Environment variables (not tracked in git)
-├── .python-version       # Python version specification
-├── README.md             # This file
-├── app/                  # Main application source code
-│   ├── data/
-│   │   ├── mockData.ts   # Mock data exports for development
-│   │   └── pets.json     # Dog profiles data
-│   └── types/
-│       └── pet.ts        # Pet type definitions
-└── asset-generation/     # Scripts for generating app assets
-    ├── main.py           # Script to generate dog profiles using Gemini AI
-    ├── pets.json         # Generated dog profiles data (source)
-    ├── pyproject.toml    # Project configuration and dependencies
-    └── uv.lock           # Dependency lock file
-```
+## Tech Stack
 
-## Data Generation Process
+- **Vite (v7.2+)**: Next-generation frontend tooling for fast development and optimized builds.
+- **React (v19+)**: A JavaScript library for building user interfaces with a focus on component-based architecture.
+- **Tailwind CSS (v4+)**: Utility-first CSS framework with a CSS-first configuration and high-performance engine.
+- **TypeScript**: Static typing for enhanced developer experience and code reliability.
 
-The `asset-generation/main.py` script uses Google's Gemini AI to generate dog profiles:
+## Architecture
 
-1. **API Configuration**: The script loads the `GOOGLE_API_KEY` from a `.env` file using `python-dotenv`
-2. **AI Generation**: Uses the `gemini-3-flash-preview` model via the `google-genai` library
-3. **Profile Structure**: Each dog profile contains:
-   - `id`: Unique integer identifier (1-50)
-   - `name`: Creative dog name
-   - `bio`: 3-line adoption-focused biography in Spanish describing personality, ideal home, and adoption appeal
-4. **Output**: Saves 50 dog profiles to `pets.json` with UTF-8 encoding
+The project follows a standard React directory structure in the `app/` folder:
 
-### Running the Data Generation Script
+- `app/src/components/`: Reusable UI components.
+- `app/src/hooks/`: Custom React hooks for shared logic.
+- `app/src/services/`: API and data fetching services.
+- `app/src/types/`: TypeScript interfaces and type definitions.
+- `app/src/data/`: Static assets and mock data.
 
-```bash
-# Create .env file with your API key in the root pawsmatch folder
-# Add your GOOGLE_API_KEY to .env
+## Design System
 
-# Navigate to asset-generation and run the script
-cd asset-generation
-uv run python main.py
-```
+PawsMatch uses a "warm and friendly" color palette configured in `app/src/index.css` using Tailwind CSS 4's `@theme` block. This includes:
+- **Warm Palette**: Earthy oranges and browns for a cozy feel.
+- **Friendly Palette**: Soft greens for growth and positivity.
+- **Typography**: Focused on readability and a premium aesthetic using modern sans-serif fonts.
 
-## Stack
+## Getting Started
 
-- **Package Manager**: [uv](https://docs.astral.sh/uv/) - Fast Python package installer and resolver
-- **Language**: Python 3.13+
-- **AI Model**: Google Gemini 3 Flash Preview (`gemini-3-flash-preview`)
-- **Dependencies**:
-  - `google-genai` - Google Generative AI Python client
-  - `python-dotenv` - Environment variable management
+1.  Navigate to the `app/` directory.
+2.  Install dependencies: `npm install`
+3.  Run development server: `npm run dev`
+4.  Build for production: `npm run build`
 
-## Setup
+## Asset Generation
 
-1. Install uv if not already installed:
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
+To generate fresh mock data for the application, use the provided Python script in the `asset-generation/` directory. This script uses Google's Gemini API to create unique dog profiles.
 
-2. Clone the repository and navigate to the project:
-   ```bash
-   cd pawsmatch
-   ```
+### Prerequisites
+- Python installed
+- `uv` package manager (recommended) or `pip`
+- A Google Cloud project with Vertex AI enabled or a Gemini API key
 
-3. Create environment file in the pawsmatch root:
-   ```bash
-   # Add your GOOGLE_API_KEY to .env
-   echo "GOOGLE_API_KEY=your_key_here" > .env
-   ```
+### Running the Generator
 
-4. Install dependencies and generate pet data:
-   ```bash
-   cd asset-generation
-   uv sync
-   uv run python main.py
-   ```
+1.  Navigate to the `asset-generation/` directory.
+2.  Set your API key:
+    ```bash
+    export GEMINI_API_KEY="your_api_key_here"
+    ```
+3.  Run the script:
+    ```bash
+    # Using uv (recommended)
+    uv run main.py
 
-## Sample Data
-
-Each dog profile in `asset-generation/pets.json` follows this format:
-
-```json
-{
-  "id": 1,
-  "name": "Max",
-  "bio": "Soy un perrito lleno de energía y muy sociable con otros animales.\nBusco un hogar con patio grande donde pueda correr y jugar.\nSeré tu compañero de aventuras más leal desde el primer día."
-}
-```
-
-## Coding Standards
-
-### Types
-
-Use `export interface` with PascalCase naming:
-
-```typescript
-export interface Pet {
-  id: number;
-  name: string;
-  bio: string;
-}
-```
-
-### Services
-
-Use `export const` with async arrow functions and explicit Promise return types:
-
-```typescript
-export const fetchPets = async (): Promise<Pet[]> => {
-  const res = await fetch('/api/pets');
-  if (!res.ok) throw new Error('Failed');
-  return res.json();
-}
-```
-
-### Custom Hooks
-
-Use `export const` with arrow functions and destructured return objects:
-
-```typescript
-export const usePets = () => {
-  const [pets, setPets] = useState<Pet[]>([]);
-  return { pets, isEmpty: pets.length === 0 };
-}
-```
+    # Or using standard python
+    # pip install -r requirements.txt (if available)
+    python main.py
+    ```
+4.  The script will generate a new `pets.json` file. Copy this file to `app/src/data/pets.json` to update the app data.
