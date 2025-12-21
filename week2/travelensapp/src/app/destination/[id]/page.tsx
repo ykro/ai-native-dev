@@ -1,11 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, MapPin, Share2 } from "lucide-react";
+import { ArrowLeft, Share2, MapPin } from "lucide-react"; // Restored MapPin for context usage if needed, usually just Compass
 import { Button } from "@/components/ui/button";
 import { UnsplashService } from "@/services/unsplash";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { TravelPlanPanel } from "@/components/features/TravelPlanPanel";
 
 // Using real data fetching
 export default async function DestinationPage({
@@ -21,9 +22,14 @@ export default async function DestinationPage({
       return <div className="p-10 text-center">Destino no encontrado.</div>;
    }
 
-   // Fetch related based on first tag
-   const queryTag = destination.tags[0] || 'travel';
-   const related = await UnsplashService.fetchRelated(queryTag);
+   // Fetch related using smart context
+   const baseContext = destination.location || destination.title;
+   const related = await UnsplashService.fetchRelated(
+      baseContext,
+      destination.tags,
+      destination.id, // exclude current
+      destination.cityName // fallback city for second query!
+   );
 
    return (
       <div className="h-screen w-full bg-background flex flex-col lg:flex-row overflow-hidden">
@@ -40,24 +46,29 @@ export default async function DestinationPage({
             </Link>
 
             <Image
-               src={destination.urls.full}
+               src={destination.urls.regular}
                alt={destination.title}
                fill
                className="object-cover transition-transform duration-1000 lg:group-hover:scale-105"
                priority
+               sizes="(max-width: 768px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
 
             <div className="absolute bottom-0 left-0 p-8 lg:p-12 w-full text-white">
-               {destination.tags.map(tag => (
-                  <Badge key={tag} variant="secondary" className="mb-4 mr-2 bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-0 uppercase tracking-widest text-[10px]">
-                     {tag}
-                  </Badge>
-               ))}
-               <h1 className="text-4xl lg:text-6xl font-bold mb-4 tracking-tight leading-none line-clamp-2">{destination.title}</h1>
-               <div className="flex items-center gap-2 text-white/80">
-                  <MapPin className="h-4 w-4" />
-                  <span className="text-sm tracking-wide font-light">{destination.slug}</span>
+               {/* Location / Compass Removed as requested for Main Photo */}
+               {/* Just Title and Tags */}
+
+               <h1 className="text-4xl lg:text-6xl font-bold mb-4 tracking-tight leading-none line-clamp-2 shadow-black drop-shadow-lg">
+                  {destination.title}
+               </h1>
+
+               <div className="flex flex-wrap gap-2">
+                  {destination.tags.map(tag => (
+                     <Badge key={tag} variant="secondary" className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-0 uppercase tracking-widest text-[10px]">
+                        {tag}
+                     </Badge>
+                  ))}
                </div>
             </div>
          </div>
@@ -75,7 +86,6 @@ export default async function DestinationPage({
 
             <ScrollArea className="flex-1 p-6">
                <div className="space-y-6 pb-20">
-                  {/* Description */}
                   <div className="space-y-2">
                      <p className="text-lg leading-relaxed text-foreground font-light">
                         {destination.description}
@@ -85,15 +95,12 @@ export default async function DestinationPage({
                      </p>
                   </div>
 
-                  {/* MOCK AI CONTENT: Placeholder until Role 4 */}
-                  <div className="space-y-4 pt-4 opacity-50">
-                     <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground/80">Esperando Integración AI...</h3>
-                     <div className="rounded-xl bg-secondary/30 p-4 mt-6">
-                        <p className="text-xs text-muted-foreground/90">
-                           La IA Gemini generará el plan aquí en el Rol 4.
-                        </p>
-                     </div>
-                  </div>
+                  {/* AI Integrated Panel */}
+                  <TravelPlanPanel
+                     destination={destination.title}
+                     context={destination.cityName || destination.location} // Pass more context if available
+                  />
+
                </div>
             </ScrollArea>
          </div>
@@ -103,22 +110,42 @@ export default async function DestinationPage({
             <div className="p-6 border-b border-sidebar-border">
                <h3 className="text-xs font-bold uppercase tracking-widest text-sidebar-foreground/70">Destinos Similares</h3>
             </div>
-            <ScrollArea className="flex-1 p-4">
-               <div className="grid gap-4">
-                  {related.map(item => (
-                     <Link key={item.id} href={`/destino/${item.id}`} className="block group">
-                        <div className="aspect-[3/4] rounded-lg overflow-hidden relative mb-2">
+            <ScrollArea className="flex-1 p-2">
+               {/* Bento Grid: 2 Columns, variable spans. Pattern repeats every 6 items or so. */}
+               <div className="grid grid-cols-2 gap-2 auto-rows-[80px]">
+                  {related.map((item, index) => {
+                     // Bento Logic: Define classes based on index to create visual rhythm
+                     // 0: Big Hero (2x2)
+                     // 1, 2: Standard (1x1)
+                     // 3: Tall (1x2)
+                     // 4, 5: Standard (1x1)
+                     // 6: Wide (2x1)
+                     // 7: Standard (1x1)
+                     const spans = [
+                        "col-span-2 row-span-2", // 0: Big
+                        "col-span-1 row-span-1", // 1
+                        "col-span-1 row-span-1", // 2
+                        "col-span-1 row-span-2", // 3: Tall side
+                        "col-span-1 row-span-1", // 4
+                        "col-span-1 row-span-1", // 5
+                        "col-span-2 row-span-1", // 6: Wide strip
+                        "col-span-1 row-span-1"  // 7
+                     ];
+                     const spanClass = spans[index] || "col-span-1 row-span-1";
+
+                     return (
+                        <Link key={item.id} href={`/destination/${item.id}`} className={`block group relative overflow-hidden rounded-md ${spanClass}`}>
                            <Image
-                              src={item.urls.small}
+                              src={index === 0 ? item.urls.small : item.urls.thumb} // First one gets better resolution
                               alt={item.title}
                               fill
-                              className="object-cover transition-transform group-hover:scale-110"
+                              className="object-cover transition-transform duration-700 group-hover:scale-110"
+                              sizes="(max-width: 1200px) 25vw, 15vw"
                            />
-                        </div>
-                        <h4 className="text-sm font-medium text-sidebar-foreground truncate group-hover:text-primary transition-colors">{item.title}</h4>
-                        <p className="text-[10px] text-muted-foreground">{item.tags[0]}</p>
-                     </Link>
-                  ))}
+                           <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
+                        </Link>
+                     );
+                  })}
                </div>
             </ScrollArea>
          </div>

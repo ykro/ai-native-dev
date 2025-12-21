@@ -3,7 +3,7 @@ import { MasonryGrid } from "@/components/features/MasonryGrid";
 import { UnsplashService } from "@/services/unsplash";
 
 // Use Revalidation to keep "Popular" fresh but not realtime
-export const revalidate = 3600; // 1 hour
+export const revalidate = 0; // Disable cache as requested
 
 export default async function Home({
   searchParams,

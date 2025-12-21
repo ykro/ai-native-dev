@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface MasonryGridProps {
@@ -15,33 +14,32 @@ export function MasonryGrid({ items }: MasonryGridProps) {
             {items.map((item) => (
                 <Link
                     key={item.id}
-                    href={`/destino/${item.id}`}
+                    href={`/destination/${item.id}`}
                     className="group block relative break-inside-avoid rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
                     <div className="relative">
                         <Image
-                            src={item.urls.regular}
+                            src={item.urls.small} // OPTIMIZATION: Use small as requested
                             alt={item.description || item.title}
                             width={600}
                             height={800}
+                            // Increased duration as user seems to like premium feel
                             className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         {/* Overlay Gradient on hover */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                        <div className="absolute bottom-0 left-0 p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
-                            <h3 className="text-white font-medium text-lg leading-tight mb-1 font-sans">{item.title || "Destino Desconocido"}</h3>
-                            <p className="text-white/80 text-xs line-clamp-1">{item.user.name}</p>
+                        {/* Text: Hover Only (Reverted as requested) */}
+                        <div className="absolute bottom-0 left-0 p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0 bg-gradient-to-t from-black/80 to-transparent">
+                            {/* Uses gridTitle if available (Custom Logic), falls back to normal title */}
+                            <h3 className="text-white font-bold text-lg leading-tight mb-1 font-sans shadow-black drop-shadow-md">
+                                {item.gridTitle || item.location || item.title}
+                            </h3>
+                            {/* Uses gridSubtitle if available */}
+                            <p className="text-white/90 text-xs line-clamp-2 font-medium">
+                                {item.gridSubtitle || item.tags.slice(0, 3).join(' • ')}
+                            </p>
                         </div>
-
-                        {/* Tag Badge */}
-                        {item.tags && item.tags[0] && (
-                            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                                <Badge variant="secondary" className="bg-white/90 text-foreground backdrop-blur-sm text-[10px] uppercase tracking-wider font-bold shadow-sm">
-                                    {item.tags[0]}
-                                </Badge>
-                            </div>
-                        )}
                     </div>
                 </Link>
             ))}
