@@ -1,8 +1,8 @@
 import { createApi } from 'unsplash-js';
-import nodeFetch, { Response as NodeFetchResponse } from 'node-fetch';
+import nodeFetch, { Response as NodeFetchResponse, RequestInit as NodeFetchInit } from 'node-fetch';
 
 // Custom Fetch Wrapper
-const fetchWithLogging = async (url: any, init: any) => {
+const fetchWithLogging = async (url: string, init: NodeFetchInit) => {
     try {
         const response = await nodeFetch(url, init);
         if (!response.ok) {
@@ -23,6 +23,7 @@ const fetchWithLogging = async (url: any, init: any) => {
 
 const unsplash = createApi({
     accessKey: process.env.UNSPLASH_ACCESS_KEY || '',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetch: fetchWithLogging as any,
 });
 
@@ -134,9 +135,10 @@ export const UnsplashService = {
 
             if (result.errors) return null;
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return mapPhotoToDestination(result.response as any, undefined, 'detail');
 
-        } catch (error) {
+        } catch { // Removed error
             return null;
         }
     },
@@ -188,13 +190,14 @@ export const UnsplashService = {
             // Limit to 8 (Bento Grid)
             return rawPhotos.slice(0, 8).map(p => mapPhotoToDestination(p, fallbackCity || locationBase, 'search'));
 
-        } catch (error) {
+        } catch {
             return [];
         }
     }
 };
 
 // Mapper: Updated for ID Cleanup and Duplicates
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapPhotoToDestination(photo: any, contextLocation?: string, mode: 'home' | 'search' | 'detail' = 'detail'): Destination {
 
     // --- DESCRIPTION / SLUG CLEANING ---
@@ -252,6 +255,7 @@ function mapPhotoToDestination(photo: any, contextLocation?: string, mode: 'home
 
     // --- GRID CUSTOMIZATION ---
     let gridTitle = primaryTitle;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let gridSubtitle = (photo.tags || []).slice(0, 3).map((t: any) => t.title).join(' • ');
 
     // Override Subtitle if it contains ID (rare but happens if tags fail?)
@@ -287,6 +291,7 @@ function mapPhotoToDestination(photo: any, contextLocation?: string, mode: 'home
             name: photo.user.name,
             username: photo.user.username,
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tags: (photo.tags || []).slice(0, 3).map((t: any) => t.title),
         location: finalLocation,
         cityName: cityName, // ADDED

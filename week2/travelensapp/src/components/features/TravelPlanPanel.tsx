@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sparkles, Map, Leaf, Coffee, MapPin, Utensils } from "lucide-react";
+import { Sparkles, MapPin, Utensils } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Import the interface (or duplicate it if sharing is hard across file boundaries in this context)
 interface TravelPlan {
@@ -85,7 +83,7 @@ export function TravelPlanPanel({ destination, context }: TravelPlanPanelProps) 
             {/* Intro */}
             <div className="bg-primary/5 p-4 rounded-lg border border-primary/10">
                 <p className="text-sm text-foreground/80 italic leading-relaxed">
-                    "{plan.intro}"
+                    &quot;{plan.intro}&quot;
                 </p>
             </div>
 

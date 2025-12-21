@@ -1,10 +1,10 @@
+
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Share2, MapPin } from "lucide-react"; // Restored MapPin for context usage if needed, usually just Compass
+import { ArrowLeft, Share2 } from "lucide-react"; // Restored MapPin for context usage if needed, usually just Compass
 import { Button } from "@/components/ui/button";
 import { UnsplashService } from "@/services/unsplash";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TravelPlanPanel } from "@/components/features/TravelPlanPanel";
 
@@ -134,7 +134,7 @@ export default async function DestinationPage({
                      const spanClass = spans[index] || "col-span-1 row-span-1";
 
                      return (
-                        <Link key={item.id} href={`/destination/${item.id}`} className={`block group relative overflow-hidden rounded-md ${spanClass}`}>
+                        <Link key={item.id} href={`/ destination / ${item.id} `} className={`block group relative overflow - hidden rounded - md ${spanClass} `}>
                            <Image
                               src={index === 0 ? item.urls.small : item.urls.thumb} // First one gets better resolution
                               alt={item.title}
