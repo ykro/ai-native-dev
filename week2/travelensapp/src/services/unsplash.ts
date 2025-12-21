@@ -67,7 +67,7 @@ export const UnsplashService = {
             const shuffled = TOP_CITIES.sort(() => 0.5 - Math.random());
             const selected = shuffled.slice(0, 3);
 
-            console.log(`[Unsplash] Fetching popular for: ${selected.join(', ')}`);
+            // console.log(`[Unsplash] Fetching popular for: ${selected.join(', ')}`);
 
             const promises = selected.map(city => {
                 const query = `${city} travel`;
@@ -103,7 +103,7 @@ export const UnsplashService = {
     searchDestinations: async (query: string): Promise<Destination[]> => {
         try {
             const finalQuery = query + ' travel';
-            console.log(`[Unsplash] Search Query: "${finalQuery}"`);
+            // console.log(`[Unsplash] Search Query: "${finalQuery}"`);
 
             const result = await unsplash.search.getPhotos({
                 query: finalQuery,
@@ -146,6 +146,7 @@ export const UnsplashService = {
     // 4. Fetch Related
     fetchRelated: async (locationBase: string, tags: string[] = [], excludedId?: string, fallbackCity?: string): Promise<Destination[]> => {
         try {
+            // console.log(`[Unsplash] fetchRelated called with: locationBase="${locationBase}", tags=${tags.length}, fallbackCity="${fallbackCity}"`);
             // USER REQUEST: "en la primera query no veo todos los tags" -> Increase tag slice
             const tagString = tags.slice(0, 3).join(' ');
             const finalQuery = `${locationBase} ${tagString} travel`;
@@ -188,7 +189,8 @@ export const UnsplashService = {
             }
 
             // Limit to 8 (Bento Grid)
-            return rawPhotos.slice(0, 8).map(p => mapPhotoToDestination(p, fallbackCity || locationBase, 'search'));
+            const finalResults = rawPhotos.slice(0, 8).map(p => mapPhotoToDestination(p, fallbackCity || locationBase, 'search'));
+            return finalResults;
 
         } catch {
             return [];
@@ -274,7 +276,31 @@ function mapPhotoToDestination(photo: any, contextLocation?: string, mode: 'home
     const finalLocation = photoLocationName || ((photo.location?.city && photo.location?.country) ? `${photo.location.city}, ${photo.location.country}` : undefined);
 
     // EXTRACT CITY NAME FOR FALLBACKS
-    const cityName = photo.location?.city || photo.location?.country || contextLocation;
+    let cityName = photo.location?.city || photo.location?.country || contextLocation;
+
+    // Fallback: If no location metadata, try to extract from Tags
+    if (!cityName && photo.tags && photo.tags.length > 0) {
+        // Filter out generic tags like 'travel', 'outdoor', etc. if possible, or just take the first few meaningful ones
+        // Assuming tags are objects with title.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const usefulTags = photo.tags.map((t: any) => t.title)
+            .filter((t: string) => !['travel', 'nature', 'city', 'building', 'architecture'].includes(t.toLowerCase()))
+            .slice(0, 1);
+
+        if (usefulTags.length > 0) {
+            cityName = usefulTags[0]; // e.g., "Prague"
+        }
+    }
+
+    // Improve Title if it defaulted to description and we found a city name
+    if (primaryTitle === descText && cityName) {
+        // If the description doesn't already start with the city
+        if (!descText.toLowerCase().includes(cityName.toLowerCase())) {
+            primaryTitle = `${cityName} - ${descText}`; // e.g. "Prague - A woman walking..."
+            // If description is super long, maybe just use City?
+            // Let's keep it descriptive but anchored.
+        }
+    }
 
     return {
         id: photo.id,

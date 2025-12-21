@@ -1,12 +1,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Share2 } from "lucide-react"; // Restored MapPin for context usage if needed, usually just Compass
+import { ArrowLeft } from "lucide-react"; // Restored MapPin for context usage if needed, usually just Compass
 import { Button } from "@/components/ui/button";
 import { UnsplashService } from "@/services/unsplash";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { TravelPlanPanel } from "@/components/features/TravelPlanPanel";
+import { AiTravelSidebar } from "@/components/features/AiTravelSidebar";
 
 // Using real data fetching
 export default async function DestinationPage({
@@ -74,35 +74,8 @@ export default async function DestinationPage({
          </div>
 
          {/* CENTER PANEL: AI Travel Plan (30%) */}
-         <div className="w-full lg:w-[30%] h-full bg-background border-r border-border flex flex-col relative z-10 shadow-2xl lg:shadow-none">
-            <div className="p-6 border-b border-border bg-background/95 backdrop-blur z-10 flex justify-between items-center sticky top-0">
-               <h2 className="font-semibold text-lg flex items-center gap-2 text-primary">
-                  ✨ Plan de Viaje AI
-               </h2>
-               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                  <Share2 className="h-4 w-4" />
-               </Button>
-            </div>
-
-            <ScrollArea className="flex-1 p-6">
-               <div className="space-y-6 pb-20">
-                  <div className="space-y-2">
-                     <p className="text-lg leading-relaxed text-foreground font-light">
-                        {destination.description}
-                     </p>
-                     <p className="text-sm text-muted-foreground italic">
-                        Foto por <span className="text-primary">{destination.user.name}</span> en Unsplash.
-                     </p>
-                  </div>
-
-                  {/* AI Integrated Panel */}
-                  <TravelPlanPanel
-                     destination={destination.title}
-                     context={destination.cityName || destination.location} // Pass more context if available
-                  />
-
-               </div>
-            </ScrollArea>
+         <div className="w-full lg:w-[30%] h-full">
+            <AiTravelSidebar destination={destination} />
          </div>
 
          {/* RIGHT PANEL: Similar Destinations (20%) */}
@@ -134,7 +107,7 @@ export default async function DestinationPage({
                      const spanClass = spans[index] || "col-span-1 row-span-1";
 
                      return (
-                        <Link key={item.id} href={`/ destination / ${item.id} `} className={`block group relative overflow - hidden rounded - md ${spanClass} `}>
+                        <Link key={item.id} href={`/destination/${item.id}`} className={`block group relative overflow-hidden rounded-md ${spanClass}`}>
                            <Image
                               src={index === 0 ? item.urls.small : item.urls.thumb} // First one gets better resolution
                               alt={item.title}

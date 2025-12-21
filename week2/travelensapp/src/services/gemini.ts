@@ -56,7 +56,7 @@ export const GeminiService = {
             const response = await result.response;
             const text = response.text();
 
-            console.log("Gemini JSON Response:", text); // Debug
+            // console.log("Gemini JSON Response:", text); // Debug removed per user request
 
             return JSON.parse(text) as TravelPlan;
 
