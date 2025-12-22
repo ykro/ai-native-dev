@@ -29,6 +29,9 @@ graph TD
 For detailed setup instructions, please refer to [ONBOARDING.md](ONBOARDING.md).
 For architecture decisions and patterns, see [TECHNICAL_DOCS.md](TECHNICAL_DOCS.md).
 
+> [!NOTE]
+> This repository includes default `.env` files (specifically `.env` in backend and `.env.local` in frontend). These are purposely included to simplify the local setup of this example project and contain **only** configuration URLs, not sensitive secrets.
+
 ### Backend (Python 3.14)
 
 Navigate to `/backend`:

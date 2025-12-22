@@ -6,7 +6,8 @@ __pycache__/
 # Virtual Environment
 venv/
 env/
-.env
+# including .env files because this example runs locally
+#.env
 
 # Distribution / Packaging
 dist/
