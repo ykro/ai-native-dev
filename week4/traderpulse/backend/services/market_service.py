@@ -44,9 +44,6 @@ async def get_historical_data(symbol: str):
         response = await client.get(BASE_URL, params=params)
         response.raise_for_status()
         data = response.json()
-        print(f"--- DEBUG ALPHA VANTAGE RESPONSE ({symbol}) ---")
-        print(data)
-        print("-------------------------------------------------")
 
     # Process into a simpler format for the frontend
     # Alpha Vantage returns "Time Series (Daily)"

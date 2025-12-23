@@ -1,9 +1,9 @@
 **Objective:**
-Deploy the **TraderPulse** SaaS to production. The backend (FastAPI + Python 3.14.2) will run on **Google Cloud Run**, pulling sensitive credentials from **Google Secret Manager**. The frontend (Next.js 16) will be hosted on **Vercel**.
+Deploy the **TraderPulse** SaaS to production. The backend (FastAPI + Python 3.12-slim) will run on **Google Cloud Run**, pulling sensitive credentials from **Google Secret Manager**. The frontend (Next.js 16) will be hosted on **Vercel**.
 
 **Technical Specs:**
 
-* **Backend:** Python 3.14.2 (free-threading mode).
+* **Backend:** Python 3.12-slim
 * **Security:** Google Secret Manager (GSM) for `ALPHA_VANTAGE_KEY` and `GEMINI_API_KEY`.
 * **Frontend:** Next.js 16 (Vercel).
 
@@ -15,16 +15,13 @@ Deploy the **TraderPulse** SaaS to production. The backend (FastAPI + Python 3.1
 
 **Step 2: Backend Deployment (Cloud Run)**
 
-1. **Build & Push:** Build the Docker image (Python 3.14-slim) and push it to Google Artifact Registry.
+1. **Build & Push:** Build the Docker image (Python 3.12-slim) and push it to Google Artifact Registry.
 2. **Cloud Run Deploy:**
 * Service name: `traderpulse-api`.
 * Region: Select nearest.
 * Resources: 512MiB RAM / 1 CPU.
 * Secrets: Map GSM secrets to environment variables.
 * Flag: `--allow-unauthenticated`.
-* **Performance:** Ensure HTTP/2 is enabled.
-
-
 
 **Step 3: Frontend Deployment (Vercel)**
 

@@ -1,86 +1,61 @@
-### 1. Inyección de Errores (Error Injection)
+### 1. Error Injection
 
-Este prompt introduce fallos lógicos y de validación que parecen correctos a simple vista pero rompen la integridad del negocio.
+Modify the current codebase of **Rent my Gear** to introduce the following three subtle bugs for educational purposes:
+* 1. **Logic Error:** In `src/lib/date-utils.ts`, modify the price calculation so it misses the final day of the range (an 'off-by-one' error).
+* 2. **Validation Error:** In the **Zod** schema for the rental process, set a constraint that incorrectly rejects rentals longer than 7 days, even though the business rule allows them.
+* 3. **State Error:** In the `RentalFlow` component, make the 'Confirmar' button stay in a permanent 'loading' state if the user selects a specific category, without showing any error message.
+* 4. Introduce a subtle **Hydration Mismatch** error in the `HeroCarousel.tsx` component. Use `Math.random()` or `new Date()` directly inside the component's initial state without `useEffect` or `suppressHydrationWarning`.
 
-**Prompt (English):**
-
-> "Modify the current codebase of **Rent my Gear** to introduce the following three subtle bugs for educational purposes:
-> 1. **Logic Error:** In `src/lib/date-utils.ts`, modify the price calculation so it misses the final day of the range (an 'off-by-one' error).
-> 2. **Validation Error:** In the **Zod** schema for the rental process, set a constraint that incorrectly rejects rentals longer than 7 days, even though the business rule allows them.
-> 3. **State Error:** In the `RentalFlow` component, make the 'Confirmar' button stay in a permanent 'loading' state if the user selects a specific category, without showing any error message.
-> 
-> 
-> Do not fix them. Ensure the code still compiles but behaves incorrectly."
+Do not fix them. Ensure the code still compiles but behaves incorrectly.
 
 ---
 
-### 2. Depuración Asistida (Guided Debugging)
+### 2. Guided Debugging
+Users are reporting that the total price for rentals is lower than expected, that they cannot rent items for more than a week, and that the "Confirmar" button gets stuck in a permanent loading state when trying to rent water sports equipment.
+                                                                                                                                    
+* 1. Run the application and inspect the terminal and browser logs.
+* 2. Analyze src/lib/date-utils.ts and the Zod validation schemas for pricing and date issues.
+* 3. Analyze the RentalFlow component and its children (PriceSummary.tsx) for state management issues related to the confirm button.
+* 4. Identify the logical errors and propose fixes that restore the correct price calculation, the 7+ day rental capability, and proper confirmation flow for all categories.
+                                                                                                                                    
+Fix the code and show me a summary of the fixes. 
+---
 
-Este prompt enseña al estudiante a usar **Claude Code** para diagnosticar problemas basándose en síntomas reportados por el usuario.
+### 3. Fixing the "invisible" error
+The UI 'flickers' or shows different content than the server-rendered HTML. Why does this happens? Investigate components that render dynamic content on the home page.  
 
-**Prompt (English):**
-
-> "Users are reporting that the total price for rentals is lower than expected and that they cannot rent items for more than a week.
-> 1. Run the application and use **Claude Code** to inspect the terminal and browser logs.
-> 2. Analyze `src/lib/date-utils.ts` and the Zod validation schemas.
-> 3. Identify the logical errors and propose a fix that restores the correct price calculation and the 7+ day rental capability."
-> 
-> 
+**Note for students:**
+If the AI suggests it is a CSS issue, insist on checking the React rendering cycle and values used in initial state (useState).
 
 ---
 
-### 3. El Error "Invisible" (The AI-Hard Bug)
+### 4. Testing Suite
 
-Este bug está diseñado para que la IA tenga dificultades al detectarlo mediante análisis estático, ya que es un error de **Hydration Mismatch**.
+Using **Vitest** and **React Testing Library**, generate a testing suite for the rental module:
+* 1. **Unit Tests:** Create tests for `src/lib/date-utils.ts` to validate price calculations with various date ranges (1 day, 1 week, across different months).
+* 2. **Integration Tests:** Simulate the full rental flow: selecting a category, picking a gear item, choosing dates, and clicking 'Confirmar'. Ensure the success toast appears only when data is valid.
+* 3. **Edge Cases:** Test how the system handles the 'Nano Banana' fallback if the Unsplash API returns a 404 error.
 
-**Prompt (English):**
-
-> "Introduce a subtle **Hydration Mismatch** error in the `HeroCarousel.tsx` component. Use `Math.random()` or `new Date()` directly inside the component's initial state without `useEffect` or `suppressHydrationWarning`.
-> **Challenge:** Ask the AI agent to explain why the UI 'flickers' or shows different content than the server-rendered HTML. If the AI suggests it is a CSS issue, insist on checking the React rendering cycle."
-
+Run all the tests, make a document summarizing the results and reference in the `README.md`
 ---
 
-### 4. Generación de Pruebas (Testing Suite)
+### 5. Documentation
 
-Enfoque en pruebas unitarias para la lógica y pruebas de integración para el flujo.
+Generate full technical documentation for **Rent my Gear**:
+* 1. Document everything that's needed for project understanding
+* 2. Create a **Mermaid sequence diagram** showing the 'Image Resolution Flow' (JSON file -> Nano Banana -> GCS Persistence).
+* 3. Create a **Mermaid class diagram** for the `inventoryService` and `imageService` interactions.
+* 4. Write an 'Onboarding Guide' that explains code, architecture, all that's needed for a new developer to join the project, how to debug the GCS connection and how to add a new category to the system without breaking the existing validation schemas."
 
-**Prompt (English):**
-
-> "Using **Vitest** and **React Testing Library**, generate a testing suite for the rental module:
-> 1. **Unit Tests:** Create tests for `src/lib/date-utils.ts` to validate price calculations with various date ranges (1 day, 1 week, across different months).
-> 2. **Integration Tests:** Simulate the full rental flow: selecting a category, picking a gear item, choosing dates, and clicking 'Confirmar'. Ensure the success toast appears only when data is valid.
-> 3. **Edge Cases:** Test how the system handles the 'Nano Banana' fallback if the Unsplash API returns a 404 error."
-> 
-> 
-
+Reference all the documents in the `README.md`
 ---
 
-### 5. Documentación y Arquitectura (Mermaid & Onboarding)
+### 6. Hallucination Demo
 
-Generación de activos técnicos para la mantenibilidad del proyecto.
+We want to integrate the **Nano Banana Pro Local-Offline SDK for Next.js 16** to process images directly on the user's GPU without using API calls. Do not change the project yet, but provide the exact npm command to install this local SDK, configuration and show the code needed for the `offline-gen` mode.
 
-**Prompt (English):**
-
-> "Generate advanced technical documentation for **Rent my Gear**:
-> 1. Create a **Mermaid sequence diagram** showing the 'Image Resolution Flow' (GCS -> Unsplash -> Nano Banana -> GCS Persistence).
-> 2. Create a **Mermaid class diagram** for the `inventoryService` and `imageService` interactions.
-> 3. Write a 'Senior Developer Onboarding Guide' that explains how to debug the GCS connection and how to add a new category to the system without breaking the existing validation schemas."
-> 
-> 
-
----
-
-### 6. Laboratorio de Alucinaciones (Hallucination Demo)
-
-Este ejemplo sirve para mostrar a los estudiantes que la IA puede inventar herramientas o procesos que no existen.
-
-**Prompt (English - Hallucination Trigger):**
-
-> "Integrate the **Nano Banana Pro Local-Offline SDK for Next.js 16** to process images directly on the user's GPU without using API calls. Please provide the exact npm command to install this local SDK and the configuration object for the `offline-gen` mode."
-
-**Consejos para corregirlo (Para el Estudiante):**
-
-* **Verificación Cruzada:** Si la IA sugiere una librería o comando que parece demasiado bueno para ser cierto, búscalo en **npm** o en la documentación oficial de la herramienta.
-* **Context Engineering:** Si la IA alucina, reinicia el contexto y proporciona la documentación real (vía **context7**) para "centrar" al modelo en los límites de la realidad técnica actual.
-* **Escepticismo Técnico:** Los agentes tienden a ser "complacientes". Si pides algo imposible, intentarán inventar una solución. Siempre valida las dependencias críticas.
+**Note for students:**
+* If the AI suggest a command or library that seems "too good to be true", perform some class of cross-verification, do a web search or npm look-up and ask for official documentation.
+* If you're convinced it's an hallucination, reset the session and provide the agent proper documentation(i.e. **context7**) to bound it to current technical scope.
+* Agents are usually "obliging", if you request something "impossible" they will try to find a solution, and might hallucinate something(library, command, code, etc) that seems very real. Always check the dependencies.
 
