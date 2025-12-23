@@ -57,9 +57,7 @@ export function RentalFlow({ item }: RentalFlowProps) {
 
       const data = await response.json();
       setConfirmationId(data.id);
-      if (item.category !== "deportes-acuaticos") {
-        setStep("confirmed");
-      }
+      setStep("confirmed");
     } catch (error) {
       console.error("Rental confirmation failed:", error);
       // TODO: Show error toast

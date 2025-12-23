@@ -38,9 +38,7 @@ export function PriceSummary({
     try {
       await onConfirm();
     } finally {
-      if (item.category !== "deportes-acuaticos") {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }
   };
 

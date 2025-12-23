@@ -33,7 +33,7 @@ export function formatDateRange(startDate: Date, endDate: Date): string {
 export function calculateRentalDays(startDate: Date, endDate: Date): number {
   const days = differenceInDays(startDate, endDate);
   // Add 1 because rental is inclusive of both start and end dates
-  return Math.abs(days);
+  return Math.abs(days) + 1;
 }
 
 /**
