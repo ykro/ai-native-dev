@@ -3,6 +3,7 @@ marp: true
 theme: gaia
 paginate: true
 footer: 'AI Native Dev - Universidad Galileo'
+math: mathjax
 style: |
   section {
     font-family: 'Inter', sans-serif;
@@ -10,6 +11,13 @@ style: |
   }
   code {
     font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8em;
+  }
+  blockquote {
+    background: #f0f0f0;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
   }
 ---
 
@@ -66,15 +74,6 @@ How an LLM processes your input:
 
 ![width:900px](https://mermaid.ink/img/pako:eNplkUtvwjAMx7_Kya0T2gcelxHaaZOGNglpL1y8Jk0VNUkc1w71u880FRTiF_u_xP62j2hNC0SRF-tS81q_iBHe5dI64K7Cg0Y7D8Z5cIahkZ6M8w0W7wtuTPAkQgMd2kZq3N0Y-6DR0L0n7OEc_9CgIf_O9578278yqK_S4P3Bmj_StGvQ-o73aY5W-OAvmNIVjBkoWJ0V7Ag7sKIVG1iRml7BmtT4CtasJipYiw3s7I72O4N36G_N4KAdGj91f9fgER3S-S1ZkqY5y7KMyTJJM1lkCSs4SzmTUcZSTpI0SXmScbBMH0We3D-9Yg?type=png)
 
-<!-- 
-graph LR
-    A[Input Text] --> B(Tokenization)
-    B --> C(Embeddings)
-    C --> D(Transformer Layers)
-    D --> E(Probability Dist.)
-    E --> F[Next Token]
--->
-
 ---
 
 # 2. Transformers: The Engine
@@ -91,14 +90,6 @@ The model assigns a "relevance score" to every word's relationship with every ot
 # Transformer Architecture
 
 ![width:900px](https://mermaid.ink/img/pako:eNp1kMtqwzAQRX9FzKoF2_GqLroIJA8IdNN0EaxRjD0WPFKMjBNC_r1yrJSSQrdzmXunnoky1lSIkoytK83W-lmM8DbX3gM7iwAa7QKY5MCFhUYGMskP2NwuuTfBkwgNDGg7qXF3ZxyCRkP_kXCAc_xHg4b8Kz848q__yqC-S4PPBxs-Stq3aP0dHyY5WuHLv2DKKDBmoGB1UbAnHMCKVmxgRWp6BWtS4ytYsxqpYC02cLAHOu4MPqC_NYCjdmj83P1dgwd0SOe35Cwr8oznOcsLRrKMF6wQsJyzQqSCLHmekCznrMjBCn2WZOXj0ytmZw?type=png)
-
-<!-- 
-graph LR
-    Inputs --> Embeddings
-    Embeddings --> Encoders
-    Encoders --> Decoders
-    Decoders --> Output
--->
 
 ---
 
@@ -155,23 +146,50 @@ If it falls out of the window, the model forgets it. The industry is racing towa
 
 # Other Tools
 
-### 3. Gemini CLI
-- **Role**: Specialized tasks and integration with Google ecosystem.
+### 3. Cursor
+- **Role**: The "AI-Native IDE".
+- **Strengths**: Inline editing (Cmd+K), codebase chat (Cmd+L), context-aware auto-complete.
+- **Usage**: Quick edits, "Vibe Coding", reviewing AI changes.
+
+### 4. Gemini CLI
+- **Role**: Technical Utility.
+- **Strengths**: Direct API interaction, quick prototyping without IDE overhead.
+- **Usage**: Testing generated assets, lightweight scripting.
+
+---
+
+# Choosing the Right Tool
+
+The "AI Native" developer is not defined by a single tool, but by their ability to **orchestrate** them.
+
+*   **Deep Reasoning**: Use **Claude Code** when you need architectural planning or complex refactoring.
+*   **Heavy Lifting**: Use **Antigravity** for file creation, systematic changes, and shell interactions.
+*   **Speed & Polish**: Use **Cursor** for visual "vibe coding", quick fixes, and UI verification.
+
+*The workflow is flexible—adapt it to your immediate needs.*
 
 ---
 
 # The Workflow
 
+Flexible and non-linear. Use the best tool for the current task.
+
 ```
-+----------------+      +----------------+      +----------------+
-|  Idea / Prompt | ---> |   Claude Code  | ---> |   Antigravity  |
-+----------------+      | (Reason & Plan)|      | (Exect & Files)|
-                        +----------------+      +----------------+
-                                                        |
-                                                        v
-                                                +----------------+
-                                                |   Final Code   |
-                                                +----------------+
+       +-----------------+
+       |  Idea / Prompt  |
+       +--------+--------+
+                |
+    +-----------v-----------+
+    |    Reasoning Phase    | <---(Claude Code)
+    +-----------+-----------+
+                |
+    +-----------v-----------+
+    |    Execution Phase    | <---(Antigravity / Cursor)
+    +-----------+-----------+
+                |
+    +-----------v-----------+
+    |    Final Codebase     |
+    +-----------------------+
 ```
 
 ---
@@ -204,109 +222,172 @@ It involves curating the "System Prompt", identifying necessary files, and manag
 
 ---
 
-# 1. Zero-Shot
-Asking without examples. Fast, but unpredictable.
+# Technique 1: Zero-Shot
 
-# *Example: Project Initialization*
-**(From Phase 1)**
-One-Shot + Tool Calling
+**Theory**: Asking the model to perform a task without any prior examples.
 
-> "We are building a web app called PawsMatch... Use uv to initialize a new Python project... Use gemini-3-flash-preview to generate a pets.json file... Create a README.md... Verify the existence of both files..."
-
----
-
-# 2. Few-Shot (K-Shot)
-Providing examples (shots) to guide the model. Ensures adherence to style/structure.
-
-# *Example: Coding Standards*
-**(From Phase 2)**
-
-> "I want to define the coding standards for PawsMatch. Here are 3 examples...
-> **Example 1 (Types)**: `export interface User...`
-> **Example 2 (Service)**: `export const fetchUsers...`
-> Based on these examples... generate pet.ts..."
+*   **Pros**: Fastest to write, lowest token cost.
+*   **Cons**: Unpredictable output format. The model guesses the structure you want.
+*   **Best for**: Simple questions, creative writing, or when you rely on the model's default training.
 
 ---
 
-# 3. Context-Augmented
-Grounding the AI with external documentation before generating code.
+# Example: One Shot + Tool Calling
+**(Phase 1 Prompt)**
 
-# *Example: Project Scaffolding*
-**(From Phase 3)**
+> We are building a web app called PawsMatch... Use uv to initialize a new Python project inside a folder named asset-generation/. Install google-genai and create a script named main.py. This script must use gemini-3-flash-preview to generate a pets.json file containing 50 dog profiles... Create a README.md... Verify the existence of both files using terminal tools and run the script.
 
-> "Using context7, fetch the latest stable documentation for Vite, React, and Tailwind CSS. Initialize a project... using these versions... Follow this project structure: `src/components`, `src/hooks`... Update README.md..."
+*Note the tool calling instruction: "Verify the existence..."*
 
 ---
 
-# 4. Chain of Thought (CoT)
-Encourages "thinking aloud". Logic: `Input -> Reasoning Steps -> Conclusion`.
+# Technique 2: Few-Shot (K-Shot)
 
-# *Example: Architecture Analysis*
-**(From Phase 4)**
+**Theory**: Providing $K$ examples (shots) of "Input -> Output" pairs to guide the model.
 
-> "Search the web for The Dog API... Before coding, perform an analysis to:
+*   **Pros**: Drastically improves adherence to specific formats or styles (e.g., JSON structure, Coding Style).
+*   **Cons**: Consumes more context window.
+*   **Best for**: API payload generation, enforcing coding standards.
+
+---
+
+# Example: K-Shot
+**(Phase 2 Prompt)**
+
+> I want to define the coding standards for PawsMatch. Here are 3 examples of how I structure services and types in my projects:
+>
+> **Example 1 (Types)**: `export interface User { id: string... }`
+> **Example 2 (Service)**: `export const fetchUsers = async ()...`
+> **Example 3 (Hook)**: `export const useAuth = ()...`
+>
+> Based on these examples and the @pets.json, generate pet.ts file...
+
+---
+
+# Technique 3: Context-Augmented
+
+**Theory**: Providing external knowledge or documentation before asking for generation.
+
+*   **Pros**: Reduces hallucinations, ensures use of correct/latest API versions.
+*   **Cons**: Requires retrieving the context first.
+*   **Best for**: Using new libraries (breaking changes) or private documentation.
+
+---
+
+# Example: One-Shot + Context
+**(Phase 3 Prompt)**
+
+> Using context7, fetch the latest stable documentation for Vite, React, and Tailwind CSS. Initialize a project named PawsMatch inside a new folder called "app/" using these versions.
+>
+> Follow this project structure: `src/components`, `src/hooks`...
+>
+> Make sure the entry point displays a clean, centered layout...
+
+---
+
+# Technique 4: Chain of Thought (CoT)
+
+**Theory**: Instructing the model to "think step-by-step" or produce high-level reasoning before outputting the final answer.
+
+*   **Pros**: Increases accuracy on complex logic/math problems.
+*   **Cons**: Slower, more verbose.
+*   **Best for**: Architecture analysis, algorithm design, debugging.
+
+---
+
+# Example: CoT + Context
+**(Phase 4 Prompt)**
+
+> Search the web for the official documentation for The Dog API... Before coding, perform an analysis to:
+>
 > 1. Read the local pets.json...
 > 2. Identify the exact JSON path...
 > 3. Detail how to fetch...
-> Do not write the code yet; provide the analysis first."
+> 4. Explain the TypeScript interface...
+>
+> Do not write the code yet; provide the analysis first and wait for my confirmation.
 
 ---
 
-# 5. Tree of Thoughts (ToT)
-Explores multiple reasoning paths (branches) before selecting the best one.
+# Technique 5: Tree of Thoughts (ToT)
 
-# *Example: Key Decisions*
-**(From Phase 5)**
+**Theory**: Exploring multiple possible solution paths (branches), evaluating them, and selecting the best one.
 
-> "Explore three technical approaches for the card stack behavior:
-> - Simple state
-> - Pre-fetch stack
-> - Virtualized list
-> Compare them regarding network usage and UX fluidity. Wait for my decision before implementing."
+*   **Pros**: Avoids "tunnel vision" on the first probable token.
+*   **Cons**: Very high token cost (requires multiple generations).
+*   **Best for**: Critical architectural decisions, trade-off analysis.
 
 ---
 
-# 6. ReAct (Reasoning + Acting)
-Synergy between logic and tools. Loop: `Thought -> Action -> Observation -> Thought`.
+# Example: ToT
+**(Phase 5 Prompt)**
 
-# *Example: Refactoring*
-**(From Phase 6)**
+> Explore three technical approaches for the card stack behavior:
+>
+> - **Simple state**: Only the current pet is in memory.
+> - **Pre-fetch stack**: Keep a buffer of 3 upcoming pets...
+> - **Virtualized list**: For high-performance rendering...
+>
+> Compare them regarding network usage and UX fluidity. Wait for my decision before implementing.
 
-> "Analyze the entire codebase... focus on src/services... Your task is to refactor the UI...
+---
+
+# Technique 6: ReAct (Reasoning + Acting)
+
+**Theory**: A loop of Reasoning -> Acting (using a tool) -> Observing Result -> Reasoning.
+
+*   **Pros**: Can solve tasks that require multiple steps and information gathering.
+*   **Cons**: Can get stuck in loops if not managed.
+*   **Best for**: Autonomous agents, complex refactoring across multiple files.
+
+---
+
+# Example: ReAct
+**(Phase 6 Prompt)**
+
+> Analyze the entire codebase. Focus on src/services/petProvider.ts... Your task is to refactor the UI into a modern, mobile-first application.
+>
 > 1. Review README...
 > 2. Install lucide-react...
+> 3. Create a PetCard.tsx...
 > 4. Use useRef guards...
-> 6. Ensure the UI feels like a premium native app..."
+> 6. Ensure the UI feels like a premium native app. Act on all necessary files...
 
 ---
 
-# 7. Feedback Loop
-Using error traces as context.
+# Technique 7: Feedback Loop
 
-# *Example: Debugging*
-**(From Phase 7)**
+**Theory**: Using the output (often an error) of a previous run as input for the next correction.
 
-> "The application is currently throwing an error in the console... Run it, capture the full stack trace... and use that information to fix the bug."
+*   **Pros**: mimics how humans debug.
+*   **Best for**: Fixing compile errors, runtime bugs.
 
----
-
-# 8. Explanation Pattern
-Asking the AI to explain its own work for documentation.
-
-# *Example: Documentation*
-**(From Phase 8)**
-
-> "Analyze the implementation in src/services/petProvider.ts. Explain in detail how the connection works... Lifecycle... JSON path... Synchronization... Use a technical but accessible tone..."
+**Example (Phase 7)**:
+> The application is currently throwing an error... Run it, capture the full stack trace... and use that information to fix the bug.
 
 ---
 
-# 9. Verification Pattern
-Automating the proof of work.
+# Technique 8: Explanation
 
-# *Example: Verification*
-**(From Phase 9)**
+**Theory**: Asking the model to explain its own code or logic.
 
-> "Use your tools to launch the development server... Take a high-quality screenshot... Record a short video... Save these files in a 'assets/' folder..."
+*   **Pros**: Great for generating documentation or validating the model's understanding.
+*   **Best for**: Writing docs, comments, or educational content.
+
+**Example (Phase 8)**:
+> Analyze the implementation in src/services/petProvider.ts. Explain in detail how the connection with 'The Dog API' works... Lifecycle... JSON path...
+
+---
+
+# Technique 9: Verification
+
+**Theory**: Using the model to prove that the work was done correctly (Screenshots, Tests).
+
+*   **Pros**: establishing trust.
+*   **Best for**: Final sign-off.
+
+**Example (Phase 9)**:
+> Use your tools to launch the development server... Take a high-quality screenshot... Record a short video... Save these files in a 'assets/' folder...
 
 ---
 
@@ -436,4 +517,3 @@ export const fetchRandomPetProfile = async (): Promise<PetProfile> => {
 - [Anthropic Claude](https://www.anthropic.com/claude)
 - [React Documentation](https://react.dev/)
 - [Vite Documentation](https://vitejs.dev/)
-
