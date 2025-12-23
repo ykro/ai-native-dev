@@ -2,10 +2,10 @@
 
 Welcome to the first week of the **AI Native Dev** course. This week focuses on establishing the core terminology, understanding the "AI Native" toolchain, and mastering basic prompt engineering strategies.
 
-## 📚 Topics Covered / Tópicos
+## Topics Covered
 
-### 1. Terminology (Terminología)
-*   **LLM Internals**: Tokens, Context Window (Memoria de trabajo), Transformer Architecture.
+### 1. Terminology
+*   **LLM Internals**: Tokens, Context Window (Working Memory), Transformer Architecture.
 *   **Models**: Gemini 3 Pro, Claude Opus 4.5, GPT-5.2.
 *   **Key Concepts**: Hallucinations, Stochasticity (Nondeterministic nature).
 
@@ -15,7 +15,7 @@ Welcome to the first week of the **AI Native Dev** course. This week focuses on 
 *   **Cursor**: The "AI-Native IDE" for speed, polish, and vibe coding.
 *   **Gemini CLI**: Utility for quick prototyping and API testing.
 
-### 3. Prompting Strategies (Estrategias de Prompting)
+### 3. Prompting Strategies
 We cover 9 specific phases of interaction with LLMs, moving from basic to advanced:
 1.  **Zero-Shot**
 2.  **Few-Shot (K-Shot)**
@@ -29,7 +29,7 @@ We cover 9 specific phases of interaction with LLMs, moving from basic to advanc
 
 ---
 
-## 📂 Directory Structure / Estructura de Carpetas
+## Directory Structure
 
 ### `pawsmatch/`
 Contains the **Introduction Demo App** ("Tinder for Pets").
@@ -47,7 +47,7 @@ Contains the **Course Materials**.
 
 ---
 
-## 🛠️ Weekly Project
+## Weekly Project
 
 **Objective**: Re-build the PawsMatch demo app using a different technology stack (e.g., Vue, Svelte, or Vanilla JS).
 **Constraints**:
@@ -55,4 +55,4 @@ Contains the **Course Materials**.
 2.  Identical Design (Glassmorphism).
 3.  **No React**.
 
-Good luck! / ¡Buena suerte!
+Good luck!

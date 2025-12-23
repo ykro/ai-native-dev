@@ -52,6 +52,31 @@ PawsMatch is a **pet adoption application** designed to connect loving families 
 
 <!-- _class: lead -->
 
+---
+
+# What does "AI Native" mean?
+
+It represents a **paradigm shift** in how we build software.
+
+*   **Old Way**: You write code -> You Google errors/ -> You write tests.
+*   **AI Native**: You **orchestrate** models to write code, debug, and test *for* you.
+
+*You cease to be just a "coder" and become an "Apply-er" of Intelligence.*
+
+---
+
+# Why Now?
+
+We are in the **Intelligence Era**.
+
+1.  **Speed**: Agents can scaffold entire apps in minutes.
+2.  **Complexity**: Models can reason through architecture better than tired humans.
+3.  **Future-Proofing**: The developer who ignores AI will be replaced by the developer who masters it.
+
+*The goal of this course is to make you that master.*
+
+---
+
 # Theme 1: Terminology
 ## Under the Hood of LLMs
 
