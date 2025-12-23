@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { BrainCircuit, ThumbsUp, ThumbsDown, Minus } from "lucide-react";
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
-const API_URL = "http://localhost:8000/api/v1";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 interface Props {
     symbol: string;

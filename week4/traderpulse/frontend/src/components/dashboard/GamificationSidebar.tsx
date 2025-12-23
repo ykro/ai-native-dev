@@ -8,8 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 
-// Points to localhost:8000 for now, should be env var in production
-const API_URL = "http://localhost:8000/api/v1";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export default function GamificationSidebar() {
     const { data, error, isLoading } = useSWR(`${API_URL}/gamification/status`, fetcher);
