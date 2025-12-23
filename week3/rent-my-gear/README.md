@@ -205,6 +205,34 @@ npm run test:coverage
 
 For detailed test documentation, see [docs/TESTING.md](docs/TESTING.md).
 
+## Documentation
+
+Comprehensive documentation is available in the `docs/` folder:
+
+| Document | Description |
+|----------|-------------|
+| [Architecture](docs/ARCHITECTURE.md) | System architecture, component hierarchy, data flow |
+| [Diagrams](docs/DIAGRAMS.md) | Mermaid diagrams (sequence, class, state machine) |
+| [Onboarding](docs/ONBOARDING.md) | Developer guide, debugging, adding categories |
+| [Testing](docs/TESTING.md) | Test suite documentation and results |
+
+### Quick Links
+
+- **New Developer?** Start with the [Onboarding Guide](docs/ONBOARDING.md)
+- **Understanding the codebase?** See [Architecture](docs/ARCHITECTURE.md)
+- **Visual learner?** Check [Diagrams](docs/DIAGRAMS.md) for Mermaid diagrams
+- **Running tests?** Read [Testing](docs/TESTING.md)
+
+### Key Diagrams
+
+The [Diagrams](docs/DIAGRAMS.md) document includes:
+
+- **Image Resolution Flow**: Sequence diagram showing JSON → Nano Banana → GCS persistence
+- **Service Class Diagram**: inventoryService and imageService interactions
+- **Rental Flow State Machine**: Multi-step wizard state transitions
+- **Component Hierarchy**: React component tree
+- **Data Flow Diagram**: Request/response flow through layers
+
 ## License
 
 MIT
