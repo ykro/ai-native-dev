@@ -180,6 +180,31 @@ npm run build
 npm run lint
 ```
 
+## Testing
+
+The project includes a comprehensive testing suite using **Vitest** and **React Testing Library**.
+
+```bash
+# Run all tests
+npm run test:run
+
+# Run tests in watch mode
+npm run test
+
+# Run with coverage
+npm run test:coverage
+```
+
+### Test Coverage
+
+| Category | Tests | Pass Rate |
+|----------|-------|-----------|
+| Unit Tests (date-utils) | 32 | 90.6% |
+| Integration Tests (RentalFlow) | 15 | 53.3% |
+| Edge Cases (imageService) | 10 | 100% |
+
+For detailed test documentation, see [docs/TESTING.md](docs/TESTING.md).
+
 ## License
 
 MIT
