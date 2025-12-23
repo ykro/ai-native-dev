@@ -22,7 +22,7 @@ interface HeroCarouselProps {
 
 export function HeroCarousel({ items }: HeroCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(Math.floor(Math.random() * items.length));
   const isInitialized = useRef(false);
 
   const onSelect = useCallback(() => {

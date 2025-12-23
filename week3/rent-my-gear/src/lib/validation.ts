@@ -77,6 +77,18 @@ export const rentalDatesSchema = z
       message: "La fecha de fin debe ser igual o posterior a la fecha de inicio",
       path: ["endDate"],
     }
+  )
+  .refine(
+    (data) => {
+      const days = Math.ceil(
+        (data.endDate.getTime() - data.startDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      return days <= 7;
+    },
+    {
+      message: "La renta no puede exceder 7 días",
+      path: ["endDate"],
+    }
   );
 
 export type RentalDates = z.infer<typeof rentalDatesSchema>;
