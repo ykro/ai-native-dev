@@ -58,7 +58,7 @@ PawsMatch is a **pet adoption application** designed to connect loving families 
 
 It represents a **paradigm shift** in how we build software.
 
-*   **Old Way**: You write code -> You Google errors/ -> You write tests.
+*   **Old Way**: You write code -> You Google errors/use Stack Overflow -> You write tests.
 *   **AI Native**: You **orchestrate** models to write code, debug, and test *for* you.
 
 *You cease to be just a "coder" and become an "Apply-er" of Intelligence.*
@@ -77,7 +77,7 @@ We are in the **Intelligence Era**.
 
 ---
 
-# Theme 1: Terminology
+# Topic 1: Terminology
 ## Under the Hood of LLMs
 
 ---
@@ -150,7 +150,7 @@ If it falls out of the window, the model forgets it. The industry is racing towa
 
 <!-- _class: lead -->
 
-# Theme 2: Tech Stack
+# Topic 2: Tech Stack
 ## The AI Native Toolchain
 
 ---
@@ -221,7 +221,7 @@ Flexible and non-linear. Use the best tool for the current task.
 
 <!-- _class: lead -->
 
-# Theme 3: Basic Prompting
+# Topic 3: Basic Prompting
 ## Strategies & Prompts
 
 ---
