@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TraderPulse Frontend
 
-## Getting Started
+The **TraderPulse Frontend** is a high-performance financial dashboard built with **Next.js 16**. It is designed to feel like a professional trading terminal, featuring dark mode aesthetics, real-time data visualization, and instant AI feedback.
 
-First, run the development server:
+## 🌟 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **High-Frequency UI**: Optimized for dense data display. Uses a "Dark/Cyan" theme typical of financial terminals.
+- **Live Ticker Tape**: A marquee component that smoothly scrolls current market prices, giving the app an immediate sense of activity.
+- **Interactive Charts**: Powered by `recharts`, allowing users to visualize price history.
+- **AI Widgets**: Specialized UI components that render Gemini's text output into digestible "Sentiment Cards".
+- **Responsive Design**: Fully responsive layout that adapts from large desktop monitors to mobile devices.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧩 Key Components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### `TickerTape` (`src/components/dashboard/TickerTape.tsx`)
+A horizontal scrolling bar. It accepts a list of symbols and independently polls their prices.
+- **Tech**: `useSWR` for individual symbol fetching. CSS animations for the scroll.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### `MarketChart` (`src/components/dashboard/MarketChart.tsx`)
+Displays the historical price trend.
+- **Tech**: `recharts`. It handles loading states and empty data scenarios gracefully.
 
-## Learn More
+### `GamificationSidebar` (`src/components/dashboard/GamificationSidebar.tsx`)
+A panel (currently mocked) designed to show user achievements and trading streaks, adding a layer of engagement to the learning process.
 
-To learn more about Next.js, take a look at the following resources:
+## 📜 Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+In the project directory, you can run:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **`npm run dev`**: Starts the development server on `http://localhost:3000`.
+- **`npm run build`**: Builds the app for production (creates `.next` folder).
+- **`npm run start`**: Runs the built production application.
+- **`npm run lint`**: Runs ESLint to check for code quality issues.
 
-## Deploy on Vercel
+## 🚀 Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For setup and running instructions, please see the **[Onboarding Guide](./ONBOARDING.md)**.

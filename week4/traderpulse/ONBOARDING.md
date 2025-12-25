@@ -1,71 +1,35 @@
-# Developer Onboarding
+# Developer Onboarding Hub
 
-Welcome to TraderPulse! This guide will help you set up your local development environment.
+Welcome to the **TraderPulse** project! This document serves as the starting point for all new developers.
 
-## Prerequisites
+## 🚀 Quick Start (Docker)
 
-- Python 3.12+
-- Node.js 20+
-- Git
+If you just want to run the application without setting up local development environments:
 
-## Setup Steps
+1.  **Backend Config**: Create `backend/.env` (see [Backend Onboarding](./backend/ONBOARDING.md) for details).
+2.  **Run**:
+    ```bash
+    docker-compose up --build
+    ```
+3.  **Access**:
+    - Frontend: [http://localhost:3000](http://localhost:3000)
+    - Backend API: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### 1. Clone & Config
+## 🛠️ Local Development Setup
 
-```bash
-git clone <repo_url>
-cd traderpulse
-```
+For active development, you should set up the backend and frontend separately. Please follow the detailed guides below:
 
-### 2. Backend Setup
+### 1. Backend Setup (Python/FastAPI)
+> Go to: **[Backend Onboarding Guide](./backend/ONBOARDING.md)**
+- **Prerequisites**: Python 3.12+
+- **Key Steps**: Virtual Env creation, Dependency installation, Environment Variables.
 
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
-```
+### 2. Frontend Setup (Next.js)
+> Go to: **[Frontend Onboarding Guide](./frontend/ONBOARDING.md)**
+- **Prerequisites**: Node.js 20+
+- **Key Steps**: `npm install`, Environment Variables.
 
-Create `.env`:
-```env
-ALPHA_VANTAGE_KEY=demo
-GEMINI_API_KEY=demo
-CORS_ORIGINS=http://localhost:3000
-```
+## 📚 Documentation Index
 
-Run Server:
-```bash
-uvicorn backend.main:app --reload --port 8000
-```
-
-### 3. Frontend Setup
-
-```bash
-cd frontend
-npm install
-```
-
-Run Dev Server:
-```bash
-npm run dev
-```
-Access at [http://localhost:3000](http://localhost:3000).
-
-## Running Tests
-
-**Backend**:
-```bash
-cd backend
-pytest
-```
-
-**Frontend**:
-```bash
-cd frontend
-npx vitest
-```
-
-## Troubleshooting
-
-- **CORS Errors**: Ensure `CORS_ORIGINS` in `backend/.env` matches your frontend URL.
-- **API Errors**: Check if your API Keys are valid.
+- **[Project README](./README.md)**: High-level overview.
+- **[Architecture](./ARCHITECTURE.md)**: System design and diagrams.

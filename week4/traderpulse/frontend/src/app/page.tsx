@@ -8,15 +8,34 @@ import GamificationSidebar from '@/components/dashboard/GamificationSidebar';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { toast } from 'sonner';
 
 export default function Home() {
     const [symbol, setSymbol] = useState("AAPL");
     const [searchInput, setSearchInput] = useState("");
 
-    const handleSearch = (e: React.FormEvent) => {
+    const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (searchInput.trim()) {
-            setSymbol(searchInput.trim().toUpperCase());
+            const query = searchInput.trim().toUpperCase();
+
+            // Check if symbol exists
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'}/stocks/${query}`);
+
+                if (res.ok) {
+                    setSymbol(query);
+                    toast.success(`Encontrado: ${query}`);
+                } else {
+                    toast.error("Stock no encontrado", {
+                        description: `El símbolo '${query}' no existe o no se pudo cargar.`
+                    });
+                }
+            } catch (err) {
+                toast.error("Error de conexión", {
+                    description: "No se pudo conectar con el servidor."
+                });
+            }
         }
     };
 
@@ -40,7 +59,7 @@ export default function Home() {
                 </div>
             </header>
 
-            <TickerTape />
+            <TickerTape onSelectSymbol={setSymbol} />
 
             <div className="container mx-auto px-4 py-6 flex-1">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">

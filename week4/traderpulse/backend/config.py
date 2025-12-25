@@ -6,7 +6,6 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     
     # External APIs
-    ALPHA_VANTAGE_KEY: str
     GEMINI_API_KEY: str
     
     # CORS (comma separated list of origins)

@@ -1,34 +1,74 @@
 'use client';
 
 import { ArrowUp, ArrowDown } from "lucide-react";
+import useSWR from 'swr';
 
-// Mock data for the ticker to avoid API rate limits on simple visual components
-const TICKER_DATA = [
-    { symbol: "AAPL", price: 154.32, change: 1.25, changePercent: 0.8 },
-    { symbol: "GOOGL", price: 175.40, change: -0.50, changePercent: -0.28 },
-    { symbol: "MSFT", price: 410.15, change: 3.20, changePercent: 0.78 },
-    { symbol: "AMZN", price: 180.90, change: 1.10, changePercent: 0.6 },
-    { symbol: "TSLA", price: 178.00, change: -5.20, changePercent: -2.8 },
-    { symbol: "BTC", price: 68500, change: 1200, changePercent: 1.7 },
-    { symbol: "ETH", price: 3800, change: 50, changePercent: 1.3 },
-    { symbol: "SPY", price: 520.10, change: 2.15, changePercent: 0.4 },
-];
+// Symbols to track in the ticker
+const TICKER_SYMBOLS = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BTC-USD", "ETH-USD", "SPY"];
 
-export default function TickerTape() {
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch");
+    return res.json();
+};
+
+interface TickerTapeProps {
+    onSelectSymbol?: (symbol: string) => void;
+}
+
+export default function TickerTape({ onSelectSymbol }: TickerTapeProps) {
+    // We use a simple approach: fetch all data. In production, we might batch this.
+    // Here we use SWR's useSWR with a custom key function or multiple hooks is tricky.
+    // Instead we'll make a wrapper component or just map and fetch individually 
+    // BUT fetching individually is bad for rate limits/performance.
+    // Given the constraints and the backend endpoint /api/v1/stocks/{symbol},
+    // we will create a simple internal component for each item to handle its own state/SWR.
+
     return (
         <div className="w-full bg-slate-950 border-b border-slate-800 overflow-hidden py-2 whitespace-nowrap flex">
             <div className="animate-ticker flex space-x-8 px-4">
-                {[...TICKER_DATA, ...TICKER_DATA].map((stock, idx) => (
-                    <div key={`${stock.symbol}-${idx}`} className="flex items-center space-x-2">
-                        <span className="font-bold text-slate-200">{stock.symbol}</span>
-                        <span className="text-slate-400">${stock.price.toFixed(2)}</span>
-                        <span className={`flex items-center text-xs font-medium ${stock.change >= 0 ? "text-green-500" : "text-red-500"}`}>
-                            {stock.change >= 0 ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
-                            {Math.abs(stock.changePercent)}%
-                        </span>
-                    </div>
+                {/* Duplicate the list for infinite scroll effect */}
+                {[...TICKER_SYMBOLS, ...TICKER_SYMBOLS].map((symbol, idx) => (
+                    <TickerItem
+                        key={`${symbol}-${idx}`}
+                        symbol={symbol}
+                        onClick={() => onSelectSymbol?.(symbol)}
+                    />
                 ))}
             </div>
+        </div>
+    );
+}
+
+function TickerItem({ symbol, onClick }: { symbol: string, onClick?: () => void }) {
+    const { data, error } = useSWR(
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'}/stocks/${symbol}`,
+        fetcher,
+        { refreshInterval: 60000 } // Refresh every minute
+    );
+
+    if (error) return <div className="flex items-center space-x-2"><span className="font-bold text-slate-500">{symbol}</span></div>;
+    if (!data) return <div className="flex items-center space-x-2"><span className="font-bold text-slate-500">{symbol}...</span></div>;
+
+    const stock = data.realtime;
+    // Assuming API returns string "XX.XX%" or similar, we parse it or use directly.
+    // API returns: { price: "273.81", change_percent: "0.6137%", ... }
+
+    const changePercentStr = stock.change_percent.replace('%', '');
+    const changePercent = parseFloat(changePercentStr);
+    const isPositive = changePercent >= 0;
+
+    return (
+        <div
+            className="flex items-center space-x-2 cursor-pointer hover:bg-slate-900 px-2 py-1 rounded transition-colors"
+            onClick={onClick}
+        >
+            <span className="font-bold text-slate-200">{stock.symbol}</span>
+            <span className="text-slate-400">${parseFloat(stock.price).toFixed(2)}</span>
+            <span className={`flex items-center text-xs font-medium ${isPositive ? "text-green-500" : "text-red-500"}`}>
+                {isPositive ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
+                {Math.abs(changePercent).toFixed(2)}%
+            </span>
         </div>
     );
 }
