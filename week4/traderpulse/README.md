@@ -2,6 +2,12 @@
 
 **TraderPulse** is a high-performance, AI-powered real-time market analysis dashboard. It combines live market data from Yahoo Finance with sentiment analysis powered by Gemini 3 Flash.
 
+![TraderPulse Dashboard](./assets/demo-screenshot.png)
+
+## 🚀 Live Demo
+
+👉 **[Try it Live: https://trader-pulse.vercel.app/](https://trader-pulse.vercel.app/)**
+
 ## Repository Structure
 
 This repository is a monorepo containing both the backend service and the frontend application.
