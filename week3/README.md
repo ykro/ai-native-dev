@@ -9,6 +9,13 @@ Welcome to Week 3. This week we focus on **Reliability**. You will learn how to 
 *   **Documentation**: Generating architectural diagrams (Mermaid) and Onboarding guides automatically.
 *   **Hallucinations**: Identifying and avoiding "Ghost Libraries" (The Nano Banana Trap).
 
+## Project Preview
+
+| Visual Discovery | Rental Flow |
+| :---: | :---: |
+| ![Home](rent-my-gear/assets/home_demo.png) | ![Detail](rent-my-gear/assets/detail_demo.png) |
+
+
 ## The AI Native Toolchain
 *   **Vitest**: Blazing fast unit test framework.
 *   **React Testing Library**: Testing UI components by user interaction.
