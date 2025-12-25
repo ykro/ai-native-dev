@@ -40,10 +40,10 @@ Contains the **Course Materials**.
 *   **Others**: 10% fee.
 
 **Definition of Done**:
-- [ ] **TDD First**: Generate `insurance-calculator.test.ts` covering all categories *before* writing logic.
-- [ ] **Implementation**: Implement the logic to pass the AI-generated tests.
-- [ ] **Integration**: Add an "Add Insurance" toggle to the `PriceSummary` component.
-- [ ] **Documentation**: Update `docs/DIAGRAMS.md` to reflect the new price calculation flow.
+- [ ] **100% Base Coverage**: Ensure existing demo app tests pass with 100% coverage.
+- [ ] **Feature TDD**: Implement "Smart Insurance" maintaining 100% coverage.
+- [ ] **Documentation**: Update `docs/DIAGRAMS.md`, `docs/ONBOARDING.md`, and `README.md`.
+- [ ] **Verification**: Submit proof of 100% coverage from `npm run test:coverage`.
 
 ## Resources
 

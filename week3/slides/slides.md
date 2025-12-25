@@ -108,7 +108,7 @@ An Agent can analyze the *Logic*, the *State*, and the *Semantics* simultaneousl
 
 ---
 
-# 3. The "Fix-It" Loop
+# 3. Method: The "Context Injection" Loop
 
 We don't just dump the error. We use a **Loop**:
 
@@ -130,7 +130,7 @@ To learn, we first break things. We ask the AI to **inject** subtle bugs.
 
 ---
 
-# 5. Anatomy of the Logic Bug
+# 5. Anatomy of the Logic Bug (Code)
 
 The AI modifies `date-utils.ts` to be *almost* correct.
 
@@ -157,17 +157,15 @@ Now we switch roles. We are the Senior Dev guiding the Agent to fix it.
 > 2. Analyze `src/lib/date-utils.ts` and the Zod validation schemas.
 > 3. Identify the logical errors and propose fixes."
 
-**Note**: We force the agent to *Inspection* before *Action*.
-
 ---
 
-# 7. Semantic Analysis
+# 7. Prompt: Fixing "Invisible" Errors
 
-Why does the AI find this faster?
-It understands the *intent* of "Rental Days".
+Some bugs are subtle, like Hydration Mismatches in Next.js.
 
-*   **Human**: Sees `differenceInDays`. Thinks "Math is correct".
-*   **AI**: Sees `Rental Context`. Knows "Rentals are usually date-inclusive". Flags mismatch between `Math` and `Business Domain`.
+> **Prompt**: "The UI 'flickers' or shows different content than the server-rendered HTML. Why does this happens? Investigate components that render dynamic content on the home page.
+>
+> *Note: If the AI suggests it is a CSS issue, insist on checking the React rendering cycle and values used in initial state (useState).*"
 
 ---
 
@@ -188,19 +186,29 @@ It understands the *intent* of "Rental Days".
 
 ---
 
-# 1. The Reality of Testing
+# 1. Test Driven Development (TDD)
 
-**"I'll write tests later"** is the biggest lie in software engineering.
+**The Concept**
+Reverse the workflow. Write the *Requirement* as a *Test* before you write the *Code*.
 
-*   **Traditional**: Writing mocks is tedious. Validating edge cases is hard.
-*   **Result**: Low coverage, regression bugs on Fridays.
-
-**AI-Driven TDD**:
-The AI *loves* writing boilerplate. It makes TDD (Test Driven Development) faster than "coding and praying".
+**The Cycle (Red-Green-Refactor)**:
+1.  **Red**: Write a test that fails (because the feature doesn't exist).
+2.  **Green**: Write just enough code to pass the test.
+3.  **Refactor**: Clean up the code while keeping the test green.
 
 ---
 
-# 2. The V-Model in AI
+# 2. Why TDD is hard (Traditionally)
+
+1.  **Boilerplate**: Setting up mocks and imports takes longer than writing the function.
+2.  **Mental Shift**: It's hard to test something that doesn't exist yet.
+3.  **Maintenance**: Tests can be brittle and break with minor changes.
+
+**AI Solves This**: It generates the boilerplate and the "Red" state instantly based on your spec.
+
+---
+
+# 3. AI-Driven TDD Strategy
 
 We treat Testing as the mirror of Implementation.
 
@@ -215,23 +223,23 @@ With AI, we generate the **Right Side** (Tests) often *before* or *immediately a
 
 ---
 
-# 3. Prompt: Generating a Test Suite
+# 4. Prompt: Generating a Test Suite
 
-We don't write `expect(x).toBe(y)` manually. We design the *scope*.
+We design the *scope*.
 
-> **Prompt**: "Using **Vitest** and **React Testing Library**, generate a testing suite:
-> 1. **Unit Tests:** Create tests for `src/lib/date-utils.ts` to validate price calculations with various ranges (1 day, 1 week, cross-month).
-> 2. **Integration:** Simulate full rental flow (selecting category -> picking items).
-> 3. **Edge Cases:** Handle Unsplash 404 errors."
+> **Prompt**: "Using **Vitest** and **React Testing Library**, generate a testing suite for the rental module:
+> 1. **Unit Tests:** Create tests for `src/lib/date-utils.ts` to validate price calculations...
+> 2. **Integration Tests:** Simulate the full rental flow: selecting a category, picking a gear item...
+> 3. **Edge Cases:** Test how the system handles the 'Nano Banana' fallback if the Unsplash API returns a 404 error."
 
 ---
 
-# 4. Example: Variable Logic Testing
+# 5. Example: Deep Verification
 
-The AI generates exhaustive test cases we might miss (e.g., Leap Years).
+ The AI generates exhaustive test cases, including edge cases like Leap Years.
 
 ```typescript
-// Generated Test
+// Generated: src/lib/date-utils.test.ts
 describe("calculateRentalDays", () => {
   it("should calculate correct days for leap year crossing", () => {
     const start = new Date("2024-02-28");
@@ -244,43 +252,33 @@ describe("calculateRentalDays", () => {
 
 ---
 
-# 5. Integration Testing with AI
+# 6. Integration Testing with AI
 
-Testing React Components requires mocking context, router, and API.
-
-*   **Challenge**: Correctly mocking `useRouter()` or `fetch`.
-*   **AI Solution**: It generates the `setup` file automatically.
+Testing React Components requires mocking context and API.
 
 ```typescript
-// mocks/handlers.ts
+// Generated: mocks/handlers.ts
+import { http, HttpResponse } from 'msw'
+
 export const handlers = [
   http.get('/api/gear', () => {
     return HttpResponse.json(mockInventory)
   }),
+  http.post('/api/rental', () => {
+    return HttpResponse.json({ success: true, id: "RENT-123" })
+  })
 ]
 ```
 
 ---
 
-# 6. Edge Cases & Resilience
+# 7. Edge Cases & Resilience
 
 What happens when 3rd party APIs fail?
-We ask the AI to simulate "Chaos".
 
 *   **Scenario**: Unsplash API goes down (500 Error).
 *   **Test**: Ensure `imageService` switches to "Nano Banana" fallback seamlessly.
-*   **Prompt**: "Write a test that mocks a 500 error from Unsplash and asserts that `generateImageWithAI` is called."
-
----
-
-# 7. Coverage is not Quality
-
-**Warning**: AI can generate 100% coverage tests that check nothing.
-
-*   **Bad Test**: `expect(true).toBe(true)`
-*   **Good Test**: `expect(screen.getByText("Confirmar")).toBeDisabled()`
-
-**Rule**: Always review the *assertions* generated by the AI.
+*   **Prompt Segment**: *"Test how the system handles the 'Nano Banana' fallback if the Unsplash API returns a 404 error."*
 
 ---
 
@@ -313,24 +311,31 @@ We ask the AI to simulate "Chaos".
 # 2. Types of AI Documentation
 
 1.  **Narrative**: "How-to" guides (Onboarding).
-2.  **Structural**: Diagrams (Sequence, Class, Cloud).
+2.  **Structural**: Diagrams (Mermaid.js).
 3.  **Reference**: API Docs (Swagger/OpenAPI).
 4.  **Inline**: JSDoc comments for complex logic.
 
 ---
 
-# 3. Prompt: Reverse Engineering
+# 3. Method: Reverse Engineering
 
 We ask the Agent to read our code and explain it back to us visually.
 
-> **Prompt**: "Generate full technical documentation:
-> 1. Create a **Mermaid sequence diagram** showing the 'Image Resolution Flow'.
-> 2. Create a **Mermaid class diagram** for `inventoryService`.
-> 3. Write an 'Onboarding Guide' explaining how to debug GCS connection."
+*   **Constraint**: The Agent must read the `src/` folder to know the truth.
+*   **Output**: Standardized Markdown formats.
 
 ---
 
-# 4. Diagram: Image Resolution Flow
+# 4. Prompt: Documentation Generation
+
+> **Prompt**: "Generate full technical documentation for **Rent my Gear**:
+> 1. Document everything that's needed for project understanding.
+> 2. Create a **Mermaid sequence diagram** showing the 'Image Resolution Flow' (JSON file -> Nano Banana -> GCS Persistence).
+> 3. Create a **Mermaid class diagram** for the `inventoryService` and `imageService` interactions."
+
+---
+
+# 5. Diagram: Image Resolution Flow
 
 The AI visualizes the logic we built in Week 2.
 
@@ -355,45 +360,40 @@ sequenceDiagram
 
 ---
 
-# 5. Diagram: Component Hierarchy
+# 6. Diagram: Class Hierarchy
 
-Understanding the React Tree helps identifying re-renders.
+Visualizing the service layer to ensure separation of concerns.
 
 ```mermaid
-graph TD
-    HP[HomePage] --> HC[HeroCarousel]
-    HP --> CB[CategoryButtons]
+classDiagram
+    class GearItem {
+        +string id
+        +string name
+        +CategoryId category
+    }
+    class inventoryService {
+        +getGearById(id)
+        +updateGearImage(id, url)
+    }
+    class imageService {
+        +getOrGenerateImage(id)
+        -generateWithNanoBanana(item)
+    }
     
-    subgraph Rental Flow
-        RF[RentalFlow] --> DS[DateSelection]
-        RF --> PS[PriceSummary]
-        RF --> CF[Confirmation]
-    end
+    inventoryService --> GearItem
+    imageService --> inventoryService
 ```
 
 ---
 
-# 6. The "Onboarding" Artifact
+# 7. The "Onboarding" Artifact
 
 The `docs/ONBOARDING.md` file is crucial for new hires (or AI Agents).
 
-**Key Sections**:
-1.  **Prerequisites**: Node.js, Python 3.10+, `uv`.
-2.  **Environment**: How to set up `.env.local`.
-3.  **Debugging**: "If GCS fails, check `service-account.json` path".
+**Prompt**:
+> "Write an 'Onboarding Guide' that explains code, architecture, all that's needed for a new developer to join the project, how to debug the GCS connection..."
 
-*The AI writes this by scanning `package.json` and `.env.example`.*
-
----
-
-# 7. Documentation as "Context"
-
-When you have good docs, you can feed them back into the AI.
-
-*   **Loop**:
-    1.  AI writes Code.
-    2.  AI writes Docs.
-    3.  **Next Session**: You give AI the Docs -> It understands the Code faster.
+*The AI writes this by scanning `package.json`, `.env.example`, and file structure.*
 
 ---
 
@@ -417,16 +417,47 @@ When you have good docs, you can feed them back into the AI.
 
 We asked the Agent to install **"Nano Banana Pro Local SDK"**.
 
-*   **The Reality**: It doesn't exist. "Nano Banana" is a made-up name for Gemini.
+*   **The Reality**: It doesn't exist. "Nano Banana" is a made-up name.
 *   **The Risk**: The Agent might give you `npm install nano-banana-sdk`.
-*   **The Lesson**: Agents are "people pleasers". They hallucinate to satisfy requirements.
-*   **Defense**: Always ask for "Official Documentation Links" or cross-reference with NPM.
+*   **The Lesson**: Agents hallucinate to satisfy requirements.
 
 ---
 
-# 2. Image Flow Architecture
+# 2. Prompt: Hallucination Demo
 
-A Hybrid Strategy using Server Actions and Cloud Storage.
+We intentionally try to trick the AI to see if it catches the lie.
+
+> **Prompt**: "We want to integrate the **Nano Banana Pro Local-Offline SDK for Next.js 16** to process images directly on the user's GPU without using API calls. Do not change the project yet, but provide the exact npm command to install this local SDK, configuration and show the code needed for the `offline-gen` mode."
+
+*Will it invent a library? Or will it tell you it doesn't exist?*
+
+---
+
+# 3. Code Spotlight: The "Fake" Implementation
+
+If the Agent hallucinates, it might look like this:
+
+```javascript
+// WARNING: THIS IS HALLUCINATED CODE
+import { NanoBanana } from '@nano-banana/sdk';
+
+const nb = new NanoBanana({
+  gpu: true, // "GPU Acceleration"
+  mode: 'offline'
+});
+
+export function generate() {
+  return nb.dream('kayak'); // "Dream" method doesn't exist
+}
+```
+
+*Always cross-reference obscure libraries with `npm search`.*
+
+---
+
+# 4. Real Architecture: Image Strategy
+
+A valid Hybrid Strategy using Server Actions and Cloud Storage.
 
 ```mermaid
 flowchart TD
@@ -443,25 +474,6 @@ flowchart TD
     
     GCS -->|Public Link| DB
     GCS --> URL
-```
-
----
-
-# 3. Code Spotlight: State Machines
-
-We don't use simple booleans for complex flows. We use strict states.
-
-```typescript
-// src/components/features/RentalFlow/index.tsx
-type RentalFlowStep = 
-  | "selecting" 
-  | "configuring" 
-  | "reviewing" 
-  | "confirmed";
-
-// Benefits:
-// 1. Impossible States: Can't be 'confirmed' and 'configuring' at once.
-// 2. Type Safety: TypeScript ensures we handle every state.
 ```
 
 ---
@@ -489,10 +501,10 @@ You must use **AI-Driven TDD**. You cannot write the implementation until the AI
 
 # Definition of Done
 
-- [ ] **Test Suite**: Created `insurance-calculator.test.ts` covering all categories *before* implementation.
-- [ ] **Implementation**: `calculateInsurance(dailyRate, category)` logic is pure and verified.
-- [ ] **UI Integration**: Added "Add Insurance" toggle to `PriceSummary.tsx`.
-- [ ] **Docs Update**: Updated `docs/DIAGRAMS.md` flow chart to include the optional Insurance step.
+- [ ] **100% Base Coverage**: Ensure existing demo app tests pass with 100% coverage.
+- [ ] **Feature TDD**: Implement "Smart Insurance" maintaining 100% coverage.
+- [ ] **Documentation**: Update `docs/DIAGRAMS.md`, `docs/ONBOARDING.md`, and `README.md`.
+- [ ] **Verification**: Submit proof of 100% coverage from `npm run test:coverage`.
 
 ---
 
