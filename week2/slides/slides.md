@@ -491,7 +491,66 @@ If you ask an LLM: *"Make a travel page"*, it will minimize risk.
 
 
 
+
+<!-- _class: lead -->
+
+# Deep Dive: Code Spotlight
+## Why the AI wrote it this way
+
+---
+
+# 1. Performance First: CSS Masonry
+
+The AI chose **CSS Columns** over JavaScript libraries to prevent Layout Shift.
+
+```tsx
+// MasonryGrid.tsx
+export function MasonryGrid({ items }: MasonryGridProps) {
+    return (
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+             {/* break-inside-avoid prevents items from being cut in half */}
+            {items.map((item) => (
+                <div className="break-inside-avoid mb-4">
+                    <Card item={item} />
+                </div>
+            ))}
+        </div>
+    );
+}
+```
+
+*   **Decision**: `Masonry.js` causes "Hydration Mismatch" in Next.js 14+. CSS is instant.
+
+---
+
+# 2. Clean Architecture: `cn()` Utility
+
+The AI standardizes class merging to avoid template literal hell.
+
+```ts
+// lib/utils.ts
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  // Merges Tailwind classes safely (e.g., p-4 vs p-8)
+  return twMerge(clsx(inputs))
+}
+```
+
+*   **Decision**: This enables "Agentic Overrides". The Agent can pass `className="bg-red-500"` to a component and it *actually works*.
+
+---
+
+<!-- _class: lead -->
+
+# Weekly Project
+## Polish "TraveLens"
+
+---
+
 # The Challenge: Polish to Perfection
+
 
 **Goal**: The current app is functional. Your job is to make it delightful.
 

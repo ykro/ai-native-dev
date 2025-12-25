@@ -66,9 +66,6 @@ PawsMatch is a **pet adoption application** designed to connect loving families 
 
 *Zero-latency swiping implementation with pre-fetch buffer.*
 
----
-
-<!-- _class: lead -->
 
 ---
 
@@ -95,6 +92,8 @@ We are in the **Intelligence Era**.
 
 ---
 
+<!-- _class: lead -->
+
 # Topic 1: Terminology
 ## Under the Hood of LLMs
 
@@ -115,7 +114,16 @@ An **LLM** is a probabilistic system trained to predict the next token in a sequ
 
 How an LLM processes your input:
 
-![width:900px](https://mermaid.ink/img/pako:eNplkUtvwjAMx7_Kya0T2gcelxHaaZOGNglpL1y8Jk0VNUkc1w71u880FRTiF_u_xP62j2hNC0SRF-tS81q_iBHe5dI64K7Cg0Y7D8Z5cIahkZ6M8w0W7wtuTPAkQgMd2kZq3N0Y-6DR0L0n7OEc_9CgIf_O9578278yqK_S4P3Bmj_StGvQ-o73aY5W-OAvmNIVjBkoWJ0V7Ag7sKIVG1iRml7BmtT4CtasJipYiw3s7I72O4N36G_N4KAdGj91f9fgER3S-S1ZkqY5y7KMyTJJM1lkCSs4SzmTUcZSTpI0SXmScbBMH0We3D-9Yg?type=png)
+
+```mermaid
+graph LR
+    A[Input Text] -->|Tokenization| B(Token IDs)
+    B -->|Processing| C{Model Layers}
+    C -->|Probabilities| D(Logits)
+    D -->|Decoding| E[Output Token]
+    style C fill:#f9f,stroke:#333
+```
+
 
 ---
 
@@ -132,7 +140,24 @@ The model assigns a "relevance score" to every word's relationship with every ot
 
 # Transformer Architecture
 
-![width:900px](https://mermaid.ink/img/pako:eNp1kMtqwzAQRX9FzKoF2_GqLroIJA8IdNN0EaxRjD0WPFKMjBNC_r1yrJSSQrdzmXunnoky1lSIkoytK83W-lmM8DbX3gM7iwAa7QKY5MCFhUYGMskP2NwuuTfBkwgNDGg7qXF3ZxyCRkP_kXCAc_xHg4b8Kz848q__yqC-S4PPBxs-Stq3aP0dHyY5WuHLv2DKKDBmoGB1UbAnHMCKVmxgRWp6BWtS4ytYsxqpYC02cLAHOu4MPqC_NYCjdmj83P1dgwd0SOe35Cwr8oznOcsLRrKMF6wQsJyzQqSCLHmekCznrMjBCn2WZOXj0ytmZw?type=png)
+
+```mermaid
+graph TD
+    subgraph Encoder
+    A[Input Embeddings] --> B[Self-Attention]
+    B --> C[Feed Forward]
+    end
+    subgraph Decoder
+    D[Output Embeddings] --> E[Masked Attention]
+    E --> F[Cross-Attention]
+    F --> G[Feed Forward]
+    end
+    C --> F
+    style B fill:#bfb,stroke:#333
+    style E fill:#fbf,stroke:#333
+    style F fill:#fbf,stroke:#333
+```
+
 
 ---
 
