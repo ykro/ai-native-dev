@@ -7,17 +7,35 @@ math: mathjax
 style: |
   section {
     font-family: 'Inter', sans-serif;
-    font-size: 28px;
+    font-size: 26px;
   }
   code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8em;
+    font-size: 0.75em;
   }
   blockquote {
     background: #f0f0f0;
     border-left: 10px solid #ccc;
     margin: 1.5em 10px;
     padding: 0.5em 10px;
+  }
+  h1, h2 {
+    color: #2563eb;
+  }
+  li {
+    margin-bottom: 0.5em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
   }
 ---
 
@@ -517,7 +535,7 @@ export const fetchRandomPetProfile = async (): Promise<PetProfile> => {
 
 ---
 
-# Resources (1/2)
+# Resources
 
 **Visual Guides to LLMs**
 - [The Illustrated Transformer (Jay Alammar)](https://jalammar.github.io/illustrated-transformer/) - The classic visual guide to Attention.
@@ -531,9 +549,10 @@ export const fetchRandomPetProfile = async (): Promise<PetProfile> => {
 
 ---
 
-# Resources (2/2)
+# Resources
 
 **Deep Dive Articles**
+- [The AI-Native Developer: A manifest](https://www.swyx.io/ai-native-dev) - *Swyx.*
 - [What is Context Engineering? (Anthropic)](https://www.anthropic.com/context-engineering) - How to design better inputs.
 - [Tool Use & Function Calling Guide](https://platform.openai.com/docs/guides/function-calling) - Conceptual overview.
 - [The Rise of Agents (Sequoia)](https://www.sequoiacap.com/article/ai-agents/) - Business and tech landscape of agents.

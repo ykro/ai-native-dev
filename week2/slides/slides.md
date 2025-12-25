@@ -7,7 +7,7 @@ math: mathjax
 style: |
   section { font-family: 'Inter', sans-serif; font-size: 26px; }
   code { font-family: 'JetBrains Mono', monospace; font-size: 0.75em; }
-  blockquote { background: #f0f0f0; border-left: 10px solid #ccc; margin: 1em 10px; padding: 0.5em 10px; }
+  blockquote { background: #f0f0f0; border-left: 10px solid #ccc; margin: 1.5em 10px; padding: 0.5em 10px; }
   h1, h2 { color: #2563eb; }
   li { margin-bottom: 0.5em; }
   table { width: 100%; border-collapse: collapse; }
@@ -15,14 +15,11 @@ style: |
   th { background-color: #f2f2f2; }
 ---
 
-<!-- class: lead -->
+<!-- _class: lead -->
 
-# AI Native Dev: Week 2
-
-
-<br>
-
-**Adrián Catalan**
+# AI Native Dev
+## Week 2
+### Adrián Catalan
 adriancatalan@galileo.edu
 
 ---
@@ -37,41 +34,47 @@ TraveLens is an **AI-powered travel planning application** built with Next.js 16
 
 ---
 
-# TraveLens Demo
+# TraveLens Demo: Visual Discovery
 
-![width:900px](../travelensapp/assets/home_demo.webp)
+![bg 80%](../travelensapp/assets/home_demo.webp)
 
 ---
+
+# TraveLens Demo: AI Planning
+
+![bg 80%](../travelensapp/assets/detail_demo.webp)
+
+---
+
+<!-- _class: lead -->
 
 # What is the SDLC?
 
 **Software Development Life Cycle**
 
-It is the structured process used to design, develop, and test high-quality software. It provides the "Blueprint" for the entire project life.
+It is the structured framework that software organizations use to design, develop, and test high-quality software.
 
-**Core Phases:**
-1.  **Requirement Analysis**: What do we want to build?
-2.  **Design**: How will we build it? (Architecture, UI/UX).
-3.  **Implementation**: Coding.
-4.  **Testing**: Verification and Validation.
-5.  **Deployment & Maintenance**: Releasing to the world.
+**Why do we need it?**
+1.  **Cost Efficiency**: Detecting errors early (Plan/Design) is 100x cheaper than in Production.
+2.  **Quality Assurance**: Ensures the final product meets user expectations.
+3.  **Predictability**: Provides a roadmap for timelines and resource allocation.
+
+*It acts as the "Blueprint" for the entire project life.*
 
 ---
 
-# The SDLC Visualized
+# Core Phases of SDLC
 
-```mermaid
-graph LR
-    Req[Requirements] --> Des[Design]
-    Des --> Imp[Implementation]
-    Imp --> Test[Testing]
-    Test --> Dep[Deployment]
-    Dep --> Maint[Maintenance]
-    Maint -.->|Feedback| Req
-```
-
-*   **Traditional Dev**: Spends 70% of time in **Implementation**.
-*   **AI-Native Dev**: Spends 70% of time in **Requirements** (Prompting) and **Testing** (Reviewing).
+1.  **Plan**: Requirements & Feasibility.
+    *   *Ex: Product Manager defines "Travel Plan" feature.*
+2.  **Design**: Architecture & UI/UX.
+    *   *Ex: System Architect defines Next.js; Designer draws Cards.*
+3.  **Develop**: Coding the solution.
+    *   *Ex: Frontend builds Grid; Backend connects Gemini.*
+4.  **Test**: Verification & Validation.
+    *   *Ex: QA checks if "Save" button triggers animation.*
+5.  **Deploy**: Release & Maintenance.
+    *   *Ex: Deploy to Vercel; Monitor logs.*
 
 ---
 
@@ -79,11 +82,39 @@ graph LR
 
 In Week 1, we saw that AI can write code. But **Context Management** is the real challenge.
 
-**What is an Agent?**
-An autonomous entity that perceives its environment and acts upon it to achieve a goal.
+*   **The Issue**: LLMs have a limited "Context Window".
+*   **The Symptom**: As files grow, the AI "forgets" previous instructions.
+*   **The Solution**: We don't ask for the whole app at once. We break it down.
 
-**What is a Coding Agent?**
-An AI specialized in reading codebases, understanding syntax, and generating valid code execution based on specific technical constraints.
+---
+
+# What is an Agent?
+
+An autonomous entity that perceives its environment, reasons about it, and acts to achieve a goal.
+
+**Key Strength: Autonomy**
+Unlike a script (A -> B), an Agent can decide "Plan A failed, try Plan B".
+
+```mermaid
+graph LR
+    Env[Environment] --Perception--> Agent
+    subgraph Agent Loop
+    Agent --Reasoning--> Plan[Plan]
+    Plan --Action--> Tool[Tool Use]
+    end
+    Tool --Effect--> Env
+```
+
+---
+
+# What is a Coding Agent?
+
+An AI specialized in the domain of Software Engineering.
+
+**Capabilities**:
+1.  **Perception**: Reads File System, Terminal Stdout, Git Diff.
+2.  **Action**: Writes Files, Runs Commands, Commits Code.
+3.  **Strength**: It understands the *AST* (Abstract Syntax Tree), not just text.
 
 ---
 
@@ -96,6 +127,8 @@ In an AI-Native team, you are not just a contributor; you are the **Manager**. Y
 We identified **8 Distinct Roles** to build TraveLens. Breaking the monolith prevents "Context Drift" (when the AI forgets instructions because the prompt is too long).
 
 ---
+
+
 
 # Role 1: System Architect 
 
@@ -235,22 +268,95 @@ Senior Devs document the "Why" and "How" for junior devs.
 
 ---
 
-# Roles 7 & 8: Documentation & Media
+# SDLC Roles 7 & 8: Documentation & Media
 
 **Standard Industry Responsibility**:
-Technical Writers and QAs create proof-of-work and maintenance docs.
+*   **Role 7 (Media)**: Marketing or Design team creates "glamour shots".
+*   **Role 8 (Docs)**: Technical Writers or Junior devs write docs (often outdated).
 
-**AI Agent Responsibilities**:
-*   **Role 7**: Runs the app and captures screenshots (Automation).
-*   **Role 8**: Compiles `README.md` using the assets from Role 7.
-
-*Note: In our prompt, these handle the final "Handoff" package.*
+**AI Agent Responsibility**:
+*   **Role 7**: Runs *Visual Regression Tests*. The "screenshots" are proof of UI stability.
+*   **Role 8**: Generates *Living Documentation*. Parses the actual AST to write accurate docs.
 
 ---
 
-# Topic 2: Agent Workflows
+# SDLC Roles 7 & 8: Documentation & Media
 
-**The Hand-off Mechanism**
+> **Automated Media Capture (Role 7)**
+> - **Task**: Launch server, screenshot initial state, record video of interactions.
+> - **Output**: `assets/home_demo.webp`, `assets/detail_demo.webp`.
+
+> **Technical Documentation (Role 8)**
+> - **Task**: Generate `README.md`.
+> - **Content**: Architecture overview, API logic explanation, Setup guide.
+> - **Visuals**: Embed assets from Role 7.
+
+---
+
+<!-- _class: lead -->
+
+# Topic 2: Agent Workflows
+## The Hand-off Mechanism
+
+---
+
+# The Traditional Handoff
+(Friction Points)
+
+*   **Design -> Dev**: "Pixel Perfect" myth. Figma files drift from implemented code. Redlines are ignored.
+*   **Dev -> QA**: "Works on my machine." Context of environment variables is lost.
+*   **Back -> Front**: "Is the API ready?" Swagger docs are outdated.
+
+*Result: High friction, slow velocity.*
+
+---
+
+# The Agentic Handoff
+(Context as Code)
+
+In an Agentic SDLC, the "Output" of one agent becomes the **Immutable Context** for the next.
+
+1.  **Strict**: Agent B cannot proceed until Agent A's output (file) exists.
+2.  **Explicit**: No "Slack messages." Instructions are prompt-engineered.
+3.  **Verifiable**: A file is either present or absent.
+
+---
+
+# Comparison: Context Management
+
+| Feature | Traditional | Agentic |
+| :--- | :--- | :--- |
+| **Medium** | Meetings / Syncs | Files / Prompts |
+| **Latency** | Hours/Days | Milliseconds |
+| **Risk** | "Context Drift" (Forgetting) | "Hallucination" (Inventing) |
+| **Fix** | Documentation | Structuring Context (RAG) |
+
+---
+
+# The Agentic Loop
+
+Using Agents turns the SDLC into a series of **Feedback Loops**.
+
+1.  **Draft**: Agent generates v1.
+2.  **Review**: Human (or another Agent) critiques.
+3.  **Refine**: Agent generates v2 based on critique.
+
+*This cycle repeats until the "Definition of Done" is met.*
+
+---
+
+# Automation vs Agentic
+
+| Feature | Traditional Automation | Agentic Workflow |
+| :--- | :--- | :--- |
+| **Trigger** | Script run manually/CI | Autonomous decision |
+| **Logic** | `if/else` rigid paths | LLM Reasoning |
+| **Failure** | Crashes on error | Self-corrects / Retries |
+| **Role** | Tool | Collaborator |
+
+---
+
+# The Hand-off Mechanism
 
 The critical part of an Agentic Workflow is not the *Agent*, but the **Hand-off**. How does information flow from Agent A to Agent B without loss?
 
@@ -299,9 +405,16 @@ Prompting Gemini for a travel plan is a *content* task. Fetching images is a *da
 
 ---
 
-# Topic 3: UI Improvements
 
-**Theory: What makes a UI "Premium"?**
+
+<!-- _class: lead -->
+
+# Topic 3: UI Improvements
+## Theory & Principles
+
+---
+
+# What makes a UI "Premium"?
 
 1.  **Visual Hierarchy**: The eye should be guided. Large images first, bold titles second, metadata last.
 2.  **Gestalt Principles**:
@@ -311,52 +424,109 @@ Prompting Gemini for a travel plan is a *content* task. Fetching images is a *da
 
 ---
 
-# Why Gemini?
+# The Default: Generic by Design
+(What happens without prompting)
 
-**The Need for Speed**
+If you ask an LLM: *"Make a travel page"*, it will minimize risk.
 
-In TraveLens, we use `gemini-3-flash-preview`.
-
-*   **Latency**: < 1000ms.
-*   **Context**: 1 Million tokens (allows us to pass huge context if needed).
-*   **Cost**: Significantly cheaper than Pro models.
-
-**Use Case**:
-When a user clicks "Generate Plan," they expect an instant result. We trade the *reasoning depth* of Pro models for the *instant feedback* of Flash models.
+*   **Result**: Standard Bootstrap/Tailwind card.
+*   **Why**: It's the statistically most probable token sequence.
+*   **Problem**: It looks like a template.
 
 ---
 
-# Weekly Project: UI/UX Refinement
+# Simple Implementation
+(Before Refinement)
+
+*Standard Implementation without refinement:*
+
+*   **Layout**: Simple CSS Grid (Rows/Columns).
+*   **Images**: standard `<img>` tags (slow loading, layout shift).
+*   **Interaction**: Browser default (blue outline, instant page changes).
+*   **Result**: Functional, but feels "Cheap".
+
+---
+
+# Result of Detailed Prompting
+(After Refinement)
+
+*Applying Role 2 Constraints:*
+
+*   **Masonry Grid**: Tailwind `columns-3` for organic layout.
+*   **Bento Grid**: "Similar Destinations" in a structured, hierarchical grid.
+*   **Visuals**: High-res photos with *clean overlays* (Gradient text protection).
+*   **Performance**: `urls.small` used for speed, pre-fetched.
+
+---
+
+
+
+# Prompt Specifics: The Masonry Grid
+(UI Structure)
+
+> "**Homepage:** Responsive Masonry Grid (Pinterest-style) using Tailwind `columns`... Use `urls.small` for performance."
+
+*   **Constraint**: We forced a specific layout engine (`columns`) instead of generic Flexbox.
+*   **Performance**: We explicitly requested the optimized image size.
+
+---
+
+# Prompt Specifics: Visual Hierarchy
+(Visual Fidelity)
+
+> "**Left panel (Hero):** Selected high-res photo (`urls.regular`). Overlay must be **clean**: Display only **Title** and **Tags** (Remove location text and Compass/Map icons)."
+
+*   **Reduction**: We explicitly told the Agent what to *remove* to achieve a cleaner look.
+
+---
+
+# Prompt Specifics: UX & Search
+(Interactivity)
+
+> "**Search Bar:** A centered shadcn `Input` with a search icon that updates the grid in real-time (Syncs with URL query params)."
+
+*   **Behavior**: We defined the *state mechanism* (URL Params), ensuring the search is shareable and bookmarks work (UX Best Practice).
+
+---
+
+
+
+# The Challenge: Polish to Perfection
 
 **Goal**: The current app is functional. Your job is to make it delightful.
 
 **Definition of Done**:
-- [ ] **Interaction**: Add "View Transitions" so images morph when clicking a card.
-- [ ] **Feature**: Implement a "Save to Favorites" button using `localStorage` (Persist state).
-- [ ] **Visuals**: Add a "Dark Mode" toggle that actually looks good (Theme aware).
-- [ ] **Deep Link**: Add a "Share" button that copies a URL with current params.
-- [ ] **Polish**: Replace `alert()` with specific UI Toasts (use `sonner` or `toast`).
+
+- [ ] **Favorites**: Implement "Save" button with `localStorage` persistence.
+- [ ] **UI Animation**: Clicking "Save" triggers a Heart/Confetti scale effect.
+- [ ] **UI Polish**: Grid items load with a "Staggered Fade-in" effect.
+- [ ] **UX**: Masonry Grid supports Keyboard Navigation (Arrow Keys).
+- [ ] **UX**: "Recent Searches" chips appear below the search bar.
 
 ---
 
 # Resources
 
-**Reading & Learning**
+**Foundations & Strategy**
 
-*   [The AI-Native Developer: A manifest](https://www.swyx.io/ai-native-dev) - *Swyx.*
-*   [Components as Data: The future of UI](https://rauchg.com/2023/ai-components) - *Guillermo Rauch.*
-*   [Gestalt Principles in UI Design](https://www.usertesting.com/blog/gestalt-principles) - *Theory.*
-*   [Micro-Interactions: Why details matter](https://www.nngroup.com/articles/microinteractions/) - *NN/g.*
-*   [Google Gemini Models](https://ai.google.dev/models) - *Understanding Flash vs Pro.*
+*   [Software Engineering at Google](https://abseil.io/resources/swe-book) - *Winters, Manshreck, Wright (O'Reilly).*
+*   [The Bitter Lesson](http://www.incompleteideas.net/IncIdeas/BitterLesson.html) - *Rich Sutton.*
+*   [Strategies for rigorous agentic workflows](https://www.anthropic.com/research/building-effective-agents) - *Anthropic Research.*
+
+**Architecture & Workflow**
+*   [Patterns for Building LLM-based Systems & Products](https://eugeneyan.com/writing/llm-patterns/) - *Eugene Yan.*
+*   [SWE-agent: Agent-Computer Interfaces](https://swe-agent.com/) - *Princeton University.*
+*   [Building LLM Applications for Production](https://huyenchip.com/2023/04/11/llm-engineering.html) - *Chip Huyen.*
 
 ---
 
-# Advanced Resources
+# Resources
 
-**Deep Technical Reads**
+**Design Engineering**
 
-*   [Patterns for Building LLM-based Systems & Products](https://eugeneyan.com/writing/llm-patterns/) - *Eugene Yan.*
-*   [Building LLM Applications for Production](https://huyenchip.com/2023/04/11/llm-engineering.html) - *Chip Huyen.*
-*   [Strategies for rigorous agentic workflows](https://www.anthropic.com/research/building-effective-agents) - *Anthropic Research.*
+*   [Components as Data: The future of UI](https://rauchg.com/2023/ai-components) - *Guillermo Rauch.*
 *   [Generative UI & Vercel AI SDK](https://vercel.com/blog/ai-sdk-3-generative-ui) - *Concept deep dive.*
+*   [Gestalt Principles in UI Design](https://www.usertesting.com/blog/gestalt-principles) - *Theory.*
+*   [Design Engineering at Vercel](https://vercel.com/blog/design-engineering-at-vercel) - *Rauno Freiberg.*
+*   [Understanding React Server Components](https://www.joshwcomeau.com/react/server-components/) - *Josh W. Comeau.*
 
