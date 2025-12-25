@@ -469,20 +469,30 @@ type RentalFlowStep =
 <!-- _class: lead -->
 
 # Weekly Project
-## Guarantee Reliability
+## Feature Expansion with TDD
 
 ---
 
-# The Challenge: Fix & Fortify
+# The Challenge: "Smart Insurance"
 
-**Objective**: The app has 3 critical bugs and zero tests. Fix them and prove it.
+**Context**: Users are damaging premium gears. We need an optional "Damage Protection" add-on.
 
-**Definition of Done**:
-- [ ] **Fix Logic Error**: `date-utils.ts` calculates exact day range (fix off-by-one).
-- [ ] **Fix Validation**: Zod schema allows rentals > 7 days.
-- [ ] **Fix State**: `RentalFlow` button stops loading after error/success.
-- [ ] **Test Coverage**: > 80% coverage on `date-utils` and `RentalFlow`.
-- [ ] **Docs**: Complete `ONBOARDING.md` and `DIAGRAMS.md` (Mermaid).
+**The Task**:
+Implement a **Dynamic Insurance** feature that calculates a fee based on the category:
+*   **Photography/Video**: 20% of daily rate (High Risk).
+*   **All other categories**: 10% of daily rate.
+
+**The Constraint**:
+You must use **AI-Driven TDD**. You cannot write the implementation until the AI has generated a failing test suite.
+
+---
+
+# Definition of Done
+
+- [ ] **Test Suite**: Created `insurance-calculator.test.ts` covering all categories *before* implementation.
+- [ ] **Implementation**: `calculateInsurance(dailyRate, category)` logic is pure and verified.
+- [ ] **UI Integration**: Added "Add Insurance" toggle to `PriceSummary.tsx`.
+- [ ] **Docs Update**: Updated `docs/DIAGRAMS.md` flow chart to include the optional Insurance step.
 
 ---
 

@@ -31,16 +31,19 @@ Contains the **Prompt Library** for this week.
 Contains the **Course Materials**.
 *   **`slides.md`**: The lecture slides in MARP Markdown format.
 
-## The Challenge: Reliability & Polish
+## The Challenge: Feature Expansion (TDD)
 
-**Objective**: The current app works but has critical bugs and no safety net. Fix it and prove it works.
+**Objective**: Add a new "Smart Insurance" feature to the application using Strict AI-Driven TDD.
+
+**Context**: Users are breaking equipment. We need an optional protection plan.
+*   **Photography**: 20% fee.
+*   **Others**: 10% fee.
 
 **Definition of Done**:
-- [ ] **Fix Logic Error**: `date-utils.ts` calculates exact day range (fix off-by-one).
-- [ ] **Fix Validation**: Zod schema allows rentals > 7 days.
-- [ ] **Fix State**: `RentalFlow` button stops loading after error/success.
-- [ ] **Test Coverage**: > 80% coverage on `date-utils` and `RentalFlow`.
-- [ ] **Docs**: Complete `ONBOARDING.md` and `DIAGRAMS.md` (Mermaid).
+- [ ] **TDD First**: Generate `insurance-calculator.test.ts` covering all categories *before* writing logic.
+- [ ] **Implementation**: Implement the logic to pass the AI-generated tests.
+- [ ] **Integration**: Add an "Add Insurance" toggle to the `PriceSummary` component.
+- [ ] **Documentation**: Update `docs/DIAGRAMS.md` to reflect the new price calculation flow.
 
 ## Resources
 
