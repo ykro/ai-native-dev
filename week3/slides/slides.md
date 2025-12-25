@@ -19,7 +19,7 @@ style: |
     margin: 1.5em 10px;
     padding: 0.5em 10px;
   }
-  h1, h2 {
+  h1, h2, h3 {
     color: #2563eb;
   }
   li {
@@ -61,8 +61,19 @@ adriancatalan@galileo.edu
 
 *   **Stack**: Next.js (App Router), Tailwind CSS, Shadcn UI.
 *   **AI Integration**: "Nano Banana" (Gemini) for on-demand image generation.
-*   **Storage**: Google Cloud Storage (GCS) for asset persistence.
-*   **Problem**: It works... mostly. It has hidden bugs, missing tests, and zero documentation.
+*   **Problem**: It works... mostly. But it has hidden bugs, missing tests, and zero documentation.
+
+---
+
+# Rent My Gear: Visual Discovery
+
+![bg 80%](../rent-my-gear/assets/home_demo.png)
+
+---
+
+# Rent My Gear: Rental Flow
+
+![bg 80%](../rent-my-gear/assets/detail_demo.png)
 
 ---
 
@@ -73,28 +84,100 @@ adriancatalan@galileo.edu
 
 ---
 
-# The "Fix-It" Loop
+# 1. Why do we need Structured Debugging?
 
-When debugging with AI, we don't just paste code and say "fix it". We use a structured approach:
+**The "Spray and Pray" Problem**
+In traditional development, when a bug appears, we stare at `console.log` for hours.
+
+*   **Cost**: Average developer spends 50% of their time debugging.
+*   **Risk**: Fixing one bug often creates two more ("Whac-A-Mole").
+
+**The AI Advantage**
+An Agent can analyze the *Logic*, the *State*, and the *Semantics* simultaneously.
+
+---
+
+# 2. Traditional vs AI-Native Debugging
+
+| Feature | Traditional Debugging | AI-Native Debugging |
+| :--- | :--- | :--- |
+| **Input** | `console.log("here")` | Error Trace + File Context |
+| **Analysis** | Manual Stack Trace Reading | Pattern Matching + Semantic Analysis |
+| **Hypothesis** | Developer Intuition | Multi-Factor Probability Assessment |
+| **Fix** | Trial and Error | Step-by-Step Resolution Plan |
+
+---
+
+# 3. The "Fix-It" Loop
+
+We don't just dump the error. We use a **Loop**:
 
 1.  **Context Injection**: Provide the error logs + relevant file contents.
 2.  **Hypothesis Generation**: Ask the AI to list 3 possible causes (Logic, State, Validation).
 3.  **Step-by-Step Resolution**: Fix one layer at a time.
-
-> "A bug is just an undeclared feature... until it costs money."
+4.  **Verify**: Run the code to check if the error persists.
 
 ---
 
-# Example: Guided Debugging Prompt
+# 4. Prompt: Error Injection
 
-We intentionally injected bugs (off-by-one errors, Zod validation issues). Here is how we ask the Agent to solve them:
+To learn, we first break things. We ask the AI to **inject** subtle bugs.
 
-> **Guided Debugging**: "Users are reporting that the total price for rentals is lower than expected...
-> 1. Run the application and inspect logs.
-> 2. Analyze `src/lib/date-utils.ts` and Zod schemas.
-> 3. Identify logical errors and propose fixes."
+> **Prompt**: "Modify the current codebase of **Rent my Gear** to introduce the following three subtle bugs for educational purposes:
+> 1. **Logic Error:** In `src/lib/date-utils.ts`, modify the price calculation so it misses the final day (off-by-one).
+> 2. **Validation Error:** In Zod schema, reject rentals > 7 days.
+> 3. **State Error:** Make 'Confirmar' button stick in 'loading' state."
 
-*This creates a plan before touching code.*
+---
+
+# 5. Anatomy of the Logic Bug
+
+The AI modifies `date-utils.ts` to be *almost* correct.
+
+```typescript
+// src/lib/date-utils.ts (BUGGY VERSION)
+export function calculateRentalDays(startDate: Date, endDate: Date): number {
+  const days = differenceInDays(startDate, endDate);
+  // ERROR: Missing the +1 inclusive day
+  return Math.abs(days);
+}
+```
+
+*   **Impact**: User rents Mon-Tue (2 days). System charges for 1 day.
+*   **Business Cost**: 50% revenue loss on short rentals.
+
+---
+
+# 6. Prompt: Guided Debugging
+
+Now we switch roles. We are the Senior Dev guiding the Agent to fix it.
+
+> **Prompt**: "Users are reporting that the total price for rentals is lower than expected...
+> 1. Run the application and inspect the terminal and browser logs.
+> 2. Analyze `src/lib/date-utils.ts` and the Zod validation schemas.
+> 3. Identify the logical errors and propose fixes."
+
+**Note**: We force the agent to *Inspection* before *Action*.
+
+---
+
+# 7. Semantic Analysis
+
+Why does the AI find this faster?
+It understands the *intent* of "Rental Days".
+
+*   **Human**: Sees `differenceInDays`. Thinks "Math is correct".
+*   **AI**: Sees `Rental Context`. Knows "Rentals are usually date-inclusive". Flags mismatch between `Math` and `Business Domain`.
+
+---
+
+# 8. Key Takeaway: Debugging
+
+> **Don't ask "Fix this Error".**
+> **Ask "Explain why this state is reached".**
+
+*   **Rule**: Always force the AI to explain the root cause (Hypothesis) before generating the code fix.
+*   **Benefit**: You learn the system while the AI fixes it.
 
 ---
 
@@ -105,27 +188,108 @@ We intentionally injected bugs (off-by-one errors, Zod validation issues). Here 
 
 ---
 
-# AI-Driven TDD
+# 1. The Reality of Testing
 
-Writing tests is tedious. AI loves tedious work.
-We use **Vitest** and **React Testing Library** to create a safety net.
+**"I'll write tests later"** is the biggest lie in software engineering.
 
-*   **Unit Tests**: Validate pure functions (e.g., Price Calculation).
-*   **Integration Tests**: Simulate user flows (e.g., Clicking "Rent").
-*   **Edge Cases**: What happens if the Image API returns 404?
+*   **Traditional**: Writing mocks is tedious. Validating edge cases is hard.
+*   **Result**: Low coverage, regression bugs on Fridays.
+
+**AI-Driven TDD**:
+The AI *loves* writing boilerplate. It makes TDD (Test Driven Development) faster than "coding and praying".
 
 ---
 
-# Example: Generating a Test Suite
+# 2. The V-Model in AI
 
-Instead of writing `expect(true).toBe(true)`, detailed prompting gives us full coverage:
+We treat Testing as the mirror of Implementation.
 
-> **Testing Suite**: "Using Vitest... generate a testing suite:
-> 1. **Unit Tests:** `date-utils.ts` with various ranges.
-> 2. **Integration:** Full rental flow (Success toast).
-> 3. **Edge Cases:** Handle Nano Banana fallback on 404."
+```mermaid
+graph TD
+    Req[Requirements] --- Acc[Acceptance Tests]
+    Des[Design] --- Sys[System Tests]
+    Imp[Implementation] --- Unit[Unit Tests]
+```
 
-*Result: A comprehensive `date-utils.test.ts` with Leap Year support.*
+With AI, we generate the **Right Side** (Tests) often *before* or *immediately after* the **Left Side** (Code).
+
+---
+
+# 3. Prompt: Generating a Test Suite
+
+We don't write `expect(x).toBe(y)` manually. We design the *scope*.
+
+> **Prompt**: "Using **Vitest** and **React Testing Library**, generate a testing suite:
+> 1. **Unit Tests:** Create tests for `src/lib/date-utils.ts` to validate price calculations with various ranges (1 day, 1 week, cross-month).
+> 2. **Integration:** Simulate full rental flow (selecting category -> picking items).
+> 3. **Edge Cases:** Handle Unsplash 404 errors."
+
+---
+
+# 4. Example: Variable Logic Testing
+
+The AI generates exhaustive test cases we might miss (e.g., Leap Years).
+
+```typescript
+// Generated Test
+describe("calculateRentalDays", () => {
+  it("should calculate correct days for leap year crossing", () => {
+    const start = new Date("2024-02-28");
+    const end = new Date("2024-03-01");
+    // 2024 is leap year: Feb 28, Feb 29, Mar 1 = 3 days
+    expect(calculateRentalDays(start, end)).toBe(3);
+  });
+});
+```
+
+---
+
+# 5. Integration Testing with AI
+
+Testing React Components requires mocking context, router, and API.
+
+*   **Challenge**: Correctly mocking `useRouter()` or `fetch`.
+*   **AI Solution**: It generates the `setup` file automatically.
+
+```typescript
+// mocks/handlers.ts
+export const handlers = [
+  http.get('/api/gear', () => {
+    return HttpResponse.json(mockInventory)
+  }),
+]
+```
+
+---
+
+# 6. Edge Cases & Resilience
+
+What happens when 3rd party APIs fail?
+We ask the AI to simulate "Chaos".
+
+*   **Scenario**: Unsplash API goes down (500 Error).
+*   **Test**: Ensure `imageService` switches to "Nano Banana" fallback seamlessly.
+*   **Prompt**: "Write a test that mocks a 500 error from Unsplash and asserts that `generateImageWithAI` is called."
+
+---
+
+# 7. Coverage is not Quality
+
+**Warning**: AI can generate 100% coverage tests that check nothing.
+
+*   **Bad Test**: `expect(true).toBe(true)`
+*   **Good Test**: `expect(screen.getByText("Confirmar")).toBeDisabled()`
+
+**Rule**: Always review the *assertions* generated by the AI.
+
+---
+
+# 8. Key Takeaway: Testing
+
+> **AI turns Testing from a "chore" into a "spec".**
+
+*   **Workflow**: Write Code -> Prompt for Tests -> Fix Code based on Test Failures.
+*   **Benefit**: You get a robust safety net for free.
 
 ---
 
@@ -136,25 +300,109 @@ Instead of writing `expect(true).toBe(true)`, detailed prompting gives us full c
 
 ---
 
-# The "Bus Factor"
+# 1. The "Bus Factor"
 
-If you leave the project tomorrow, can someone else run it?
-AI Agents excel at creating structure from chaos.
+**Bus Factor**: The number of team members that can get "hit by a bus" before the project stalls.
+*   **Low Factor (1)**: Only YOU know how the build works.
+*   **High Factor**: Anyone can read `ONBOARDING.md` and deploy.
 
-**Key Documents**:
-1.  **ONBOARDING.md**: How to start (Environment, Install, Run).
-2.  **ARCHITECTURE.md**: System design (Presentation vs Data Layers).
-3.  **DIAGRAMS.md**: Visual flows (Mermaid.js).
+**Documentation is the ultimate scalability tool.**
 
 ---
 
-# Example: Architecture Documentation
+# 2. Types of AI Documentation
 
-We ask the Agent to reverse-engineer our code into a clear diagram:
+1.  **Narrative**: "How-to" guides (Onboarding).
+2.  **Structural**: Diagrams (Sequence, Class, Cloud).
+3.  **Reference**: API Docs (Swagger/OpenAPI).
+4.  **Inline**: JSDoc comments for complex logic.
 
-> **Documentation**: "Create a **Mermaid sequence diagram** showing the 'Image Resolution Flow' (JSON -> Nano Banana -> GCS Persistence). Also write an 'Onboarding Guide' explaining code and architecture."
+---
 
-*This generates the artifacts found in `docs/`.*
+# 3. Prompt: Reverse Engineering
+
+We ask the Agent to read our code and explain it back to us visually.
+
+> **Prompt**: "Generate full technical documentation:
+> 1. Create a **Mermaid sequence diagram** showing the 'Image Resolution Flow'.
+> 2. Create a **Mermaid class diagram** for `inventoryService`.
+> 3. Write an 'Onboarding Guide' explaining how to debug GCS connection."
+
+---
+
+# 4. Diagram: Image Resolution Flow
+
+The AI visualizes the logic we built in Week 2.
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant IS as imageService
+    participant AI as Nano Banana
+    participant GCS as Google Cloud Storage
+
+    C->>IS: Request Image
+    alt Image Exists
+        IS-->>C: Return URL
+    else Image Missing
+        IS->>AI: Generate(prompt)
+        AI-->>IS: Base64
+        IS->>GCS: Upload
+        GCS-->>IS: Public URL
+        IS-->>C: Return New URL
+    end
+```
+
+---
+
+# 5. Diagram: Component Hierarchy
+
+Understanding the React Tree helps identifying re-renders.
+
+```mermaid
+graph TD
+    HP[HomePage] --> HC[HeroCarousel]
+    HP --> CB[CategoryButtons]
+    
+    subgraph Rental Flow
+        RF[RentalFlow] --> DS[DateSelection]
+        RF --> PS[PriceSummary]
+        RF --> CF[Confirmation]
+    end
+```
+
+---
+
+# 6. The "Onboarding" Artifact
+
+The `docs/ONBOARDING.md` file is crucial for new hires (or AI Agents).
+
+**Key Sections**:
+1.  **Prerequisites**: Node.js, Python 3.10+, `uv`.
+2.  **Environment**: How to set up `.env.local`.
+3.  **Debugging**: "If GCS fails, check `service-account.json` path".
+
+*The AI writes this by scanning `package.json` and `.env.example`.*
+
+---
+
+# 7. Documentation as "Context"
+
+When you have good docs, you can feed them back into the AI.
+
+*   **Loop**:
+    1.  AI writes Code.
+    2.  AI writes Docs.
+    3.  **Next Session**: You give AI the Docs -> It understands the Code faster.
+
+---
+
+# 8. Key Takeaway: System Memory
+
+> **Documentation is the Long-Term Memory of your Team.**
+
+*   **Rule**: Never merge a PR without updating the relevant `docs/` file.
+*   **AI Role**: Use the "Documentation Role" to auto-generate the diff.
 
 ---
 
@@ -167,44 +415,54 @@ We ask the Agent to reverse-engineer our code into a clear diagram:
 
 # 1. The "Nano Banana" Trap (Hallucinations)
 
-We asked the Agent to install "Nano Banana Pro Local SDK".
-**It doesn't exist.** But the Agent might try to `npm install nano-banana-sdk` or hallucinate configuration code.
+We asked the Agent to install **"Nano Banana Pro Local SDK"**.
 
-*   **Lesson**: Always verify libraries.
-*   **Rule**: If an Agent suggests a library you've never heard of for a complex task, check NPM first.
-
----
-
-# 2. Separation of Concerns
-
-Our project structure follows a strict hierarchy to make AI editing safer:
-
-```
-src/
-├── components/features/  # UI Logic (Client)
-├── services/            # Business Logic (Server/Client agnostic)
-└── lib/                 # Pure Utility Functions
-```
-
-*   **Why?**: You can ask the AI to "Refactor the validaton in `lib/`" without breaking the UI components in `components/`.
+*   **The Reality**: It doesn't exist. "Nano Banana" is a made-up name for Gemini.
+*   **The Risk**: The Agent might give you `npm install nano-banana-sdk`.
+*   **The Lesson**: Agents are "people pleasers". They hallucinate to satisfy requirements.
+*   **Defense**: Always ask for "Official Documentation Links" or cross-reference with NPM.
 
 ---
 
-# 3. Smart Image Strategy
+# 2. Image Flow Architecture
 
-A Hybrid approach to assets:
+A Hybrid Strategy using Server Actions and Cloud Storage.
 
 ```mermaid
-graph TD
-    A[Request Item] --> B{Has Image?}
-    B -->|Yes| C[Serve from CDN]
-    B -->|No| D[Call AI Generator]
-    D --> E[Upload to GCS]
-    E --> F[Update Inventory]
-    F --> C
+flowchart TD
+    User -->|View Item| App
+    App -->|Check Cache| DB[(Inventory)]
+    DB -->|Found| URL[Return URL]
+    DB -->|Missing| Gen[Trigger Generation]
+    
+    subgraph "AI Pipeline"
+        Gen -->|Prompt| Gemini
+        Gemini -->|Image| Buffer
+        Buffer -->|Stream| GCS[Cloud Storage]
+    end
+    
+    GCS -->|Public Link| DB
+    GCS --> URL
 ```
 
-*   **Benefit**: Saves costs (only generate once) and latency (serve static).
+---
+
+# 3. Code Spotlight: State Machines
+
+We don't use simple booleans for complex flows. We use strict states.
+
+```typescript
+// src/components/features/RentalFlow/index.tsx
+type RentalFlowStep = 
+  | "selecting" 
+  | "configuring" 
+  | "reviewing" 
+  | "confirmed";
+
+// Benefits:
+// 1. Impossible States: Can't be 'confirmed' and 'configuring' at once.
+// 2. Type Safety: TypeScript ensures we handle every state.
+```
 
 ---
 
