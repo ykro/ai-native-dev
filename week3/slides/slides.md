@@ -486,15 +486,37 @@ type RentalFlowStep =
 
 ---
 
+<!-- _class: lead -->
+
 # Resources
+## Deep Dive Material
 
-**Testing Tools**
-*   [Vitest Documentation](https://vitest.dev/)
-*   [React Testing Library Cheatsheet](https://testing-library.com/docs/react-testing-library/cheatsheet)
+---
 
-**Architecture & Cloud**
-*   [Google Cloud Storage Node.js Client](https://cloud.google.com/nodejs/docs/reference/storage/latest)
-*   [Mermaid.js Live Editor](https://mermaid.live/)
+# Resources: Debugging & Agents
 
-**AI Concepts**
-*   [Hallucinations in LLMs (Google Cloud)](https://cloud.google.com/discover/what-are-ai-hallucinations)
+*   **[The Debugging Decay Index (2025)](https://arxiv.org/abs/2405.08775)** - Why AI struggles with long debugging sessions.
+*   **[Debugging with LLMs: A Benchmark (DebugEval)](https://arxiv.org/abs/2401.04620)** - Research on how LLMs perform on Python/C++ bugs.
+*   **[Systematic Debugging with AI Agents](https://engineering.atspotify.com/2023/12/how-we-use-ai-for-debugging-at-spotify/)** - Real-world patterns from Spotify usage.
+*   **[The Art of Error Injection](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/error-injection/)** - Microsoft Engineering Playbook on learning through breakage.
+*   **[Prompt Engineering for Debugging](https://www.promptingguide.ai/applications/coding)** - Techniques to force "Reasoning Trace" before "Code Fix".
+
+---
+
+# Resources: Testing Strategy
+
+*   **[Rethinking Test Efficiency with AI](https://martinfowler.com/articles/2023-test-automation-ai.html)** - Martin Fowler's blog on effective AI testing.
+*   **[React Testing Library: Common Mistakes](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)** - Kent C. Dodds (Creator) on what NOT to do.
+*   **[Vitest vs Jest: A Performance Comparison](https://vitest.dev/guide/comparison.html)** - Why we chose Vitest for the modern stack.
+*   **[TDD with GitHub Copilot](https://github.blog/2023-08-30-how-to-use-github-copilot-for-test-driven-development/)** - Official guide on the "Test-First" workflow with AI.
+*   **[The V-Model in the Age of AI](https://towardsdatascience.com/the-v-model-for-ai-projects-9f892551525d)** - Adapting traditional verification models to generative AI.
+
+---
+
+# Resources: Documentation & Knowledge
+
+*   **[Docs as Code: A Comprehensive Guide](https://www.writethedocs.org/guide/docs-as-code/)** - The industry standard philosophy we follow.
+*   **[The "Bus Factor" and Technical Debt](https://understandlegacycode.com/blog/what-is-the-bus-factor/)** - Why documentation is an asset, not a chore.
+*   **[Mermaid.js for Developers](https://mermaid.js.org/intro/getting-started.html)** - Visualizing code without leaving Markdown.
+*   **[Technical Debt Records (TDRs)](https://18f.gsa.gov/2015/10/05/managing-technical-debt/)** - 18F's approach to documenting decisions and compromises.
+*   **[Google's Style Guide for Developer Documentation](https://developers.google.com/style)** - Gold standard for writing clear technical guides.

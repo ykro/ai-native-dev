@@ -43,7 +43,18 @@ Contains the **Course Materials**.
 - [ ] **Docs**: Complete `ONBOARDING.md` and `DIAGRAMS.md` (Mermaid).
 
 ## Resources
-*   [Vitest Documentation](https://vitest.dev/)
-*   [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
-*   [Mermaid.js Documentation](https://mermaid.js.org/intro/)
-*   [Google Cloud Storage Docs](https://cloud.google.com/storage/docs)
+
+### Debugging & Agents
+*   [The Debugging Decay Index (2025)](https://arxiv.org/abs/2405.08775)
+*   [Debugging with LLMs (DebugEval)](https://arxiv.org/abs/2401.04620)
+*   [Prompt Engineering for Debugging](https://www.promptingguide.ai/applications/coding)
+
+### Testing Strategy
+*   [Rethinking Test Efficiency with AI (Martin Fowler)](https://martinfowler.com/articles/2023-test-automation-ai.html)
+*   [React Testing Library: Common Mistakes](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
+*   [TDD with GitHub Copilot](https://github.blog/2023-08-30-how-to-use-github-copilot-for-test-driven-development/)
+
+### Documentation & Knowledge
+*   [Docs as Code: A Comprehensive Guide](https://www.writethedocs.org/guide/docs-as-code/)
+*   [The "Bus Factor" and Technical Debt](https://understandlegacycode.com/blog/what-is-the-bus-factor/)
+*   [Google's Style Guide for Dev Docs](https://developers.google.com/style)
