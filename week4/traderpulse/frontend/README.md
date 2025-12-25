@@ -32,6 +32,14 @@ In the project directory, you can run:
 - **`npm run start`**: Runs the built production application.
 - **`npm run lint`**: Runs ESLint to check for code quality issues.
 
-## 🚀 Development
+## 🚀 Deployment (Vercel)
+
+The frontend is optimized for **Vercel**.
+
+### Steps
+1.  **Push to GitHub**: Ensure the repository is connected to Vercel.
+2.  **Configuration**: In Vercel Project Settings > General, set **Root Directory** to `frontend`.
+3.  **Environment Variables**: Add `NEXT_PUBLIC_API_URL` pointing to your deployed Backend URL.
+4.  **Deploy**: Trigger a deployment from the dashboard.
 
 For setup and running instructions, please see the **[Onboarding Guide](./ONBOARDING.md)**.

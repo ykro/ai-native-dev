@@ -47,6 +47,23 @@ The application uses Pydantic models for all data exchange. Key models include:
 - **`StockQuote`**: Represents a snapshot of a stock's price.
 - **`SentimentAnalysis`**: The structural output from the AI model.
 
-## 🚀 Development
+## 🚀 Deployment (Google Cloud Run)
+
+The backend is designed to run serverless on Cloud Run.
+
+### Prerequisites
+- Google Cloud Project
+- Service Account with `Secret Manager Secret Accessor` role.
+
+### Steps
+1.  **Secrets**: Create `traderpulse-gemini-key` in Google Secret Manager.
+2.  **Deploy**:
+    ```bash
+    gcloud run deploy traderpulse-api \
+      --source . \
+      --region us-central1 \
+      --allow-unauthenticated \
+      --set-secrets="GEMINI_API_KEY=traderpulse-gemini-key:latest"
+    ```
 
 For setup and running instructions, please see the **[Onboarding Guide](./ONBOARDING.md)**.
