@@ -80,11 +80,10 @@ adriancatalan@galileo.edu
 <!-- _class: lead -->
 
 # Topic 1: Debugging
-## The AI as Sherlock Holmes
 
 ---
 
-# 1. Why do we need Structured Debugging?
+# Why do we need Structured Debugging?
 
 **The "Spray and Pray" Problem**
 In traditional development, when a bug appears, we stare at `console.log` for hours.
@@ -97,7 +96,7 @@ An Agent can analyze the *Logic*, the *State*, and the *Semantics* simultaneousl
 
 ---
 
-# 2. Traditional vs AI-Native Debugging
+# Traditional vs AI-Native Debugging
 
 | Feature | Traditional Debugging | AI-Native Debugging |
 | :--- | :--- | :--- |
@@ -108,18 +107,18 @@ An Agent can analyze the *Logic*, the *State*, and the *Semantics* simultaneousl
 
 ---
 
-# 3. Method: The "Context Injection" Loop
+# Method: The "Context Injection" Loop
 
 We don't just dump the error. We use a **Loop**:
 
 1.  **Context Injection**: Provide the error logs + relevant file contents.
-2.  **Hypothesis Generation**: Ask the AI to list 3 possible causes (Logic, State, Validation).
+2.  **Hypothesis Generation**: Ask the AI to list possible causes (Logic, State, Validation, etc).
 3.  **Step-by-Step Resolution**: Fix one layer at a time.
 4.  **Verify**: Run the code to check if the error persists.
 
 ---
 
-# 4. Prompt: Error Injection
+# Prompt: Error Injection
 
 To learn, we first break things. We ask the AI to **inject** subtle bugs.
 
@@ -130,7 +129,7 @@ To learn, we first break things. We ask the AI to **inject** subtle bugs.
 
 ---
 
-# 5. Anatomy of the Logic Bug (Code)
+# Anatomy of the Logic Bug (Code)
 
 The AI modifies `date-utils.ts` to be *almost* correct.
 
@@ -148,7 +147,7 @@ export function calculateRentalDays(startDate: Date, endDate: Date): number {
 
 ---
 
-# 6. Prompt: Guided Debugging
+# Prompt: Guided Debugging
 
 Now we switch roles. We are the Senior Dev guiding the Agent to fix it.
 
@@ -159,20 +158,18 @@ Now we switch roles. We are the Senior Dev guiding the Agent to fix it.
 
 ---
 
-# 7. Prompt: Fixing "Invisible" Errors
+# Prompt: Fixing "Invisible" Errors
 
 Some bugs are subtle, like Hydration Mismatches in Next.js.
 
-> **Prompt**: "The UI 'flickers' or shows different content than the server-rendered HTML. Why does this happens? Investigate components that render dynamic content on the home page.
->
-> *Note: If the AI suggests it is a CSS issue, insist on checking the React rendering cycle and values used in initial state (useState).*"
+> **Prompt**: The UI 'flickers' or shows different content than the server-rendered HTML. Why does this happens? Investigate components that render dynamic content on the home page.
 
 ---
 
-# 8. Key Takeaway: Debugging
+# Key Takeaway: Debugging
 
-> **Don't ask "Fix this Error".**
-> **Ask "Explain why this state is reached".**
+Don't ask "Fix this Error".
+Ask "Explain why this state is reached".
 
 *   **Rule**: Always force the AI to explain the root cause (Hypothesis) before generating the code fix.
 *   **Benefit**: You learn the system while the AI fixes it.
@@ -182,48 +179,23 @@ Some bugs are subtle, like Hydration Mismatches in Next.js.
 <!-- _class: lead -->
 
 # Topic 2: Testing
-## Trust, but Verify
 
 ---
 
-# 1. Test Driven Development (TDD)
+# Testing Strategy & Importance
 
-**The Concept**
-Reverse the workflow. Write the *Requirement* as a *Test* before you write the *Code*.
+**The Safety Net**
+Testing isn't just about finding bugs; it's about enabling change without fear.
 
-**The Cycle (Red-Green-Refactor)**:
-1.  **Red**: Write a test that fails (because the feature doesn't exist).
-2.  **Green**: Write just enough code to pass the test.
-3.  **Refactor**: Clean up the code while keeping the test green.
+*   **Unit Tests**: Verify small, isolated pieces of logic (e.g., price calculation).
+*   **Integration Tests**: Verify how components work together (e.g., User selects item -> Cart updates).
+*   **End-to-End (E2E) Tests**: Verify the full user journey (e.g., Login -> Rent -> Pay).
 
----
-
-# 2. Why TDD is hard (Traditionally)
-
-1.  **Boilerplate**: Setting up mocks and imports takes longer than writing the function.
-2.  **Mental Shift**: It's hard to test something that doesn't exist yet.
-3.  **Maintenance**: Tests can be brittle and break with minor changes.
-
-**AI Solves This**: It generates the boilerplate and the "Red" state instantly based on your spec.
+"Legacy code is code without tests." - Michael Feathers
 
 ---
 
-# 3. AI-Driven TDD Strategy
-
-We treat Testing as the mirror of Implementation.
-
-```mermaid
-graph TD
-    Req[Requirements] --- Acc[Acceptance Tests]
-    Des[Design] --- Sys[System Tests]
-    Imp[Implementation] --- Unit[Unit Tests]
-```
-
-With AI, we generate the **Right Side** (Tests) often *before* or *immediately after* the **Left Side** (Code).
-
----
-
-# 4. Prompt: Generating a Test Suite
+# Prompt: Generating a Test Suite
 
 We design the *scope*.
 
@@ -234,7 +206,7 @@ We design the *scope*.
 
 ---
 
-# 5. Example: Deep Verification
+# Example: Deep Verification
 
  The AI generates exhaustive test cases, including edge cases like Leap Years.
 
@@ -252,7 +224,7 @@ describe("calculateRentalDays", () => {
 
 ---
 
-# 6. Integration Testing with AI
+# Integration Testing with AI
 
 Testing React Components requires mocking context and API.
 
@@ -272,19 +244,56 @@ export const handlers = [
 
 ---
 
-# 7. Edge Cases & Resilience
+# Edge Cases & Resilience
 
-What happens when 3rd party APIs fail?
+Example: What happens when 3rd party APIs fail?
 
-*   **Scenario**: Unsplash API goes down (500 Error).
-*   **Test**: Ensure `imageService` switches to "Nano Banana" fallback seamlessly.
+*   **Hypothetical Scenario**: We use Unsplash API as primary, and "Nano Banana" as fallback.
+*   **The Test**: Simulate Unsplash returning 500 Error, and verify the system switches to AI generation.
 *   **Prompt Segment**: *"Test how the system handles the 'Nano Banana' fallback if the Unsplash API returns a 404 error."*
 
 ---
 
-# 8. Key Takeaway: Testing
+# Test Driven Development (TDD)
 
-> **AI turns Testing from a "chore" into a "spec".**
+**The Concept**
+Reverse the workflow. Write the *Requirement* as a *Test* before you write the *Code*.
+
+**The Cycle (Red-Green-Refactor)**:
+1.  **Red**: Write a test that fails (because the feature doesn't exist).
+2.  **Green**: Write just enough code to pass the test.
+3.  **Refactor**: Clean up the code while keeping the test green.
+
+---
+
+# Why TDD is hard (Traditionally)
+
+1.  **Boilerplate**: Setting up mocks and imports takes longer than writing the function.
+2.  **Mental Shift**: It's hard to test something that doesn't exist yet.
+3.  **Maintenance**: Tests can be brittle and break with minor changes.
+
+**AI Solves This**: It generates the boilerplate and the "Red" state instantly based on your spec.
+
+---
+
+# AI-Driven TDD Strategy
+
+We treat Testing as the mirror of Implementation.
+
+```mermaid
+graph TD
+    Req[Requirements] --- Acc[Acceptance Tests]
+    Des[Design] --- Sys[System Tests]
+    Imp[Implementation] --- Unit[Unit Tests]
+```
+
+With AI, we generate the **Right Side** (Tests) often *before* or *immediately after* the **Left Side** (Code).
+
+---
+
+# Key Takeaway: Testing
+
+AI turns Testing from a "chore" into a "spec".
 
 *   **Workflow**: Write Code -> Prompt for Tests -> Fix Code based on Test Failures.
 *   **Benefit**: You get a robust safety net for free.
@@ -294,21 +303,20 @@ What happens when 3rd party APIs fail?
 <!-- _class: lead -->
 
 # Topic 3: Documentation
-## Code is Temporary, Docs are Forever
 
 ---
 
-# 1. The "Bus Factor"
+# The "Bus Factor"
 
-**Bus Factor**: The number of team members that can get "hit by a bus" before the project stalls.
-*   **Low Factor (1)**: Only YOU know how the build works.
+**Bus Factor**: The number of team members that can "suddenly dissapear" before the project stalls.
+*   **Low Factor (1)**: Only ONE person know how the build works.
 *   **High Factor**: Anyone can read `ONBOARDING.md` and deploy.
 
 **Documentation is the ultimate scalability tool.**
 
 ---
 
-# 2. Types of AI Documentation
+# Types of AI Documentation
 
 1.  **Narrative**: "How-to" guides (Onboarding).
 2.  **Structural**: Diagrams (Mermaid.js).
@@ -317,7 +325,7 @@ What happens when 3rd party APIs fail?
 
 ---
 
-# 3. Method: Reverse Engineering
+# Method: Reverse Engineering
 
 We ask the Agent to read our code and explain it back to us visually.
 
@@ -326,7 +334,7 @@ We ask the Agent to read our code and explain it back to us visually.
 
 ---
 
-# 4. Prompt: Documentation Generation
+# Prompt: Documentation Generation
 
 > **Prompt**: "Generate full technical documentation for **Rent my Gear**:
 > 1. Document everything that's needed for project understanding.
@@ -335,7 +343,7 @@ We ask the Agent to read our code and explain it back to us visually.
 
 ---
 
-# 5. Diagram: Image Resolution Flow
+# Diagram: Image Resolution Flow
 
 The AI visualizes the logic we built in Week 2.
 
@@ -360,7 +368,7 @@ sequenceDiagram
 
 ---
 
-# 6. Diagram: Class Hierarchy
+# Diagram: Class Hierarchy
 
 Visualizing the service layer to ensure separation of concerns.
 
@@ -386,7 +394,7 @@ classDiagram
 
 ---
 
-# 7. The "Onboarding" Artifact
+# The "Onboarding" Artifact
 
 The `docs/ONBOARDING.md` file is crucial for new hires (or AI Agents).
 
@@ -397,9 +405,9 @@ The `docs/ONBOARDING.md` file is crucial for new hires (or AI Agents).
 
 ---
 
-# 8. Key Takeaway: System Memory
+# Key Takeaway: System Memory
 
-> **Documentation is the Long-Term Memory of your Team.**
+Documentation is the Long-Term Memory of your Team.
 
 *   **Rule**: Never merge a PR without updating the relevant `docs/` file.
 *   **AI Role**: Use the "Documentation Role" to auto-generate the diff.
@@ -409,11 +417,10 @@ The `docs/ONBOARDING.md` file is crucial for new hires (or AI Agents).
 <!-- _class: lead -->
 
 # Deep Dive
-## Architectural Insights
 
 ---
 
-# 1. The "Nano Banana" Trap (Hallucinations)
+# The "Nano Banana" Trap (Hallucinations)
 
 We asked the Agent to install **"Nano Banana Pro Local SDK"**.
 
@@ -423,7 +430,7 @@ We asked the Agent to install **"Nano Banana Pro Local SDK"**.
 
 ---
 
-# 2. Prompt: Hallucination Demo
+# Prompt: Hallucination Demo
 
 We intentionally try to trick the AI to see if it catches the lie.
 
@@ -433,7 +440,7 @@ We intentionally try to trick the AI to see if it catches the lie.
 
 ---
 
-# 3. Code Spotlight: The "Fake" Implementation
+# Code Spotlight: The "Fake" Implementation
 
 If the Agent hallucinates, it might look like this:
 
@@ -455,7 +462,7 @@ export function generate() {
 
 ---
 
-# 4. Real Architecture: Image Strategy
+# Real Architecture: Image Strategy
 
 A valid Hybrid Strategy using Server Actions and Cloud Storage.
 
@@ -511,7 +518,6 @@ You must use **AI-Driven TDD**. You cannot write the implementation until the AI
 <!-- _class: lead -->
 
 # Resources
-## Deep Dive Material
 
 ---
 
