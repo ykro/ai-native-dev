@@ -21,6 +21,11 @@ New to the project? Start here:
 
 > **[Developer Onboarding Guide](./ONBOARDING.md)**
 
+## 🚀 Deployment
+
+- **Backend**: Deployed to **Google Cloud Run** with Secret Manager. See [Backend Deployment](./backend/README.md#deployment-google-cloud-run).
+- **Frontend**: Deployed to **Vercel** via GitHub Integration. See [Frontend Deployment](./frontend/README.md#deployment-vercel).
+
 ## Key Features
 
 - **Real-Time Data**: Live ticker and charts powered by Yahoo Finance.
