@@ -4,12 +4,12 @@ Welcome to the **AI Native Dev** course repository. This 4-week program transfor
 
 ## 🎓 Syllabus
 
-| Week | Topic | Project | Materials |
+| Week | Topics | Project | Materials |
 | :--- | :--- | :--- | :--- |
-| **Week 1** | **The AI-Native Mindset**<br>From "Syntax Writer" to "Orchestrator". Intro to Cursor, V0, and Gemini. | **[PawsMatch](./week1/pawsmatch)**<br>Pet Adoption App (Next.js) | [Slides](./week1/slides/slides.md) |
-| **Week 2** | **AI-Driven SDLC**<br>Planning, Context Management, and Micro-Agent architectures. | **[TraveLens](./week2/travelensapp)**<br>AI Travel Planner (Python/Next.js) | [Slides](./week2/slides/slides.md) |
-| **Week 3** | **Quality & Verification**<br>Automated Testing, TDD with AI, and Documentation Generation. | **[Rent My Gear](./week3/rent-my-gear)**<br>Rental Marketplace | [Slides](./week3/slides/slides.md) |
-| **Week 4** | **Delivery & The Future**<br>Deployment, Decoupled Architectures, and Agentic Dev. | **[TraderPulse](./week4/traderpulse)**<br>Real-Time Finance SaaS | [Slides](./week4/slides/slides.md) |
+| **Week 1** | **The AI-Native Mindset**<br><ul><li>Terminology (LLMs, Context Window)</li><li>Prompt Engineering (CoT, ToT)</li><li>Tooling (Antigravity, Claude Code)</li></ul>| **[PawsMatch](./week1/pawsmatch)**<br>Pet Adoption App (Next.js) | [Slides](./week1/slides/slides.md) |
+| **Week 2** | **AI-Driven SDLC**<br><ul><li>Roles (PM, Arch, Dev)</li><li>Agent Workflows & Context</li><li>UI/UX Refinement</li></ul> | **[TraveLens](./week2/travelensapp)**<br>AI Travel Planner (Python/Next.js) | [Slides](./week2/slides/slides.md) |
+| **Week 3** | **Quality & Verification**<br><ul><li>Structured Debugging</li><li>AI Testing & TDD</li><li>Documentation Generation</li></ul> | **[Rent My Gear](./week3/rent-my-gear)**<br>Rental Marketplace | [Slides](./week3/slides/slides.md) |
+| **Week 4** | **Delivery & The Future**<br><ul><li>Decoupled Architecture (BFF)</li><li>Deployment (Cloud Run/Vercel)</li><li>Future of SE (Agentic Dev)</li></ul> | **[TraderPulse](./week4/traderpulse)**<br>Real-Time Finance SaaS | [Slides](./week4/slides/slides.md) |
 
 ## 🛠️ Tools & Technologies
 
@@ -17,7 +17,7 @@ Welcome to the **AI Native Dev** course repository. This 4-week program transfor
 *   **Frontend**: Next.js 16, Tailwind CSS, Shadcn/UI.
 *   **Backend**: Python 3.12+, FastAPI, Pydantic.
 *   **DevOps**: Docker, Google Cloud Run, Vercel.
-*   **Editors**: Cursor, VS Code.
+*   **Development Environments**: Antigravity, Claude Code.
 
 ## 📂 Repository Structure
 
