@@ -8,7 +8,7 @@ Welcome to the final week of the "AI Native Dev" course. This week we focus on *
 *   **Deployment**: Validating architecture for Cloud Run (Backend) and Vercel (Frontend).
 *   **Infrastructure as Code**: Using Agents to generate Dockerfiles and Deployment configs.
 *   **Secrets Management**: Securely handling API Keys (Google Secret Manager).
-*   **Future of SE**: From "Writing Syntax" to "System Architecture" and "Agentic Dev".
+*   **Future of Software Engineering**: Agentic Dev, Code as Commodity, and the new "Architect" archetype.
 
 ## The AI Native Toolchain
 

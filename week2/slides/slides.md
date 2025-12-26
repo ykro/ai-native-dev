@@ -48,7 +48,7 @@ TraveLens is an **AI-powered travel planning application** built with Next.js 16
 
 <!-- _class: lead -->
 
-# What is the SDLC?
+# Topic 1: AI-Driven SDLC
 
 **Software Development Life Cycle**
 
