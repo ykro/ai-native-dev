@@ -6,7 +6,7 @@ Welcome to the final week of the "AI Native Dev" course. This week we focus on *
 
 *   **Architecture**: Decoupled Frontend (Next.js) & Backend (FastAPI).
 *   **Deployment**: Validating architecture for Cloud Run (Backend) and Vercel (Frontend).
-*   **Infrastructure as Code**: Using Agents to generate Dockerfiles and Deployment configs.
+*   **Prompt-Driven Operations**: Using Agents to generate Dockerfiles and Deployment configs (Ops via Instruction).
 *   **Secrets Management**: Securely handling API Keys (Google Secret Manager).
 *   **Future of Software Engineering**: Agentic Dev, Code as Commodity, and the new "Architect" archetype.
 
