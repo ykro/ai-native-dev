@@ -64,5 +64,6 @@ Contains the **Course Materials**.
 *   [The AI-Native Developer: A manifest](https://www.swyx.io/ai-native-dev)
 *   [Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)
 *   [Building LLM Applications for Production](https://huyenchip.com/2023/04/11/llm-engineering.html)
+*   [My Experience with Claude Code 2.0](https://sankalp.bearblog.dev/my-experience-with-claude-code-20-and-how-to-get-better-at-using-coding-agents/)
 
 Good luck!
