@@ -115,13 +115,17 @@ An **LLM** is a probabilistic system trained to predict the next token in a sequ
 How an LLM processes your input:
 
 
-```mermaid
-graph LR
-    A[Input Text] -->|Tokenization| B(Token IDs)
-    B -->|Processing| C{Model Layers}
-    C -->|Probabilities| D(Logits)
-    D -->|Decoding| E[Output Token]
-    style C fill:#f9f,stroke:#333
+```text
++------------+       +-----------+       +--------------+
+| Input Text | ----> | Token IDs | ----> | Model Layers |
++------------+       +-----------+       +-------+------+
+(Tokenization)       (Processing)                |
+                                                 | (Probabilities)
+                                                 v
+                     +--------------+      +----------+
+                     | Output Token | <--- |  Logits  |
+                     +--------------+      +----------+
+                        (Decoding)
 ```
 
 
@@ -141,21 +145,26 @@ The model assigns a "relevance score" to every word's relationship with every ot
 # Transformer Architecture
 
 
-```mermaid
-graph TD
-    subgraph Encoder
-    A[Input Embeddings] --> B[Self-Attention]
-    B --> C[Feed Forward]
-    end
-    subgraph Decoder
-    D[Output Embeddings] --> E[Masked Attention]
-    E --> F[Cross-Attention]
-    F --> G[Feed Forward]
-    end
-    C --> F
-    style B fill:#bfb,stroke:#333
-    style E fill:#fbf,stroke:#333
-    style F fill:#fbf,stroke:#333
+```text
+      ENCODER                       DECODER
++------------------+         +-------------------+
+| Input Embeddings |         | Output Embeddings |
++--------+---------+         +---------+---------+
+         |                             |
+         v                             v
++--------+---------+         +---------+---------+
+|  Self-Attention  |         |  Masked Attention |
++--------+---------+         +---------+---------+
+         |                             |
+         v                             v
++--------+---------+         +---------+---------+
+|   Feed Forward   |-------->|  Cross-Attention  |
++------------------+         +---------+---------+
+                                       |
+                                       v
+                             +---------+---------+
+                             |    Feed Forward   |
+                             +-------------------+
 ```
 
 
@@ -215,11 +224,11 @@ If it falls out of the window, the model forgets it. The industry is racing towa
 # Other Tools
 
 ### 3. Cursor
-- **Role**: The "AI-Native IDE".
+- **Role**: The "IDE".
 - **Strengths**: Inline editing (Cmd+K), codebase chat (Cmd+L), context-aware auto-complete.
-- **Usage**: Quick edits, "Vibe Coding", reviewing AI changes.
+- **Usage**: Quick edits, reviewing AI changes.
 
-### 4. Gemini CLI
+### 4. OpenCode
 - **Role**: Technical Utility.
 - **Strengths**: Direct API interaction, quick prototyping without IDE overhead.
 - **Usage**: Testing generated assets, lightweight scripting.
@@ -232,7 +241,7 @@ The "AI Native" developer is not defined by a single tool, but by their ability 
 
 *   **Deep Reasoning**: Use **Claude Code** when you need architectural planning or complex refactoring.
 *   **Heavy Lifting**: Use **Antigravity** for file creation, systematic changes, and shell interactions.
-*   **Speed & Polish**: Use **Cursor** for visual "vibe coding", quick fixes, and UI verification.
+*   **Speed & Polish**: Use **Cursor** for visual fixes, and UI verification.
 
 *The workflow is flexible—adapt it to your immediate needs.*
 

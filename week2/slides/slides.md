@@ -95,14 +95,19 @@ An autonomous entity that perceives its environment, reasons about it, and acts 
 **Key Strength: Autonomy**
 Unlike a script (A -> B), an Agent can decide "Plan A failed, try Plan B".
 
-```mermaid
-graph LR
-    Env[Environment] --Perception--> Agent
-    subgraph Agent Loop
-    Agent --Reasoning--> Plan[Plan]
-    Plan --Action--> Tool[Tool Use]
-    end
-    Tool --Effect--> Env
+```text
+                                   +----------------------------------+
+                                   |           AGENT LOOP             |
++-------------+     Perception     |  +-------+           +------+    |
+| Environment | -----------------> |  | Agent | --------> | Plan |    |
++-------------+                    |  +-------+ Reasoning +------+    |
+       ^                           |                         |        |
+       |                           |                         | Action |
+       |                           |                         v        |
+       |            Effect         |                    +----------+  |
+       +-------------------------- | ------------------ | Tool Use |  |
+                                   |                    +----------+  |
+                                   +----------------------------------+
 ```
 
 ---

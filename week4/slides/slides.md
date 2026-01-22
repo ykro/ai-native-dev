@@ -95,13 +95,28 @@ adriancatalan@galileo.edu
 
 Separate concerns, separate scale.
 
-```mermaid
-graph LR
-    User[Connectivity] -->|HTTPS| CDN[Vercel Edge Network]
-    CDN -->|Next.js App| Frontend[Frontend Container]
-    Frontend -->|API Call| API[Google Cloud Run]
-    API -->|Validation| Pydantic[Pydantic Settings]
-    API -->|Logic| Python[FastAPI (Python 3.12+)]
+```text
++-----------+      +----------------+      +-------------+
+|           |HTTPS |                | App  |   Frontend  |
+| User/Conn | ---> |  Vercel Edge   | ---> |  Container  |
+|           |      |                |      |             |
++-----------+      +----------------+      +------+------+
+                                                  |
+                                                  | API Call
+                                                  v
+                                           +--------------+
+                                           |  Cloud Run   |
+                                           +-------+------+
+                                                   | Validation
+                                                   v
+                                           +--------------+
+                                           |   Pydantic   |
+                                           +-------+------+
+                                                   | Logic
+                                                   v
+                                           +--------------+
+                                           |   FastAPI    |
+                                           +--------------+
 ```
 
 *   **Frontend**: Handles User State, UI rendering, and SEO.
@@ -240,13 +255,25 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 
 We use a **Serverless** approach for cost efficiency and scale.
 
-```mermaid
-graph LR
-    User[User Browser] -->|HTTPS| Vercel[Vercel (Frontend)]
-    Vercel -->|Next.js Proxy| CloudRun[Google Cloud Run (Backend)]
-    CloudRun -->|SDK| Gemini[Gemini 3 Flash]
-    CloudRun -->|Library| Yahoo[Yahoo Finance]
-    CloudRun -->|Secrets| GSM[Bóveda de Secretos]
+```text
+                      +----------+        +-------------+
+                      |          | HTTPS  |    Vercel   |
+                      |   User   | -----> |  (Frontend) |
+                      |          |        |             |
+                      +----------+        +------+------+
+                                                 |
+                                                 | Next.js Proxy
+                                                 v
+      +--------+          +-------+       +--------------+
+      | Gemini | <------- | Cloud | ----> | YahooFinance |
+      +--------+    SDK   |  Run  |  Lib  +--------------+
+                          +---+---+
+                              |
+                              | Secrets
+                              v
+                         +----------+
+                         |   GSM    |
+                         +----------+
 ```
 
 *   **Frontend**: Hosted on Edge (Vercel).
@@ -308,13 +335,22 @@ Sometimes you want to test a deploy *without* a git commit.
 
 Before we deploy, we verify. **GitHub Actions** is our robot guard.
 
-```mermaid
-graph LR
-    Push[Git Push] -->|Trigger| Test[Run Tests]
-    Test -->|Pass| Build[Build Container]
-    Build -->|Success| Registry[Artifact Registry]
-    Registry -->|Image| Deploy[Cloud Run]
-    Test -->|Fail| Block[Block Merge]
+```text
++----------+         +-----------+  Pass   +-------------+
+| Git Push | ------> | Run Tests | ------> | Build Image |
++----------+ Trigger +-----+-----+         +------+------+
+                           |                      |
+                           | Fail                 | Success
+                           v                      v
+                     +-----------+         +--------------+
+                     | Block     |         |   Registry   |
+                     | Merge     |         +------+-------+
+                     +-----------+                |
+                                                  | Image
+                                                  v
+                                           +--------------+
+                                           |  Cloud Run   |
+                                           +--------------+
 ```
 
 *   **CI (Integration)**: "Did I break the build?" (Pytest/Vitest).
@@ -383,14 +419,35 @@ Now, code is **Cattle**.
 
 The future is multiple Agents collaborating.
 
-```mermaid
-graph TD
-    Manager[PO Agent] -->|Specs| Arch[Architect Agent]
-    Arch -->|Design| Back[Backend Agent]
-    Arch -->|Design| Front[Frontend Agent]
-    Back -->|PR| Review[Reviewer Agent]
-    Front -->|PR| Review
-    Review -->|Merge| Main[Production]
+```text
+     +----------+
+     | PO Agent |
+     +-----+----+
+           | Specs
+           v
+     +-----------+
+     | Architect |
+     +----+------+
+          |
+  Design  |  Design
++---------+---------+
+|                   |
+v                   v
++---------+    +----------+
+| Backend |    | Frontend |
++----+----+    +----+-----+
+     |              |
+     | PR           | PR
+     v              v
++-------------------------+
+|      Review Agent       |
++-----------+-------------+
+            |
+            | Merge
+            v
+    +--------------+
+    |  Production  |
+    +--------------+
 ```
 
 *   **Human Role**: The "Manager" at the top and the "Reviewer" of the Reviewer.

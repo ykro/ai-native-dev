@@ -280,11 +280,12 @@ Reverse the workflow. Write the *Requirement* as a *Test* before you write the *
 
 We treat Testing as the mirror of Implementation.
 
-```mermaid
-graph TD
-    Req[Requirements] --- Acc[Acceptance Tests]
-    Des[Design] --- Sys[System Tests]
-    Imp[Implementation] --- Unit[Unit Tests]
+```text
+Requirements --- Acceptance Tests
+
+Design       --- System Tests
+
+Implementation - Unit Tests
 ```
 
 With AI, we generate the **Right Side** (Tests) often *before* or *immediately after* the **Left Side** (Code).
@@ -347,23 +348,32 @@ We ask the Agent to read our code and explain it back to us visually.
 
 The AI visualizes the logic we built in Week 2.
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant IS as imageService
-    participant AI as Nano Banana
-    participant GCS as Google Cloud Storage
-
-    C->>IS: Request Image
-    alt Image Exists
-        IS-->>C: Return URL
-    else Image Missing
-        IS->>AI: Generate(prompt)
-        AI-->>IS: Base64
-        IS->>GCS: Upload
-        GCS-->>IS: Public URL
-        IS-->>C: Return New URL
-    end
+```text
+Client        imageService       Nano Banana         GCS
+  |                 |                 |               |
+  | Request Image   |                 |               |
+  |---------------->|                 |               |
+  |                 |                 |               |
+  |          (Alt: Image Exists)      |               |
+  |                 |                 |               |
+  |   Return URL    |                 |               |
+  |<----------------|                 |               |
+  |                 |                 |               |
+  |          (Alt: Image Missing)     |               |
+  |                 |                 |               |
+  |                 | Generate(prompt)|               |
+  |                 |---------------->|               |
+  |                 |      Base64     |               |
+  |                 |<----------------|               |
+  |                 |                 |               |
+  |                 |     Upload      |               |
+  |                 |-------------------------------->|
+  |                 |                 |  Public URL   |
+  |                 |<--------------------------------|
+  |                 |                 |               |
+  | Return New URL  |                 |               |
+  |<----------------|                 |               |
+  |                 |                 |               |
 ```
 
 ---
@@ -372,24 +382,30 @@ sequenceDiagram
 
 Visualizing the service layer to ensure separation of concerns.
 
-```mermaid
-classDiagram
-    class GearItem {
-        +string id
-        +string name
-        +CategoryId category
-    }
-    class inventoryService {
-        +getGearById(id)
-        +updateGearImage(id, url)
-    }
-    class imageService {
-        +getOrGenerateImage(id)
-        -generateWithNanoBanana(item)
-    }
-    
-    inventoryService --> GearItem
-    imageService --> inventoryService
+```text
++----------------------+
+|      GearItem        |
++----------------------+
+| +string id           |
+| +string name         |
+| +CategoryId category |
++----------------------+
+          ^
+          |
++---------------------------+
+|      inventoryService     |
++---------------------------+
+| +getGearById(id)          |
+| +updateGearImage(id, url) |
++---------------------------+
+          ^
+          |
++--------------------------------+
+|          imageService          |
++--------------------------------+
+| +getOrGenerateImage(id)        |
+| -generateWithNanoBanana(item)  |
++--------------------------------+
 ```
 
 ---
@@ -466,21 +482,34 @@ export function generate() {
 
 A valid Hybrid Strategy using Server Actions and Cloud Storage.
 
-```mermaid
-flowchart TD
-    User -->|View Item| App
-    App -->|Check Cache| DB[(Inventory)]
-    DB -->|Found| URL[Return URL]
-    DB -->|Missing| Gen[Trigger Generation]
-    
-    subgraph "AI Pipeline"
-        Gen -->|Prompt| Gemini
-        Gemini -->|Image| Buffer
-        Buffer -->|Stream| GCS[Cloud Storage]
-    end
-    
-    GCS -->|Public Link| DB
-    GCS --> URL
+```text
+     View Item      Check Cache
+User ---------> App ----------> [(Inventory)]
+                                     |
+                        +------------+-----------+
+                        | Found                  | Missing
+                        v                        v
+                  +------------+          [Trigger Gen]
+                  | Return URL |                 |
+                  +------------+                 | Prompt
+                                                 v
+                                       +-------------------+
+                                       |    AI PIPELINE    |
+                                       |                   |
+                                       |      [Gemini]     |
+                                       |         | Image   |
+                                       |         v         |
+                                       |      [Buffer]     |
+                                       |         | Stream  |
+                                       |         v         |
+                                       |  [Cloud Storage]  |
+                                       +---------+---------+
+                                                 |
+                                    Public Link  |
+                                  +--------------+
+                                  |              |
+                                  v              v
+                           [(Inventory)]   [Return URL]
 ```
 
 ---
