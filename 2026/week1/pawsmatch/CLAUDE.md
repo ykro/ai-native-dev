@@ -15,6 +15,7 @@ npm run dev      # Start Vite dev server (localhost:5173)
 npm run build    # TypeScript check + Vite production build
 npm run lint     # ESLint on .ts/.tsx files
 npm run preview  # Preview production build locally
+npm test         # Vitest (vitest run)
 ```
 
 **Asset generation** (from `asset-generation/` directory):
@@ -25,8 +26,9 @@ uv run main.py   # Generates pets.json, copy to app/src/data/
 
 ## Tech Stack
 
-- React 19 + TypeScript (strict mode)
-- Vite 7 with HMR
+- React 19 + TypeScript 6 (strict mode)
+- Vite 8 with HMR
+- Vitest 5 for unit tests
 - Tailwind CSS 4 (CSS-first config in `src/index.css` using `@theme` block)
 - Framer Motion for swipe animations and micro-interactions
 - Lucide React for icons
@@ -80,6 +82,6 @@ Custom utilities for mobile safe areas: `safe-top`, `safe-bottom`, `safe-left`, 
 
 Uses `dvh` units for mobile browser chrome handling.
 
-## No Test Framework
+## Tests
 
-Testing is not configured. Would need to add Vitest or Jest if tests are required.
+Vitest is configured (`npm test`). Keep tests offline: mock `fetch` instead of calling the Dog API.
