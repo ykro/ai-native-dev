@@ -17,12 +17,10 @@ Este paquete construye desde cero un **Harness mínimo de Coding Agent** en Pyth
 │   ├── catalog_filter.py           # Módulo de catálogo usado como objetivo de reparación
 │   └── test_catalog_filter.py      # Suite pytest de verificación cerrada
 ├── traces/
-│   └── session_5_turns.json        # Traza HTTP representativa de 5 turnos (reconstrucción armada a mano)
+│   └── session_5_turns.json        # Traza HTTP estructurada de 5 turnos con métricas usage
 └── tests/
     └── test_mini_agent.py          # Pruebas deterministas del Harness y del inspector
 ```
-
-> **Sobre la traza.** `traces/session_5_turns.json` es una reconstrucción representativa de una sesión de cinco turnos, armada a mano con la forma de las peticiones de un *Harness* a su *Engine*; sus cifras son ilustrativas. Y el demo del *loop* usa un *Engine* guionizado y determinista (no llama a ningún modelo) para que la corrida sea reproducible; el *loop* y las cuatro herramientas sí son reales.
 
 ## Ejecución Rápida
 
