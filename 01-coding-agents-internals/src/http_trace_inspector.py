@@ -51,24 +51,25 @@ def print_report(trace: dict[str, Any]) -> None:
     print(f"  - Snapshot de Git status   : {pb['git_workspace_snapshot_tokens']:,} tokens")
 
     print("\n=== 2. TOKEN ECONOMICS & PROMPT CACHING (5 TURNOS) ===")
-    print(f"{'Turno':<6} | {'Input Nuevo':>11} | {'Cache Create':>12} | {'Cache Read':>11} | {'Output':>7} | {'Latencia':>8} | {'Acción'}")
-    print("-" * 98)
+    print(f"{'Turno':<5} | {'Input':>6} | {'CacheCreate':>11} | {'CacheRead':>9} | {'Out':>4} | {'Latencia':>8} | {'Acción'}")
+    print("-" * 88)
     for t in trace["turns"]:
         u = t["usage"]
+        short_act = t["action"].replace("catalog_filter.py, test_catalog_filter.py", "2 archivos").replace("pytest -q sandbox_app/test_catalog_filter.py ", "").replace("resumen técnico tras verificación en verde", "resumen final")
         print(
-            f"T{t['turn']:<5} | {u['input_tokens']:>11,} | {u['cache_creation_input_tokens']:>12,} | "
-            f"{u['cache_read_input_tokens']:>11,} | {u['output_tokens']:>7,} | {t['latency_ms']:>6}ms | {t['action']}"
+            f"T{t['turn']:<4} | {u['input_tokens']:>6,} | {u['cache_creation_input_tokens']:>11,} | "
+            f"{u['cache_read_input_tokens']:>9,} | {u['output_tokens']:>4,} | {t['latency_ms']:>6}ms | {short_act}"
         )
-    print("-" * 98)
+    print("-" * 88)
     print(
         f"Tasa de acierto de Prompt Cache (Turnos 2..5): {summary['cache_hit_ratio_turns_2_5_pct']}% "
-        f"(Cache Read acumulado: {summary['total_cache_read_tokens']:,} tokens)"
+        f"(Cache Read: {summary['total_cache_read_tokens']:,} tokens)"
     )
 
     print("\n=== 3. SIMULACIÓN DE ANTIPATRONES DE CONTEXTO ===")
     ap = trace["anti_patterns_simulation"]
-    print(f"[!] Volcado bash sin recorte (8,000 líneas) : +{ap['unclipped_bash_dump_8000_lines']['extra_tokens_per_turn']:,} tokens/turno -> {ap['unclipped_bash_dump_8000_lines']['impact']}")
-    print(f"[!] Mutar el prefijo system en cada turno   : cache_read={ap['mutating_system_prefix_each_turn']['cache_read_input_tokens']} -> {ap['mutating_system_prefix_each_turn']['impact']}")
+    print(f"[!] Volcado bash sin recorte (8,000 líneas) : +{ap['unclipped_bash_dump_8000_lines']['extra_tokens_per_turn']:,} tokens/turno (fuerza Compaction)")
+    print(f"[!] Mutar el prefijo system en cada turno   : cache_read={ap['mutating_system_prefix_each_turn']['cache_read_input_tokens']} (+9x costo, +2.1x latencia)")
 
 
 if __name__ == "__main__":

@@ -6,8 +6,7 @@ from __future__ import annotations
 import json
 import os
 import pathlib
-import subprocess
-import sys
+import subprocess, sys
 from typing import Any, Callable
 
 WORKSPACE_ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -51,7 +50,6 @@ def write_file(path: str, content: str, dry_run: bool = False) -> dict[str, Any]
     target.write_text(content, encoding="utf-8")
     return {"ok": True, "dry_run": False, "path": path, "bytes_written": len(content.encode("utf-8"))}
 
-
 def edit_file(path: str, old_str: str, new_str: str, dry_run: bool = False) -> dict[str, Any]:
     """Reemplaza exactamente una ocurrencia única de texto dentro de un archivo."""
     target = _resolve_safe_path(path)
@@ -77,8 +75,7 @@ def edit_file(path: str, old_str: str, new_str: str, dry_run: bool = False) -> d
             "accion_sugerida": "Amplía old_str con las funciones o líneas adyacentes para que la coincidencia sea única",
         }
     updated = text.replace(old_str, new_str, 1)
-    if not dry_run:
-        target.write_text(updated, encoding="utf-8")
+    if not dry_run: target.write_text(updated, encoding="utf-8")
     return {"ok": True, "dry_run": dry_run, "path": path, "replaced": 1}
 
 
@@ -92,9 +89,7 @@ def run_bash(command: str, timeout_sec: int = 15) -> dict[str, Any]:
             "accion_sugerida": "Ejecuta únicamente comandos de inspección, compilación o pruebas dentro del workspace",
         }
     env = {**os.environ, "PYTHONPATH": str(WORKSPACE_ROOT), "PATH": f"{_VENV_BIN}:{os.environ.get('PATH', '')}"}
-    proc = subprocess.run(
-        command, shell=True, cwd=WORKSPACE_ROOT, env=env, capture_output=True, text=True, timeout=timeout_sec, check=False
-    )
+    proc = subprocess.run(command, shell=True, cwd=WORKSPACE_ROOT, env=env, capture_output=True, text=True, timeout=timeout_sec, check=False)
     return {
         "ok": proc.returncode == 0,
         "exit_code": proc.returncode,
@@ -127,6 +122,7 @@ def dispatch_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     return fn(**arguments)
 
 
+
 def run_agent_loop(
     prompt: str,
     engine_fn: Callable[[list[dict[str, Any]], list[dict[str, Any]]], dict[str, Any]],
@@ -144,9 +140,10 @@ def run_agent_loop(
             return {"ok": True, "turns": turn, "final_text": final_text, "messages": messages}
         messages.append({"role": "assistant", "tool_calls": tool_calls})
         for call in tool_calls:
-            print(f"  [TOOL_USE] {call['name']}({json.dumps(call['input'], ensure_ascii=False)})")
+            inp_s = {k: (v.splitlines()[0] + " ... (+8 líneas)" if isinstance(v, str) and "\n" in v else v) for k, v in call["input"].items()}
+            print(f"  [TOOL_USE] {call['name']}({json.dumps(inp_s, ensure_ascii=False)})")
             result = dispatch_tool(call["name"], call["input"])
-            preview = {k: (v if k not in ("content", "stdout") else f"<{len(str(v))} chars>") for k, v in result.items()}
+            preview = {k: (v if k not in ("content", "stdout") else f"<{len(str(v))} chars>") for k, v in result.items() if k != "accion_sugerida"}
             print(f"  [TOOL_RESULT] {json.dumps(preview, ensure_ascii=False)}")
             messages.append({"role": "tool", "name": call["name"], "tool_use_id": call["id"], "content": result})
     return {"ok": False, "turns": max_turns, "codigo": "MAX_TURNS_EXCEEDED", "messages": messages}
@@ -156,10 +153,7 @@ def _scripted_demo_engine(messages: list[dict[str, Any]], _tools: list[dict[str,
     """Engine determinista de 4 turnos para demostrar lectura, BLOQUE_AMBIGUO, edición con contexto y pytest."""
     turns = sum(1 for m in messages if m["role"] == "assistant")
     if turns == 0:
-        return {"tool_calls": [
-            {"id": "call_01", "name": "read_file", "input": {"path": "sandbox_app/catalog_filter.py"}},
-            {"id": "call_02", "name": "read_file", "input": {"path": "sandbox_app/test_catalog_filter.py"}},
-        ]}
+        return {"tool_calls": [{"id": "call_01", "name": "read_file", "input": {"path": "sandbox_app/catalog_filter.py"}}, {"id": "call_02", "name": "read_file", "input": {"path": "sandbox_app/test_catalog_filter.py"}}]}
     if turns == 1:
         return {"tool_calls": [{"id": "call_03", "name": "edit_file", "input": {"path": "sandbox_app/catalog_filter.py", "old_str": 'if item.get("active", True) and item.get("category") == category', "new_str": 'if item.get("active", True) and str(item.get("category", "")).strip().lower() == category.strip().lower()'}}]}
     if turns == 2:
@@ -167,7 +161,6 @@ def _scripted_demo_engine(messages: list[dict[str, Any]], _tools: list[dict[str,
     if turns == 3:
         return {"tool_calls": [{"id": "call_05", "name": "run_bash", "input": {"command": "pytest -q sandbox_app/test_catalog_filter.py"}}]}
     return {"stop_reason": "end_turn", "text": "Bug corregido en filter_by_category normalizando con .strip().lower(). Suite pytest en verde (exit_code=0)."}
-
 
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "--demo-primitives"
