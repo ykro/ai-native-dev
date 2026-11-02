@@ -10,7 +10,7 @@ import subprocess, sys
 from typing import Any, Callable
 
 WORKSPACE_ROOT = pathlib.Path(__file__).resolve().parents[1]
-_VENV_BIN = "/Users/ykro/code/temp-projects/misc-oct-26/jax-openxla-series/.venv-shared/bin"
+_VENV_BIN = str(pathlib.Path(sys.executable).parent)  # bin del interprete que corre el agente
 
 
 def _resolve_safe_path(rel_path: str) -> pathlib.Path:
