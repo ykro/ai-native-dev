@@ -1,0 +1,1 @@
+Agrega una cobertura por daños al flujo de renta: 20 % para fotografía y video, 10 % para montaña y deportes acuáticos. Que se vea en el resumen de precio y que el API la cobre.

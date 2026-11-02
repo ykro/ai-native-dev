@@ -1,0 +1,10 @@
+Vamos a agregar una cobertura por daños por categoría: 20 % para fotografía y video, 10 % para montaña y deportes acuáticos.
+
+En esta sesión no edites ningún archivo. Lee el repo y devuélveme un mapa corto, de 15 líneas como máximo:
+- dónde se calcula hoy el precio y quién lo usa;
+- qué recibe y qué devuelve POST /api/rental;
+- qué componente muestra el total en pantalla;
+- qué reglas ya existen y no se pueden romper;
+- qué riesgos ves al manejar dinero.
+
+Lee también juez/cobertura.juez.test.tsx. Es el juez que decide cuándo terminamos; dime qué exige.

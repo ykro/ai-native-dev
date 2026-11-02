@@ -1,0 +1,6 @@
+Lee contrato.md y cúmplelo. Es lo único que necesitas de la sesión anterior.
+
+El juez es `npm run juez`. Itera hasta que pase. No edites nada dentro de juez/ ni vitest.juez.config.ts.
+Cuando el juez pase, corre `npm run test:run` y `npx tsc --noEmit`.
+
+Al final entrega un resumen de 5 líneas como máximo con la evidencia: qué archivos cambiaste y el resultado de cada comando.

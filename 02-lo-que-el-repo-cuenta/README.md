@@ -1,3 +1,5 @@
-# 03 · Repositorios Agent-Ready, Arquitectura y AGENTS.md
+# 02 · Lo que el repo le cuenta al agente
 
-Carpeta del monorepo público de **AI Native Dev**. Se actualizará conforme se publique este tema en la serie.
+Carpeta del monorepo público de **AI Native Dev**. Proyecto hilo: **TraveLens**.
+
+**Estado:** Próximamente.

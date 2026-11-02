@@ -1,0 +1,9 @@
+ ✓ juez/nombres.juez.test.tsx > Juez · cobertura por daños > fotografía y video paga 20 % sobre el subtotal 4135ms
+ × juez/nombres.juez.test.tsx > Juez · cobertura por daños > montaña redondea medio centavo hacia arriba y no arrastra error de flotantes 508ms
+   → expected 100.05000000000001 to be 100.05 // Object.is equality
+ × juez/nombres.juez.test.tsx > Juez · cobertura por daños > deportes acuáticos da un total exacto a dos decimales 503ms
+   → expected 27 to be 26.99 // Object.is equality
+ ✓ juez/nombres.juez.test.tsx > Juez · cobertura por daños > el servidor ignora los precios que manda el navegador 502ms
+ ✓ juez/nombres.juez.test.tsx > Juez · cobertura por daños > la pantalla muestra la cobertura y el mismo total que el servidor 691ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 3 passed (5)

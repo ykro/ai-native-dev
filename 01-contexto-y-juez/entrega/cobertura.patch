@@ -1,0 +1,159 @@
+diff --git a/src/app/api/rental/route.ts b/src/app/api/rental/route.ts
+index df72df8..ad8a66a 100644
+--- a/src/app/api/rental/route.ts
++++ b/src/app/api/rental/route.ts
+@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
+     // Calculate pricing
+     const start = new Date(startDate);
+     const end = new Date(endDate);
+-    const pricing = calculateRentalPrice(item.dailyRate, start, end);
++    const pricing = calculateRentalPrice(item.dailyRate, start, end, item.category);
+ 
+     // Generate confirmation
+     const confirmation = {
+@@ -58,6 +58,9 @@ export async function POST(request: NextRequest) {
+       endDate,
+       totalDays: pricing.days,
+       dailyRate: pricing.dailyRate,
++      subtotal: pricing.subtotal,
++      coverageRate: pricing.coverageRate,
++      coverageFee: pricing.coverageFee,
+       totalPrice: pricing.total,
+       formattedTotal: formatPrice(pricing.total),
+       status: "confirmed" as const,
+diff --git a/src/components/features/RentalFlow/PriceSummary.tsx b/src/components/features/RentalFlow/PriceSummary.tsx
+index 8143e02..8542a6a 100644
+--- a/src/components/features/RentalFlow/PriceSummary.tsx
++++ b/src/components/features/RentalFlow/PriceSummary.tsx
+@@ -30,7 +30,8 @@ export function PriceSummary({
+   const pricing = calculateRentalPrice(
+     item.dailyRate,
+     dates.startDate,
+-    dates.endDate
++    dates.endDate,
++    item.category
+   );
+ 
+   const handleConfirm = async () => {
+@@ -101,6 +102,12 @@ export function PriceSummary({
+             </span>
+             <span className="font-medium">{formatPrice(pricing.subtotal)}</span>
+           </div>
++          <div className="flex justify-between items-center py-2 border-b">
++            <span className="text-muted-foreground">
++              Cobertura por daños ({Math.round(pricing.coverageRate * 100)} %)
++            </span>
++            <span className="font-medium">{formatPrice(pricing.coverageFee)}</span>
++          </div>
+           <div className="flex justify-between items-center py-3 bg-primary/5 rounded-lg px-3 -mx-3">
+             <span className="font-semibold text-lg">Total</span>
+             <span className="font-bold text-xl text-primary">
+diff --git a/src/lib/date-utils.test.ts b/src/lib/date-utils.test.ts
+index 71d48b5..29fc526 100644
+--- a/src/lib/date-utils.test.ts
++++ b/src/lib/date-utils.test.ts
+@@ -125,6 +125,11 @@ describe("date-utils", () => {
+       const formatted = formatPrice(0);
+       expect(formatted).toContain("0");
+     });
++
++    it("should always show two decimals", () => {
++      expect(formatPrice(1000)).toContain("1,000.00");
++      expect(formatPrice(10.5)).toContain("10.50");
++    });
+   });
+ 
+   describe("formatDate", () => {
+diff --git a/src/lib/date-utils.ts b/src/lib/date-utils.ts
+index 94b849d..605690f 100644
+--- a/src/lib/date-utils.ts
++++ b/src/lib/date-utils.ts
+@@ -8,6 +8,7 @@ import {
+   parseISO,
+ } from "date-fns";
+ import { es } from "date-fns/locale";
++import type { CategoryId } from "@/lib/validation";
+ 
+ /**
+  * Normalize a Date that may have been constructed from a bare YYYY-MM-DD UTC string
+@@ -62,38 +63,58 @@ export function calculateTotalPrice(dailyRate: number, days: number): number {
+ }
+ 
+ /**
+- * Calculate rental price breakdown
++ * Damage-coverage rate per category (fraction of the subtotal).
++ */
++export const COVERAGE_RATES: Record<CategoryId, number> = {
++  "fotografia-video": 0.2,
++  "montana-camping": 0.1,
++  "deportes-acuaticos": 0.1,
++};
++
++/**
++ * Calculate rental price breakdown.
++ * Works in integer cents; coverage is rounded to the cent, halves up.
++ * Without a category no coverage is applied.
+  */
+ export function calculateRentalPrice(
+   dailyRate: number,
+   startDate: Date,
+-  endDate: Date
++  endDate: Date,
++  category?: CategoryId
+ ): {
+   days: number;
+   dailyRate: number;
+   subtotal: number;
++  coverageRate: number;
++  coverageFee: number;
+   total: number;
+ } {
+   const days = calculateRentalDays(startDate, endDate);
+-  const subtotal = calculateTotalPrice(dailyRate, days);
++  const subtotalCents = Math.round(dailyRate * 100) * days;
++  const coverageRate = category ? COVERAGE_RATES[category] : 0;
++  // rate as integer percent to avoid float error
++  const ratePercent = Math.round(coverageRate * 100);
++  const coverageCents = Math.floor((subtotalCents * ratePercent + 50) / 100);
+ 
+   return {
+     days,
+     dailyRate,
+-    subtotal,
+-    total: subtotal,
++    subtotal: subtotalCents / 100,
++    coverageRate,
++    coverageFee: coverageCents / 100,
++    total: (subtotalCents + coverageCents) / 100,
+   };
+ }
+ 
+ /**
+- * Format price in Mexican Pesos
++ * Format price in Mexican Pesos (two decimals)
+  */
+ export function formatPrice(amount: number): string {
+   return new Intl.NumberFormat("es-MX", {
+     style: "currency",
+     currency: "MXN",
+-    minimumFractionDigits: 0,
+-    maximumFractionDigits: 0,
++    minimumFractionDigits: 2,
++    maximumFractionDigits: 2,
+   }).format(amount);
+ }
+ 
+diff --git a/src/lib/validation.ts b/src/lib/validation.ts
+index 57d611a..8e13e52 100644
+--- a/src/lib/validation.ts
++++ b/src/lib/validation.ts
+@@ -120,6 +120,9 @@ export const rentalConfirmationSchema = z.object({
+   endDate: z.string(),
+   totalDays: z.number(),
+   dailyRate: z.number(),
++  subtotal: z.number(),
++  coverageRate: z.number(),
++  coverageFee: z.number(),
+   totalPrice: z.number(),
+   status: z.enum(["confirmed", "pending", "cancelled"]),
+   createdAt: z.string(),

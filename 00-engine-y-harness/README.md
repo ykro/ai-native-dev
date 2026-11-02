@@ -1,13 +1,13 @@
-# 01 · Anatomía, Harnesses y Engines de los Coding Agents
+# 00 · Lo que pasa cuando le pides algo a un Coding Agent
 
-Código ejecutable del **Tema 01** de la serie **AI Native Dev** por **Adrián Catalán** (`@adriancs.tech`).
+Código ejecutable del **Tema 00** de la serie **AI Native Dev** por **Adrián Catalán** (`@adriancs.tech`).
 
 Este paquete construye desde cero un **Harness mínimo de Coding Agent** en Python puro (`src/mini_agent.py`) para demostrar cómo operan las 4 herramientas primitivas (`read_file`, `write_file`, `edit_file`, `run_bash`), cómo se devuelven los errores como datos accionables (`BLOQUE_AMBIGUO`, `ARCHIVO_NO_ENCONTRADO`) y cómo impacta el preámbulo oculto en la economía de *tokens* y *Prompt Caching* (`src/http_trace_inspector.py`).
 
 ## Estructura del Paquete
 
 ```text
-01-coding-agents-internals/
+00-engine-y-harness/
 ├── Makefile                        # Atajos para correr los demos, el inspector y pytest
 ├── README.md                       # Guía rápida de ejecución
 ├── src/
@@ -27,7 +27,7 @@ Este paquete construye desde cero un **Harness mínimo de Coding Agent** en Pyth
 ## Ejecución Rápida
 
 ```bash
-cd 01-coding-agents-internals
+cd 00-engine-y-harness
 
 # 1. Probar las 4 primitivas y sus contratos de error como datos
 python3 src/mini_agent.py --demo-primitives

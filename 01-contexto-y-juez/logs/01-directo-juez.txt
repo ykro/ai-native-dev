@@ -1,0 +1,12 @@
+ × juez/cobertura.juez.test.tsx > Juez · cobertura por daños > fotografía y video paga 20 % sobre el subtotal 7158ms
+   → Test timed out in 5000ms.
+ × juez/cobertura.juez.test.tsx > Juez · cobertura por daños > montaña redondea medio centavo hacia arriba y no arrastra error de flotantes 1088ms
+   → expected 100.05000000000001 to be 100.05 // Object.is equality
+ × juez/cobertura.juez.test.tsx > Juez · cobertura por daños > deportes acuáticos da un total exacto a dos decimales 503ms
+   → expected undefined to be 0.1 // Object.is equality
+ × juez/cobertura.juez.test.tsx > Juez · cobertura por daños > el servidor ignora los precios que manda el navegador 505ms
+   → expected undefined to be 90 // Object.is equality
+ × juez/cobertura.juez.test.tsx > Juez · cobertura por daños > la pantalla muestra la cobertura y el mismo total que el servidor 2257ms
+   → Unable to find an element with the text: $NaN. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  5 failed (5)
