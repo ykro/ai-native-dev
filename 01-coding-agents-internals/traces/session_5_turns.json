@@ -1,0 +1,88 @@
+{
+  "session_id": "sess_01_coding_agents_internals",
+  "harness": "ai-native-harness/0.1.0",
+  "engine": "claude-sonnet-4-5",
+  "user_prompt": {
+    "text": "Corrige el bug case-sensitive en filter_by_category y verifica con pytest",
+    "tokens": 20
+  },
+  "preamble_breakdown": {
+    "system_operational_rules_tokens": 4280,
+    "tools_json_schemas_tokens": 5640,
+    "agents_md_memory_tokens": 1890,
+    "git_workspace_snapshot_tokens": 610,
+    "total_preamble_tokens": 12420,
+    "system_rules_excerpt": [
+      "PREFER native tools (read_file, edit_file, write_file) over bash cat/sed/awk.",
+      "ALWAYS verify code modifications with run_bash (pytest/ruff) before concluding.",
+      "NEVER read files without max_lines bounds or dump raw build logs into context."
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "action": "read_file(catalog_filter.py, test_catalog_filter.py)",
+      "usage": {
+        "input_tokens": 20,
+        "cache_creation_input_tokens": 12420,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 145
+      },
+      "latency_ms": 1420
+    },
+    {
+      "turn": 2,
+      "action": "edit_file(old_str sin contexto -> BLOQUE_AMBIGUO)",
+      "usage": {
+        "input_tokens": 410,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 12420,
+        "output_tokens": 160
+      },
+      "latency_ms": 690
+    },
+    {
+      "turn": 3,
+      "action": "edit_file(con 3 líneas de contexto -> replaced: 1)",
+      "usage": {
+        "input_tokens": 235,
+        "cache_creation_input_tokens": 380,
+        "cache_read_input_tokens": 12800,
+        "output_tokens": 210
+      },
+      "latency_ms": 740
+    },
+    {
+      "turn": 4,
+      "action": "run_bash(pytest -q sandbox_app/test_catalog_filter.py -> exit_code: 0)",
+      "usage": {
+        "input_tokens": 290,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 13180,
+        "output_tokens": 95
+      },
+      "latency_ms": 610
+    },
+    {
+      "turn": 5,
+      "action": "end_turn(resumen técnico tras verificación en verde)",
+      "usage": {
+        "input_tokens": 180,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 13470,
+        "output_tokens": 130
+      },
+      "latency_ms": 580
+    }
+  ],
+  "anti_patterns_simulation": {
+    "unclipped_bash_dump_8000_lines": {
+      "extra_tokens_per_turn": 64000,
+      "impact": "Contamina la ventana en un solo tool_result y fuerza Context Compaction prematura."
+    },
+    "mutating_system_prefix_each_turn": {
+      "cache_read_input_tokens": 0,
+      "impact": "Invalida el prefijo en caché en cada turno (+9x costo de entrada y +2.1x latencia)."
+    }
+  }
+}
