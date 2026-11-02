@@ -135,12 +135,18 @@ def run_agent_loop(
         tool_calls = response.get("tool_calls") or []
         print(f"\n[TURN {turn}] reason={response.get('stop_reason', 'tool_use' if tool_calls else 'end_turn')}")
         if not tool_calls:
+            if "usage" in response:
+                u = response["usage"]
+                print(f"  [USAGE] input={u['input_tokens']} cached={u['cached_tokens']} output={u['output_tokens']} thinking={u['thinking_tokens']}")
             final_text = response.get("text", "")
             print(f"[AGENT_FINAL] {final_text}")
             return {"ok": True, "turns": turn, "final_text": final_text, "messages": messages}
-        messages.append({"role": "assistant", "tool_calls": tool_calls})
+        if "usage" in response:
+            u = response["usage"]
+            print(f"  [USAGE] input={u['input_tokens']} cached={u['cached_tokens']} output={u['output_tokens']} thinking={u['thinking_tokens']}")
+        messages.append({"role": "assistant", "tool_calls": tool_calls, **({"raw": response["raw"]} if "raw" in response else {})})
         for call in tool_calls:
-            inp_s = {k: (v.splitlines()[0] + " ... (+8 líneas)" if isinstance(v, str) and "\n" in v else v) for k, v in call["input"].items()}
+            inp_s = {k: (v.splitlines()[0] + f" ... (+{v.count(chr(10))} líneas)" if isinstance(v, str) and "\n" in v else v) for k, v in call["input"].items()}
             print(f"  [TOOL_USE] {call['name']}({json.dumps(inp_s, ensure_ascii=False)})")
             result = dispatch_tool(call["name"], call["input"])
             preview = {k: (v if k not in ("content", "stdout") else f"<{len(str(v))} chars>") for k, v in result.items() if k != "accion_sugerida"}
@@ -159,8 +165,9 @@ def _scripted_demo_engine(messages: list[dict[str, Any]], _tools: list[dict[str,
     if turns == 2:
         return {"tool_calls": [{"id": "call_04", "name": "edit_file", "input": {"path": "sandbox_app/catalog_filter.py", "old_str": 'def filter_by_category(items: list[dict[str, Any]], category: str) -> list[dict[str, Any]]:\n    """Filtra productos activos que coincidan con la categoría solicitada."""\n    if not items or not category.strip():\n        return []\n    return [\n        item\n        for item in items\n        if item.get("active", True) and item.get("category") == category\n    ]', "new_str": 'def filter_by_category(items: list[dict[str, Any]], category: str) -> list[dict[str, Any]]:\n    """Filtra productos activos que coincidan con la categoría solicitada."""\n    target_cat = category.strip().lower()\n    if not items or not target_cat:\n        return []\n    return [\n        item\n        for item in items\n        if item.get("active", True) and str(item.get("category", "")).strip().lower() == target_cat\n    ]'}}]}
     if turns == 3:
-        return {"tool_calls": [{"id": "call_05", "name": "run_bash", "input": {"command": "pytest -q sandbox_app/test_catalog_filter.py"}}]}
-    return {"stop_reason": "end_turn", "text": "Bug corregido en filter_by_category normalizando con .strip().lower(). Suite pytest en verde (exit_code=0)."}
+        return {"tool_calls": [{"id": "call_05", "name": "run_bash", "input": {"command": "python3 -m pytest -q sandbox_app/test_catalog_filter.py"}}]}
+    code = messages[-1]["content"].get("exit_code")
+    return {"stop_reason": "end_turn", "text": f"filter_by_category normaliza con .strip().lower(); pytest terminó con exit_code={code}."}
 
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "--demo-primitives"
@@ -173,8 +180,17 @@ if __name__ == "__main__":
         print(json.dumps({k: v for k, v in r.items() if k != "content"}, indent=2, ensure_ascii=False))
         print("\n3. run_bash (comando destructivo bloqueado):")
         print(json.dumps(dispatch_tool("run_bash", {"command": "rm -rf /"}), indent=2, ensure_ascii=False))
+        print("\n4. edit_file (old_str que aparece en tres funciones, dry_run):")
+        print(json.dumps(dispatch_tool("edit_file", {"path": "sandbox_app/catalog_filter.py", "old_str": 'if item.get("active", True) and', "new_str": "...", "dry_run": True}), indent=2, ensure_ascii=False))
     elif mode == "--demo-loop":
         p = _resolve_safe_path("sandbox_app/catalog_filter.py")
         p.write_text(p.read_text("utf-8").replace("    target_cat = category.strip().lower()\n    if not items or not target_cat:", "    if not items or not category.strip():").replace('str(item.get("category", "")).strip().lower() == target_cat', 'item.get("category") == category'), "utf-8")
-        print("=== DEMO AGENTIC LOOP · 4 TURNOS SOBRE SANDBOX_APP ===")
-        run_agent_loop("Corrige el bug case-sensitive en filter_by_category y verifica con pytest.", _scripted_demo_engine)
+        task = "Corrige el bug case-sensitive en filter_by_category y verifica con pytest."
+        if "--engine" in sys.argv and sys.argv[sys.argv.index("--engine") + 1] == "gemini":
+            from gemini_engine import make_gemini_engine  # engine real: Gemini en Vertex AI
+            model = os.environ.get("MINI_AGENT_MODEL", "gemini-3.8-flash")
+            print(f"=== AGENTIC LOOP · ENGINE REAL {model} SOBRE SANDBOX_APP ===")
+            run_agent_loop(task, make_gemini_engine(model, trace_path=str(WORKSPACE_ROOT / "traces" / "gemini_run.jsonl")), max_turns=12)
+        else:
+            print("=== DEMO AGENTIC LOOP · ENGINE GUIONIZADO DE 4 TURNOS SOBRE SANDBOX_APP ===")
+            run_agent_loop(task, _scripted_demo_engine)

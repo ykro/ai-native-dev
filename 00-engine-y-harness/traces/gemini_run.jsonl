@@ -1,0 +1,12 @@
+{"messages_sent": 1, "tool_calls": ["run_bash"], "seconds": 123.52, "input_tokens": 284, "cached_tokens": 0, "output_tokens": 22, "thinking_tokens": 28}
+{"messages_sent": 3, "tool_calls": ["read_file"], "seconds": 147.21, "input_tokens": 956, "cached_tokens": 0, "output_tokens": 24, "thinking_tokens": 27}
+{"messages_sent": 5, "tool_calls": ["read_file"], "seconds": 6.8, "input_tokens": 1355, "cached_tokens": 0, "output_tokens": 26, "thinking_tokens": 16}
+{"messages_sent": 7, "tool_calls": ["run_bash"], "seconds": 5.82, "input_tokens": 1836, "cached_tokens": 0, "output_tokens": 16, "thinking_tokens": 12}
+{"messages_sent": 9, "tool_calls": ["edit_file"], "seconds": 26.79, "input_tokens": 2217, "cached_tokens": 0, "output_tokens": 256, "thinking_tokens": 286}
+{"messages_sent": 11, "tool_calls": ["run_bash"], "seconds": 48.1, "input_tokens": 2769, "cached_tokens": 0, "output_tokens": 16, "thinking_tokens": 15}
+{"messages_sent": 13, "tool_calls": ["run_bash"], "seconds": 164.08, "input_tokens": 2953, "cached_tokens": 0, "output_tokens": 17, "thinking_tokens": 12}
+{"messages_sent": 15, "tool_calls": ["run_bash"], "seconds": 22.26, "input_tokens": 3703, "cached_tokens": 0, "output_tokens": 17, "thinking_tokens": 13}
+{"messages_sent": 17, "tool_calls": ["run_bash"], "seconds": 1.81, "input_tokens": 4516, "cached_tokens": 0, "output_tokens": 26, "thinking_tokens": 46}
+{"messages_sent": 19, "tool_calls": ["run_bash"], "seconds": 2.02, "input_tokens": 4621, "cached_tokens": 0, "output_tokens": 28, "thinking_tokens": 56}
+{"messages_sent": 21, "tool_calls": ["read_file"], "seconds": 2.0, "input_tokens": 4713, "cached_tokens": 0, "output_tokens": 24, "thinking_tokens": 23}
+{"messages_sent": 23, "tool_calls": ["run_bash"], "seconds": 1.71, "input_tokens": 5130, "cached_tokens": 0, "output_tokens": 19, "thinking_tokens": 34}
