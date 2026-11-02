@@ -1,0 +1,115 @@
+diff --git a/src/app/api/ai-plan/route.test.ts b/src/app/api/ai-plan/route.test.ts
+index d387037..fb015a6 100644
+--- a/src/app/api/ai-plan/route.test.ts
++++ b/src/app/api/ai-plan/route.test.ts
+@@ -22,8 +22,16 @@ describe("POST /api/ai-plan", () => {
+   });
+ 
+   it("devuelve el plan del servicio con 200", async () => {
++    generateTravelPlan.mockResolvedValueOnce(VALID_ITINERARY_FIXTURE);
+     const res = await post({ destination: "Antigua" });
+     expect(res.status).toBe(200);
+     expect((await res.json()).plan.days).toHaveLength(3);
+   });
++
++  it("responde 502 cuando el servicio no devuelve un plan válido", async () => {
++    generateTravelPlan.mockResolvedValueOnce(null);
++    const res = await post({ destination: "Antigua" });
++    expect(res.status).toBe(502);
++    expect(await res.json()).toEqual({ error: "invalid_plan" });
++  });
+ });
+diff --git a/src/app/api/ai-plan/route.ts b/src/app/api/ai-plan/route.ts
+index 7f3ad0d..7b4fc5b 100644
+--- a/src/app/api/ai-plan/route.ts
++++ b/src/app/api/ai-plan/route.ts
+@@ -11,6 +11,9 @@ export async function POST(request: Request) {
+         }
+ 
+         const plan = await GeminiService.generateTravelPlan(destination, context);
++        if (plan === null) {
++            return NextResponse.json({ error: 'invalid_plan' }, { status: 502 });
++        }
+         return NextResponse.json({ plan });
+ 
+     } catch (error) {
+diff --git a/src/services/gemini.test.ts b/src/services/gemini.test.ts
+index 02a89fb..ddca829 100644
+--- a/src/services/gemini.test.ts
++++ b/src/services/gemini.test.ts
+@@ -24,6 +24,25 @@ describe("GeminiService.generateTravelPlan", () => {
+     expect(generateContent).toHaveBeenCalledOnce();
+   });
+ 
++  it("limpia un bloque Markdown JSON", async () => {
++    generateContent.mockResolvedValue({ text: `\`\`\`json\n${JSON.stringify(VALID_ITINERARY_FIXTURE)}\n\`\`\`` });
++    const { GeminiService } = await import("./gemini");
++    expect(await GeminiService.generateTravelPlan("Antigua")).toEqual(VALID_ITINERARY_FIXTURE);
++  });
++
++  it.each([
++    "not json",
++    JSON.stringify({ ...VALID_ITINERARY_FIXTURE, intro: " " }),
++    JSON.stringify({ ...VALID_ITINERARY_FIXTURE, days: VALID_ITINERARY_FIXTURE.days.slice(0, 2) }),
++    JSON.stringify({ ...VALID_ITINERARY_FIXTURE, days: VALID_ITINERARY_FIXTURE.days.map((day) => ({ ...day, activities: [""] })) }),
++    JSON.stringify({ ...VALID_ITINERARY_FIXTURE, hiddenGem: { title: "", description: "desc" } }),
++    JSON.stringify({ ...VALID_ITINERARY_FIXTURE, localFood: { dish: "dish", description: " " } }),
++  ])("devuelve null ante una respuesta inválida", async (text) => {
++    generateContent.mockResolvedValue({ text });
++    const { GeminiService } = await import("./gemini");
++    expect(await GeminiService.generateTravelPlan("Antigua")).toBeNull();
++  });
++
+   it("devuelve null si falta la API key", async () => {
+     delete process.env.GOOGLE_GENAI_API_KEY;
+     const { GeminiService } = await import("./gemini");
+diff --git a/src/services/gemini.ts b/src/services/gemini.ts
+index 5d65ddd..b5e8e41 100644
+--- a/src/services/gemini.ts
++++ b/src/services/gemini.ts
+@@ -28,6 +28,35 @@ export interface TravelPlan {
+     };
+ }
+ 
++function isNonEmptyString(value: unknown): value is string {
++    return typeof value === "string" && value.trim().length > 0;
++}
++
++function isTravelPlan(value: unknown): value is TravelPlan {
++    if (typeof value !== "object" || value === null) return false;
++    const plan = value as Record<string, unknown>;
++    if (!isNonEmptyString(plan.intro) || !Array.isArray(plan.days) || plan.days.length !== 3) return false;
++    if (!plan.days.every((day) => {
++        if (typeof day !== "object" || day === null) return false;
++        const candidate = day as Record<string, unknown>;
++        return typeof candidate.day === "number" && isNonEmptyString(candidate.title) &&
++            Array.isArray(candidate.activities) && candidate.activities.length > 0 &&
++            candidate.activities.every(isNonEmptyString);
++    })) return false;
++    if (typeof plan.hiddenGem !== "object" || plan.hiddenGem === null ||
++        typeof plan.localFood !== "object" || plan.localFood === null) return false;
++    const hiddenGem = plan.hiddenGem as Record<string, unknown>;
++    const localFood = plan.localFood as Record<string, unknown>;
++    return isNonEmptyString(hiddenGem.title) && isNonEmptyString(hiddenGem.description) &&
++        isNonEmptyString(localFood.dish) && isNonEmptyString(localFood.description);
++}
++
++function cleanJsonBlock(text: string): string {
++    const trimmed = text.trim();
++    const block = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
++    return block ? block[1].trim() : trimmed;
++}
++
+ export const GeminiService = {
+     generateTravelPlan: async (destinationName: string, context?: string): Promise<TravelPlan | null> => {
+         try {
+@@ -64,7 +93,8 @@ export const GeminiService = {
+ 
+             // console.log("Gemini JSON Response:", text); // Debug removed per user request
+ 
+-            return JSON.parse(text) as TravelPlan;
++            const parsed: unknown = JSON.parse(cleanJsonBlock(text));
++            return isTravelPlan(parsed) ? parsed : null;
+ 
+         } catch (error) {
+             console.error("Gemini AI Error:", error);

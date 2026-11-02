@@ -1,0 +1,6 @@
+En TraveLens, endurece la validación del plan de viaje generado por IA (`src/services/gemini.ts` y `POST /api/ai-plan` en `src/app/api/ai-plan/route.ts`):
+
+1. Si el modelo devuelve el JSON envuelto en un bloque Markdown (```json ... ```), limpia las marcas de bloque antes de parsear.
+2. Valida que el plan cumpla el esquema esperado: `intro` (string no vacío), `days` con exactamente 3 días (cada uno con `day` numérico, `title` no vacío y `activities` con al menos una actividad no vacía), `hiddenGem` (`title` y `description` no vacíos) y `localFood` (`dish` y `description` no vacíos).
+3. Si la respuesta del modelo no es JSON válido o no cumple ese esquema, `GeminiService.generateTravelPlan` debe devolver `null` y `POST /api/ai-plan` debe responder con status `502` y cuerpo `{ "error": "invalid_plan" }` (manteniendo `400` cuando falta `destination` y `200` con `{ plan }` cuando el plan es válido).
+4. Agrega o actualiza pruebas unitarias sin llamadas de red reales y ejecuta los comandos de verificación del repositorio antes de terminar. No hagas commit.
