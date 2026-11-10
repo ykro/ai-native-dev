@@ -2,6 +2,9 @@
 
 Código ejecutable del **Tema 00** de la serie **AI Native Dev** por **Adrián Catalán** (`@adriancs.tech`).
 
+- **YouTube** · [Video de Teoría](https://youtu.be/L7MwTArreqw) · [Video de Práctica](https://youtu.be/tFTEsbVYQvE) · [Playlist AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
+- **Substack** · [Gemini 4 Argon trabajando en auditar, construir y deployear código](https://ykro1.substack.com/p/gemini-4-argon-trabajando-en-auditar) · [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente)
+
 Este paquete cubre las dos prácticas del tema:
 
 - **Práctica A · Construir el Coding Agent mínimo**: implementación desde cero en Python puro (`src/mini_agent.py`) de las cuatro primitivas (`read_file`, `write_file`, `edit_file`, `run_bash`), sus contratos de error como datos accionables (`BLOQUE_AMBIGUO`, `BLOQUE_NO_COINCIDE`, `ARCHIVO_NO_ENCONTRADO`, `COMANDO_BLOQUEADO`), el adaptador para un *Engine* real en Vertex AI (`src/gemini_engine.py`) y el inspector de *payload* HTTP y *Prompt Caching* (`src/http_trace_inspector.py`).

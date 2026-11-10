@@ -2,6 +2,8 @@
 
 Código del **tema 01** de la serie **AI Native Dev** por **Adrián Catalán** (`@adriancs.tech`). Proyecto hilo: **Rent My Gear** (Next.js 16, React 19, Tailwind 4, Zod 4, Vitest 5).
 
+- **Lecturas relacionadas en Substack** · [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente) · [Primero la spec](https://ykro1.substack.com/p/primero-la-spec)
+
 El demo agrega una cobertura por daños por categoría con **Judge-First**: primero se escribe un juez ejecutable que hoy falla, el agente mapea el repo sin editar, se acuerda un contrato corto y una sesión limpia itera contra el juez hasta entregar con evidencia.
 
 ## Qué hay aquí
