@@ -1,0 +1,152 @@
+diff --git a/gcp/api.servicio.yaml b/gcp/api.servicio.yaml
+new file mode 100644
+index 0000000..649dd11
+--- /dev/null
++++ b/gcp/api.servicio.yaml
+@@ -0,0 +1,30 @@
++apiVersion: serving.knative.dev/v1
++kind: Service
++metadata:
++  name: traderpulse-api
++spec:
++  template:
++    metadata:
++      annotations:
++        autoscaling.knative.dev/maxScale: "5"
++    spec:
++      serviceAccountName: traderpulse-api@${PROJECT_ID}.iam.gserviceaccount.com
++      containers:
++        - image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/traderpulse/api:${TAG}
++          ports:
++            - containerPort: 8080
++          env:
++            - name: TRADERPULSE_TOKEN
++              valueFrom:
++                secretKeyRef:
++                  name: traderpulse-token
++                  key: latest
++          resources:
++            limits:
++              cpu: "1"
++              memory: 512Mi
++          startupProbe:
++            httpGet:
++              path: /salud
++            periodSeconds: 3
++            failureThreshold: 10
+diff --git a/gcp/web.servicio.yaml b/gcp/web.servicio.yaml
+new file mode 100644
+index 0000000..465fa39
+--- /dev/null
++++ b/gcp/web.servicio.yaml
+@@ -0,0 +1,32 @@
++apiVersion: serving.knative.dev/v1
++kind: Service
++metadata:
++  name: traderpulse-web
++spec:
++  template:
++    metadata:
++      annotations:
++        autoscaling.knative.dev/maxScale: "5"
++    spec:
++      serviceAccountName: traderpulse-web@${PROJECT_ID}.iam.gserviceaccount.com
++      containers:
++        - image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/traderpulse/web:${TAG}
++          ports:
++            - containerPort: 8080
++          env:
++            - name: API_URL
++              value: ${API_URL}
++            - name: TRADERPULSE_TOKEN
++              valueFrom:
++                secretKeyRef:
++                  name: traderpulse-token
++                  key: latest
++          resources:
++            limits:
++              cpu: "1"
++              memory: 512Mi
++          startupProbe:
++            httpGet:
++              path: /
++            periodSeconds: 3
++            failureThreshold: 10
+diff --git a/traderpulse/backend/.dockerignore b/traderpulse/backend/.dockerignore
+new file mode 100644
+index 0000000..9104ba2
+--- /dev/null
++++ b/traderpulse/backend/.dockerignore
+@@ -0,0 +1,13 @@
++.env
++.env.*
++**/.env
++**/.env.*
++.venv
++__pycache__
++**/__pycache__
++.pytest_cache
++.ruff_cache
++tests
++scripts
++Dockerfile
++.dockerignore
+diff --git a/traderpulse/backend/Dockerfile b/traderpulse/backend/Dockerfile
+new file mode 100644
+index 0000000..b451ccb
+--- /dev/null
++++ b/traderpulse/backend/Dockerfile
+@@ -0,0 +1,15 @@
++FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS build
++ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never
++WORKDIR /app
++COPY pyproject.toml uv.lock ./
++RUN uv sync --frozen --no-dev --no-install-project
++COPY traderpulse_api ./traderpulse_api
++RUN uv sync --frozen --no-dev --no-editable
++
++FROM python:3.13-slim-bookworm
++ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
++WORKDIR /app
++COPY --from=build /app/.venv /app/.venv
++USER 10001
++# Cloud Run inyecta PORT; exec para que uvicorn reciba SIGTERM como PID 1.
++CMD ["sh", "-c", "exec uvicorn traderpulse_api.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+diff --git a/traderpulse/frontend/.dockerignore b/traderpulse/frontend/.dockerignore
+new file mode 100644
+index 0000000..8228b99
+--- /dev/null
++++ b/traderpulse/frontend/.dockerignore
+@@ -0,0 +1,10 @@
++.env
++.env.*
++**/.env
++**/.env.*
++node_modules
++.next
++tests
++coverage
++Dockerfile
++.dockerignore
+diff --git a/traderpulse/frontend/Dockerfile b/traderpulse/frontend/Dockerfile
+new file mode 100644
+index 0000000..2258b96
+--- /dev/null
++++ b/traderpulse/frontend/Dockerfile
+@@ -0,0 +1,16 @@
++FROM node:24-slim AS build
++WORKDIR /app
++COPY package.json package-lock.json ./
++RUN npm ci
++COPY . .
++# API_URL y TRADERPULSE_TOKEN se leen al arrancar, no aquí.
++RUN npm run build
++
++FROM node:24-slim
++ENV NODE_ENV=production HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
++WORKDIR /app
++COPY --from=build /app/.next/standalone ./
++COPY --from=build /app/.next/static ./.next/static
++USER 10001
++# exec: node recibe SIGTERM como PID 1. Next lee PORT del entorno.
++CMD ["node", "server.js"]

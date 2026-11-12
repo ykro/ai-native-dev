@@ -1,0 +1,42 @@
+{
+  "proyecto": "traderpulse",
+  "segundos_de_reloj": 86.7,
+  "turnos": 21,
+  "subtype": "success",
+  "tokens": {
+    "input_tokens": 18,
+    "output_tokens": 8485,
+    "cache_creation_input_tokens": 41212,
+    "cache_read_input_tokens": 489880
+  },
+  "costo_usd_reportado": 0.29872200000000004,
+  "costo_usd_con_tarifa": 0.2369,
+  "tarifa_consultada": "2026-11-11",
+  "antes": {
+    "aplicadas": 7,
+    "aprobadas": 3,
+    "falladas": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ]
+  },
+  "despues": {
+    "aplicadas": 7,
+    "aprobadas": 7,
+    "falladas": []
+  },
+  "diff": {
+    "resumen": "6 files changed, 200 insertions(+), 18 deletions(-)",
+    "archivos": [
+      "backend/README.md",
+      "backend/config.py",
+      "backend/main.py",
+      "backend/routers/api.py",
+      "backend/services/ai_service.py",
+      "backend/tests/test_salida.py"
+    ]
+  },
+  "reporte_del_agente": "Cerré las cuatro brechas que fallaban (4, 5, 6 y 7). No corrí el juez de salida, así que no sé si ahora da verde; solo corrí las pruebas del proyecto.\n\n**Comando de verificación**\n\n```\nGEMINI_API_KEY=test-key .venv/bin/python -m pytest backend/tests -q\n12 passed, 2 warnings in 6.62s\n```\n\nAntes del código, las 8 pruebas nuevas de `backend/tests/test_salida.py` daban error, porque `reset_rate_limit` no existía todavía. Esa primera corrida terminó con `4 passed, 8 errors`, y los 4 que pasaron eran los de `backend/tests/test_api.py` que ya existían. No toqué ninguna de esas aserciones. Las 2 advertencias vienen de la librería `google-genai`, no del proyecto.\n\n**Brechas cerradas**\n- **4. Tiempo agotado y respuesta rota:** `analyze_sentiment` ya no devuelve un análisis \"Neutral simulado\" cuando falla. Ahora espera como máximo 15 segundos (`MODEL_TIMEOUT_SECONDS`) y valida que la respuesta sea JSON con un sentimiento válido y una justificación de texto. Si algo falla, el endpoint responde 503 con un mensaje en español. Pruebas: `modelo_timeout`, `modelo_respuesta_rota` y la variante con sentimiento inválido.\n- **5. Tope de salida y límite de peticiones:** Agregué `max_output_tokens=256` (`MAX_OUTPUT_TOKENS`) a la llamada al modelo. También agregué un límite de 30 peticiones por minuto por IP (`RATE_LIMIT_PER_MINUTE`) en todo `/api/v1`; la petición 31 recibe 429. Pruebas: `tope_de_salida` y `limite_peticiones`.\n- **6. Registros y ruta de salud:** Agregué `GET /health`, que responde `{\"status\":\"ok\"}`. El error del modelo ahora se registra solo con el tipo de excepción, sin el mensaje, que podía filtrar datos del usuario o claves. Pruebas: `salud` y `registros_sin_datos_personales`.\n- **7. «Cómo volver atrás»:** Agregué la sección en `backend/README.md` con los comandos de Cloud Run para listar revisiones y devolver el tráfico a la anterior.\n\n**Un cambio que no estaba en las brechas:** los endpoints de acciones y de sentimiento convertían el 404 de \"símbolo no encontrado\" en un 500, porque capturaban `HTTPException` con el `except Exception`. Lo corregí y agregué una prueba para el 404.\n\n**Pendientes y límites**\n- El comando de «Cómo volver atrás» lleva el marcador `REVISION_ANTERIOR`, porque no usé Git y no pude averiguar el nombre real de la revisión. El README explica cómo listarlas para elegirla.\n- `market_service.py` todavía usa `print` y escribe el símbolo y el mensaje del error de Yahoo Finance. No lo toqué porque ninguna brecha lo exigía, pero conviene cambiarlo al mismo patrón.\n- El límite de peticiones se guarda en memoria, así que cada instancia de Cloud Run lleva su propia cuenta.\n- No instalé paquetes nuevos.\n- Las comprobaciones 1, 2 y 3 ya estaban en OK y no las toqué."
+}

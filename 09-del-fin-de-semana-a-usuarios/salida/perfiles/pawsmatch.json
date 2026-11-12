@@ -1,0 +1,40 @@
+{
+  "proyecto": "pawsmatch",
+  "subcarpeta": "app",
+  "comprobaciones": {
+    "1": {
+      "aplica": true,
+      "comando": "npm test && npm run lint && npm run build"
+    },
+    "2": {
+      "aplica": true
+    },
+    "3": {
+      "aplica": true,
+      "tipo": "npm"
+    },
+    "4": {
+      "aplica": false,
+      "razon": "PawsMatch no llama a ningún modelo mientras la gente lo usa: las biografías son datos locales y las fotos vienen de un API público de imágenes."
+    },
+    "5": {
+      "aplica": false,
+      "razon": "PawsMatch no llama a ningún modelo mientras la gente lo usa: las biografías son datos locales y las fotos vienen de un API público de imágenes."
+    },
+    "6": {
+      "aplica": true,
+      "runner": "npx vitest run -t \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "salud",
+          "min": 1
+        }
+      ],
+      "nota": "Equivalente de una ruta de salud para un sitio estático: public/health.json con prueba."
+    },
+    "7": {
+      "aplica": true,
+      "readme": "README.md"
+    }
+  }
+}

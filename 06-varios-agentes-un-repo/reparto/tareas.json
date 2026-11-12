@@ -1,0 +1,42 @@
+[
+  {
+    "id": "presupuesto",
+    "titulo": "Presupuesto por día: validación y total",
+    "objetivo": "Crear el módulo puro src/lib/budget.ts con `applyBudget(plan: unknown)` que devuelve `{ ok: true, plan }` o `{ ok: false }`. Cada día debe traer `costUsd` entero >= 0; el `totalUsd` del resultado es siempre la suma de los días, ignorando el que traiga el modelo. Define también el tipo del plan con costos y total, para que otras tareas lo importen.",
+    "archivos": ["src/lib/budget.ts", "src/lib/budget.test.ts"],
+    "no_tocar": ["src/services/gemini.ts", "src/services/schemas.ts", "src/app/api/ai-plan/route.ts", "src/components/features/AiTravelSidebar.tsx", "src/components/features/TravelPlanPanel.tsx", "package.json", "juez/"],
+    "juez": "juez/presupuesto.juez.test.ts",
+    "depende_de": [],
+    "riesgos": "El tipo del plan con costUsd/totalUsd también existe en schemas.ts y gemini.ts (dueña: `api`) y copiado en AiTravelSidebar.tsx (dueña: `ui`); al integrar habrá tres definiciones. `api` debe importar el de budget.ts y `ui` también. No agregar zod ni dependencias nuevas."
+  },
+  {
+    "id": "descarga",
+    "titulo": "Descargar el itinerario como Markdown",
+    "objetivo": "Crear src/lib/itinerary-markdown.ts con `itineraryFilename(destino)` (minúsculas, sin acentos ni espacios, termina en .md), `itineraryToMarkdown(destino, plan)` (título H1 con el destino, un H2 por día, actividades como lista con guion) y `downloadItinerary(destino, plan)` que dispara la descarga en el navegador con un Blob text/markdown. El botón en la interfaz lo cablea la tarea `ui`.",
+    "archivos": ["src/lib/itinerary-markdown.ts", "src/lib/itinerary-markdown.test.ts"],
+    "no_tocar": ["src/services/", "src/app/", "src/components/", "src/lib/budget.ts", "package.json", "juez/"],
+    "juez": "juez/descarga.juez.test.ts",
+    "depende_de": [],
+    "riesgos": "Recibe un plan estructural mínimo (intro, days con title/activities, opcionalmente costUsd y totalUsd); no debe importar el tipo de budget.ts para no depender de `presupuesto`. Si se imprime el costo en el Markdown, debe tolerar su ausencia. Los acentos se quitan con normalize('NFD'), sin librerías nuevas."
+  },
+  {
+    "id": "api",
+    "titulo": "API: duración elegida y presupuesto",
+    "objetivo": "Hacer que POST /api/ai-plan acepte `days` (entero 2 a 7, por defecto 3; fuera de rango responde 400), pida ese número de días en el prompt y rechace con 502 invalid_plan un plan que no traiga exactamente esos días. Hacer que el prompt pida `costUsd` por día y que el servicio pase el plan por `applyBudget` de src/lib/budget.ts, de modo que la respuesta traiga `totalUsd` igual a la suma de los días y un costo inválido dé 502. ATENCIÓN: juez/ai-plan.juez.test.ts manda planes sin costUsd y espera 200, lo que contradice exigir costo por día; no tocar ese juez y reportar la discrepancia antes de decidir (ver riesgos).",
+    "archivos": ["src/services/gemini.ts", "src/services/schemas.ts", "src/services/gemini.test.ts", "src/services/__fixtures__/itinerary.fixture.ts", "src/app/api/ai-plan/route.ts", "src/app/api/ai-plan/route.test.ts"],
+    "no_tocar": ["src/lib/budget.ts", "src/lib/itinerary-markdown.ts", "src/components/", "src/app/destination/", "package.json", "juez/"],
+    "juez": "juez/api.juez.test.ts",
+    "depende_de": ["presupuesto"],
+    "riesgos": "CONTRADICCIÓN SIN RESOLVER: el pedido dice que juez/ai-plan.juez.test.ts sigue en verde, pero sus planes no traen costUsd; mi juez api exige 502 si falta el costo (el pedido dice que cada día trae costo). Ambos no pueden pasar con ese caso. Necesita decisión de producto: o se tolera costo ausente (y totalUsd sería la suma de lo que haya) o se actualiza ai-plan.juez. Hasta entonces ese caso de api.juez (un día sin costo) es el que choca. Es la única dueña de gemini.ts, schemas.ts y route.ts, aunque duración y presupuesto los tocan a la vez; por eso depende de `presupuesto`, para importar applyBudget ya integrado. AGENTS.md pide validar con schemas.ts pero gemini.ts valida a mano con su propia isTravelPlan (discrepancia previa): conviene dejar un solo validador. Cuidado con el límite de 100 líneas de AGENTS.md y con el juez ai-plan, que exige 502 con 2 días cuando no se manda days."
+  },
+  {
+    "id": "ui",
+    "titulo": "Interfaz: selector de días, costos y botón de descarga",
+    "objetivo": "Crear src/lib/plan-client.ts con `requestPlan({ destination, context?, days? })` que hace POST a /api/ai-plan (days por defecto 3) y devuelve el plan o null si el API falla o fetch lanza. Usarlo en AiTravelSidebar.tsx, que es el panel real del plan (TravelPlanPanel.tsx no se usa en ninguna página): agregar selector de 2 a 7 días, mostrar el costo de cada día y el total, y un botón que llama a `downloadItinerary`.",
+    "archivos": ["src/lib/plan-client.ts", "src/lib/plan-client.test.ts", "src/components/features/AiTravelSidebar.tsx"],
+    "no_tocar": ["src/services/", "src/app/", "src/lib/budget.ts", "src/lib/itinerary-markdown.ts", "src/components/features/TravelPlanPanel.tsx", "package.json", "juez/"],
+    "juez": "juez/ui.juez.test.ts",
+    "depende_de": ["api", "descarga", "presupuesto"],
+    "riesgos": "Última en integrarse porque AiTravelSidebar.tsx recibe los tres cambios; es su única dueña. Reemplaza la interfaz TravelPlan copiada en el componente por el tipo de budget.ts. No hay jsdom ni testing-library, así que el juez cubre plan-client.ts y no el render del componente: el botón y el selector se verifican a mano o con `npm run check`. Components/features tiene prohibido hacer fetch directo, por eso el fetch vive en src/lib."
+  }
+]

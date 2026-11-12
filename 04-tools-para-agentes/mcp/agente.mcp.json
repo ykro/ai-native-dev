@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "traderpulse": {
+      "command": "uv",
+      "args": ["run", "--quiet", "python", "mcp/agente.py"],
+      "env": { "BFF_URL": "http://127.0.0.1:8000" }
+    }
+  }
+}

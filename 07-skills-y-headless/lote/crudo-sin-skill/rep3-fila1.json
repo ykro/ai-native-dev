@@ -1,0 +1,194 @@
+{
+  "duration_api_ms": 22742,
+  "stop_reason": "end_turn",
+  "session_id": "80d4a6f3-9921-4be1-a3d4-ea45e5848043",
+  "total_cost_usd": 0.1442218,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 24232,
+    "cache_read_input_tokens": 244098,
+    "output_tokens": 2286,
+    "output_tokens_details": {
+      "thinking_tokens": 173
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 24232,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 465,
+        "cache_read_input_tokens": 47620,
+        "cache_creation_input_tokens": 752,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 752
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2286,
+      "cacheReadInputTokens": 244098,
+      "cacheCreationInputTokens": 24232,
+      "webSearchRequests": 0,
+      "costUSD": 0.1442218,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 173,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 24232,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01BVdkC2dySpmTaG5qN3Hs5q",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && tail -c 600 pets.json | cat -A | tail -15; python3 -I -c \"\nimport json;d=json.load(open('pets.json'));print(len(d),d[-1]['id'],[p['id'] for p in d]==list(range(d[0]['id'],d[0]['id']+len(d))),any(p['name']=='Tango' for p in d))\"; head -c 400 pets.json"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01A6QfMLjfrxMTnmhWq7Rp6W",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && python3 -I -c \"\nimport json;d=json.load(open('pets.json'));print(len(d),d[0]['id'],d[-1]['id'],[p['id'] for p in d]==list(range(d[0]['id'],d[0]['id']+len(d))),any(p['name'].lower()=='tango' for p in d))\""
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 9,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Agregué a **Tango** al final de `app/src/data/pets.json`. No toqué ninguna otra mascota ni otro archivo.\n\n- **id:** 51. El último era Estrella, con id 50, y el archivo tenía 50 ids.\n- **name:** \"Tango\". Busqué el nombre en el archivo y no estaba repetido.\n- **bio:** tres líneas separadas por `\\n`, sin emojis, sin \"Lorem\" y sin \"TODO\":\n  1. \"Soy Tango, un perro bailarín que mueve la cola y las patas al ritmo de todo.\" (quién soy)\n  2. \"Busco una familia con ganas de jugar, reír y ponerle música a cada día.\" (qué busco)\n  3. \"Te ofrezco mucha alegría, juegos sin fin y un compañero que baila al verte llegar.\" (qué ofrezco)\n\nEstimé a ojo que cada línea mide entre 70 y 85 caracteres, pero no las medí con un script. No pude correr uno de validación porque el entorno bloqueó el comando de Python. Tampoco ejecuté `npm test` ni abrí la app.\n\nPara la grafía y el tono de la bio usé un español neutro. Contiene \"perro bailarín\" y \"mueve la cola\", pero ningún modismo guatemalteco. Si quieres ese toque, dime y lo ajusto.",
+  "ttft_ms": 3390,
+  "type": "result",
+  "duration_ms": 26128,
+  "uuid": "4b548a34-ffc7-40b1-8869-feada4755129",
+  "ttft_stream_ms": 2137,
+  "time_to_request_ms": 615,
+  "time_to_request_phases_ms": {
+    "other": 3,
+    "system_prompt": 114,
+    "resume_other": 9,
+    "process_user_input": 1,
+    "input_attachments": 9,
+    "input_hooks": 75,
+    "conversation_append": 0,
+    "transcript_persist": 377,
+    "tool_pool_refresh": 2,
+    "init_message": 2,
+    "init_frame_send": 2,
+    "engine_pickup": 0,
+    "loop_entry": 2,
+    "message_prep": 1,
+    "model_config_wait": 0,
+    "autocompact": 1,
+    "request_announcements": 3,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 3,
+    "message_normalization": 2,
+    "client_creation": 3,
+    "request_build": 5
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 213,
+  "time_to_request_cpu_ms": 293,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 2,
+    "cpu_ms": 12,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 4,
+    "ambient_wait_ms": 2,
+    "render_ms": 1,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 1,
+    "placement_ms": 0,
+    "render_ms": 2,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 1,
+    "after_ms": 0,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 1,
+    "plans_ms": 0,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 2,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 2137,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

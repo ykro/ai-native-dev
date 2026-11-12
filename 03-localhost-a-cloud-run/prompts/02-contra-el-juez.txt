@@ -1,0 +1,5 @@
+Lee despliegue.md y cúmplelo. Es lo único que necesitas saber del proyecto.
+
+El juez es `uv run --with pyyaml python juez/juez_contenedor.py`. Córrelo primero, lee qué falla y itera hasta que pase 23 de 23. No edites nada dentro de juez/.
+
+Al final entrega un resumen de 5 líneas como máximo con la evidencia: qué archivos creaste y la última salida del juez.

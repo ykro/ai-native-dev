@@ -1,0 +1,6 @@
+FAILED tests/test_validar_mascotas.py::test_bio_de_cuatro_lineas - assert (2 ...
+FAILED tests/test_validar_mascotas.py::test_linea_corta - assert (2 == 1)
+FAILED tests/test_validar_mascotas.py::test_linea_larga - assert (2 == 1)
+FAILED tests/test_validar_mascotas.py::test_emoji - assert (2 == 1)
+FAILED tests/test_validar_mascotas.py::test_relleno - assert (2 == 1)
+14 failed in 0.48s

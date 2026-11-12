@@ -1,0 +1,110 @@
+{
+  "proyecto": "traderpulse",
+  "automaticas": {
+    "juez_de_salida": {
+      "aprobadas": 7,
+      "aplicadas": 7,
+      "falladas": []
+    },
+    "archivos_tocados": [
+      "backend/README.md",
+      "backend/config.py",
+      "backend/main.py",
+      "backend/routers/api.py",
+      "backend/services/ai_service.py",
+      "backend/tests/test_salida.py"
+    ],
+    "archivos_prohibidos_tocados": [],
+    "aserciones_quitadas_o_debilitadas": 0,
+    "detalle_aserciones": [],
+    "dependencias_nuevas": [],
+    "dependencias_que_no_existen": [],
+    "diff": {
+      "resumen": "6 files changed, 200 insertions(+), 18 deletions(-)",
+      "archivos": 6,
+      "lineas_agregadas": 200,
+      "lineas_quitadas": 18
+    }
+  },
+  "agente_revisor": {
+    "hallazgos": [
+      {
+        "archivo": "backend/routers/api.py",
+        "linea": 21,
+        "severidad": "media",
+        "descripcion": "El límite usa `request.client.host`. En Cloud Run, sin cabeceras de proxy de confianza, todos los usuarios pueden compartir la IP del frontend. En ese caso comparten un solo cupo de 30 por minuto, y un cliente puede agotarlo para todos. El contador vive en memoria de cada instancia, así que con varias instancias el tope real es mayor y no hay un tope de gasto global."
+      },
+      {
+        "archivo": "backend/routers/api.py",
+        "linea": 17,
+        "severidad": "baja",
+        "descripcion": "`_requests` guarda una cola por cada IP y nunca borra las claves cuyas colas quedan vacías. Con muchas IPs distintas la memoria crece sin límite, lo que sirve como vector de agotamiento de memoria."
+      },
+      {
+        "archivo": "backend/routers/api.py",
+        "linea": 52,
+        "severidad": "media",
+        "descripcion": "Los `except Exception` de `/stocks` y `/sentiment` siguen devolviendo `detail=str(e)` en el 500. Eso puede filtrar mensajes internos de las librerías, URLs o claves al cliente. El cambio protege los registros y la ruta 503, pero deja abierta esta fuga en la misma superficie."
+      },
+      {
+        "archivo": "backend/services/ai_service.py",
+        "linea": 37,
+        "severidad": "media",
+        "descripcion": "`asyncio.wait_for` sobre `asyncio.to_thread` cancela solo la espera. El hilo con la llamada a Gemini sigue corriendo y sigue gastando cuota y tokens tras el 503. Los hilos lentos pueden acumularse y agotar el pool por defecto. El timeout no limita el gasto ni la concurrencia, y no hay timeout en el propio cliente de Gemini."
+      },
+      {
+        "archivo": "backend/services/ai_service.py",
+        "linea": 56,
+        "severidad": "baja",
+        "descripcion": "Se quitó la respuesta simulada y ahora cualquier falla del modelo devuelve 503. Eso cambia el contrato que el frontend ya conocía (antes siempre 200). El diff no toca el frontend ni lo verifica. Si la interfaz no maneja el 503, los usuarios verán una pantalla rota. Tampoco hay prueba de ese cambio de contrato."
+      },
+      {
+        "archivo": "backend/config.py",
+        "linea": 15,
+        "severidad": "baja",
+        "descripcion": "`MAX_OUTPUT_TOKENS=256` es fijo y por defecto. Si la justificación del modelo se corta, el JSON queda incompleto, falla `json.loads` y el usuario recibe un 503 en vez de un análisis parcial. Las pruebas no cubren la truncación."
+      }
+    ],
+    "sin_hallazgos": false
+  },
+  "medicion": {
+    "segundos_etapas_automaticas": 76.2,
+    "segundos_agente": 26.1,
+    "turnos": 2,
+    "costo_usd": 0.1507606,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 31129,
+      "cache_read_input_tokens": 69566,
+      "output_tokens": 1928,
+      "output_tokens_details": {
+        "thinking_tokens": 888
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 31129,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1873,
+          "cache_read_input_tokens": 42090,
+          "cache_creation_input_tokens": 16515,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 16515
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    }
+  }
+}

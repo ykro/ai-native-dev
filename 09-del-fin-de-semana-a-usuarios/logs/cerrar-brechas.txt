@@ -1,0 +1,5 @@
+[pawsmatch] 2/5 -> 5/5 en 97.3s, 38 turnos, $0.36994369999999993
+[travelens] 3/7 -> 7/7 en 104.9s, 30 turnos, $0.35246270000000013
+[traderpulse] 3/7 -> 7/7 en 86.7s, 21 turnos, $0.29872200000000004
+[rent-my-gear] 3/7 -> 7/7 en 170.6s, 34 turnos, $0.4761154000000001
+Total de reloj: 304.5s

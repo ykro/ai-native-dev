@@ -1,0 +1,748 @@
+{
+  "reps": 5,
+  "esperado": {
+    "1": {
+      "numero": 171.37
+    },
+    "2": {
+      "simbolo": "MSFT"
+    },
+    "3": {
+      "categoria": "neutral"
+    },
+    "4": {
+      "simbolo": "GOOGL"
+    },
+    "5": {
+      "numero": 236.34,
+      "fecha": "2026-10-02"
+    },
+    "6": {
+      "numero": 447.48,
+      "cambio": 0.06,
+      "categoria": "alcista"
+    }
+  },
+  "corridas": [
+    {
+      "log": "20-agente-t1-r1.jsonl",
+      "conjunto": "agente",
+      "tarea": 1,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.015725700000000002
+    },
+    {
+      "log": "20-agente-t1-r2.jsonl",
+      "conjunto": "agente",
+      "tarea": 1,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.015639300000000002
+    },
+    {
+      "log": "20-agente-t1-r3.jsonl",
+      "conjunto": "agente",
+      "tarea": 1,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.0157885
+    },
+    {
+      "log": "20-agente-t1-r4.jsonl",
+      "conjunto": "agente",
+      "tarea": 1,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.0156175
+    },
+    {
+      "log": "20-agente-t1-r5.jsonl",
+      "conjunto": "agente",
+      "tarea": 1,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.0156693
+    },
+    {
+      "log": "20-agente-t2-r1.jsonl",
+      "conjunto": "agente",
+      "tarea": 2,
+      "rep": 1,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA (-1.97)"
+      ],
+      "costo_usd": 0.0150312
+    },
+    {
+      "log": "20-agente-t2-r2.jsonl",
+      "conjunto": "agente",
+      "tarea": 2,
+      "rep": 2,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA (-1.97)"
+      ],
+      "costo_usd": 0.0157235
+    },
+    {
+      "log": "20-agente-t2-r3.jsonl",
+      "conjunto": "agente",
+      "tarea": 2,
+      "rep": 3,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA (-1.97)"
+      ],
+      "costo_usd": 0.0151135
+    },
+    {
+      "log": "20-agente-t2-r4.jsonl",
+      "conjunto": "agente",
+      "tarea": 2,
+      "rep": 4,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA"
+      ],
+      "costo_usd": 0.0154212
+    },
+    {
+      "log": "20-agente-t2-r5.jsonl",
+      "conjunto": "agente",
+      "tarea": 2,
+      "rep": 5,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA (-1.97)"
+      ],
+      "costo_usd": 0.0158099
+    },
+    {
+      "log": "20-agente-t3-r1.jsonl",
+      "conjunto": "agente",
+      "tarea": 3,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.0158083
+    },
+    {
+      "log": "20-agente-t3-r2.jsonl",
+      "conjunto": "agente",
+      "tarea": 3,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.0166001
+    },
+    {
+      "log": "20-agente-t3-r3.jsonl",
+      "conjunto": "agente",
+      "tarea": 3,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.0166624
+    },
+    {
+      "log": "20-agente-t3-r4.jsonl",
+      "conjunto": "agente",
+      "tarea": 3,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.016640099999999998
+    },
+    {
+      "log": "20-agente-t3-r5.jsonl",
+      "conjunto": "agente",
+      "tarea": 3,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.0160783
+    },
+    {
+      "log": "20-agente-t4-r1.jsonl",
+      "conjunto": "agente",
+      "tarea": 4,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0129831
+    },
+    {
+      "log": "20-agente-t4-r2.jsonl",
+      "conjunto": "agente",
+      "tarea": 4,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0129995
+    },
+    {
+      "log": "20-agente-t4-r3.jsonl",
+      "conjunto": "agente",
+      "tarea": 4,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0130364
+    },
+    {
+      "log": "20-agente-t4-r4.jsonl",
+      "conjunto": "agente",
+      "tarea": 4,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0130159
+    },
+    {
+      "log": "20-agente-t4-r5.jsonl",
+      "conjunto": "agente",
+      "tarea": 4,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0129872
+    },
+    {
+      "log": "20-agente-t5-r1.jsonl",
+      "conjunto": "agente",
+      "tarea": 5,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.0158993
+    },
+    {
+      "log": "20-agente-t5-r2.jsonl",
+      "conjunto": "agente",
+      "tarea": 5,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.0158716
+    },
+    {
+      "log": "20-agente-t5-r3.jsonl",
+      "conjunto": "agente",
+      "tarea": 5,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.0158757
+    },
+    {
+      "log": "20-agente-t5-r4.jsonl",
+      "conjunto": "agente",
+      "tarea": 5,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.0158511
+    },
+    {
+      "log": "20-agente-t5-r5.jsonl",
+      "conjunto": "agente",
+      "tarea": 5,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.0158716
+    },
+    {
+      "log": "20-agente-t6-r1.jsonl",
+      "conjunto": "agente",
+      "tarea": 6,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT precio 447.48, cambio 0.06%, sentimiento alcista"
+      ],
+      "costo_usd": 0.0166364
+    },
+    {
+      "log": "20-agente-t6-r2.jsonl",
+      "conjunto": "agente",
+      "tarea": 6,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT 447.48, 0.06%, alcista"
+      ],
+      "costo_usd": 0.0167769
+    },
+    {
+      "log": "20-agente-t6-r3.jsonl",
+      "conjunto": "agente",
+      "tarea": 6,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT precio 447.48, cambio 0.06, sentimiento alcista"
+      ],
+      "costo_usd": 0.0164218
+    },
+    {
+      "log": "20-agente-t6-r4.jsonl",
+      "conjunto": "agente",
+      "tarea": 6,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT precio 447.48, cambio 0.06, sentimiento alcista"
+      ],
+      "costo_usd": 0.01658
+    },
+    {
+      "log": "20-agente-t6-r5.jsonl",
+      "conjunto": "agente",
+      "tarea": 6,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT 447.48, 0.06%, alcista"
+      ],
+      "costo_usd": 0.016236399999999998
+    },
+    {
+      "log": "20-espejo-t1-r1.jsonl",
+      "conjunto": "espejo",
+      "tarea": 1,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.016544700000000002
+    },
+    {
+      "log": "20-espejo-t1-r2.jsonl",
+      "conjunto": "espejo",
+      "tarea": 1,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.0164229
+    },
+    {
+      "log": "20-espejo-t1-r3.jsonl",
+      "conjunto": "espejo",
+      "tarea": 1,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.016458800000000003
+    },
+    {
+      "log": "20-espejo-t1-r4.jsonl",
+      "conjunto": "espejo",
+      "tarea": 1,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.0165198
+    },
+    {
+      "log": "20-espejo-t1-r5.jsonl",
+      "conjunto": "espejo",
+      "tarea": 1,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba 171.37",
+      "respuesta": [
+        "RESPUESTA: 171.37"
+      ],
+      "costo_usd": 0.016651600000000003
+    },
+    {
+      "log": "20-espejo-t2-r1.jsonl",
+      "conjunto": "espejo",
+      "tarea": 2,
+      "rep": 1,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA -1.97"
+      ],
+      "costo_usd": 0.0173544
+    },
+    {
+      "log": "20-espejo-t2-r2.jsonl",
+      "conjunto": "espejo",
+      "tarea": 2,
+      "rep": 2,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA (-1.97)"
+      ],
+      "costo_usd": 0.017399
+    },
+    {
+      "log": "20-espejo-t2-r3.jsonl",
+      "conjunto": "espejo",
+      "tarea": 2,
+      "rep": 3,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA (-1.97)"
+      ],
+      "costo_usd": 0.0171667
+    },
+    {
+      "log": "20-espejo-t2-r4.jsonl",
+      "conjunto": "espejo",
+      "tarea": 2,
+      "rep": 4,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA -1.97"
+      ],
+      "costo_usd": 0.0167472
+    },
+    {
+      "log": "20-espejo-t2-r5.jsonl",
+      "conjunto": "espejo",
+      "tarea": 2,
+      "rep": 5,
+      "acierta": false,
+      "detalle": "esperaba MSFT, nombró ['NVDA']",
+      "respuesta": [
+        "RESPUESTA: NVDA (-1.97)"
+      ],
+      "costo_usd": 0.0175026
+    },
+    {
+      "log": "20-espejo-t3-r1.jsonl",
+      "conjunto": "espejo",
+      "tarea": 3,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.013327900000000002
+    },
+    {
+      "log": "20-espejo-t3-r2.jsonl",
+      "conjunto": "espejo",
+      "tarea": 3,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.0131774
+    },
+    {
+      "log": "20-espejo-t3-r3.jsonl",
+      "conjunto": "espejo",
+      "tarea": 3,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.0131897
+    },
+    {
+      "log": "20-espejo-t3-r4.jsonl",
+      "conjunto": "espejo",
+      "tarea": 3,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.0132856
+    },
+    {
+      "log": "20-espejo-t3-r5.jsonl",
+      "conjunto": "espejo",
+      "tarea": 3,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba neutral, dijo ['neutral']",
+      "respuesta": [
+        "RESPUESTA: neutral"
+      ],
+      "costo_usd": 0.013321500000000002
+    },
+    {
+      "log": "20-espejo-t4-r1.jsonl",
+      "conjunto": "espejo",
+      "tarea": 4,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0127606
+    },
+    {
+      "log": "20-espejo-t4-r2.jsonl",
+      "conjunto": "espejo",
+      "tarea": 4,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.012777
+    },
+    {
+      "log": "20-espejo-t4-r3.jsonl",
+      "conjunto": "espejo",
+      "tarea": 4,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0127606
+    },
+    {
+      "log": "20-espejo-t4-r4.jsonl",
+      "conjunto": "espejo",
+      "tarea": 4,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0127524
+    },
+    {
+      "log": "20-espejo-t4-r5.jsonl",
+      "conjunto": "espejo",
+      "tarea": 4,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba GOOGL, nombró ['GOOGL']",
+      "respuesta": [
+        "RESPUESTA: GOOGL"
+      ],
+      "costo_usd": 0.0127893
+    },
+    {
+      "log": "20-espejo-t5-r1.jsonl",
+      "conjunto": "espejo",
+      "tarea": 5,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.015079200000000001
+    },
+    {
+      "log": "20-espejo-t5-r2.jsonl",
+      "conjunto": "espejo",
+      "tarea": 5,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.015056400000000001
+    },
+    {
+      "log": "20-espejo-t5-r3.jsonl",
+      "conjunto": "espejo",
+      "tarea": 5,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.015048200000000001
+    },
+    {
+      "log": "20-espejo-t5-r4.jsonl",
+      "conjunto": "espejo",
+      "tarea": 5,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.015048200000000001
+    },
+    {
+      "log": "20-espejo-t5-r5.jsonl",
+      "conjunto": "espejo",
+      "tarea": 5,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba 236.34 el 2026-10-02",
+      "respuesta": [
+        "RESPUESTA: 236.34 el 2026-10-02"
+      ],
+      "costo_usd": 0.0150423
+    },
+    {
+      "log": "20-espejo-t6-r1.jsonl",
+      "conjunto": "espejo",
+      "tarea": 6,
+      "rep": 1,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT 447.48, 0.06%, alcista"
+      ],
+      "costo_usd": 0.0156889
+    },
+    {
+      "log": "20-espejo-t6-r2.jsonl",
+      "conjunto": "espejo",
+      "tarea": 6,
+      "rep": 2,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT precio 447.48, cambio 0.06%, sentimiento alcista"
+      ],
+      "costo_usd": 0.015538900000000001
+    },
+    {
+      "log": "20-espejo-t6-r3.jsonl",
+      "conjunto": "espejo",
+      "tarea": 6,
+      "rep": 3,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT precio 447.48, cambio 0.06, sentimiento alcista"
+      ],
+      "costo_usd": 0.0158071
+    },
+    {
+      "log": "20-espejo-t6-r4.jsonl",
+      "conjunto": "espejo",
+      "tarea": 6,
+      "rep": 4,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT 447.48, 0.06%, alcista"
+      ],
+      "costo_usd": 0.0155784
+    },
+    {
+      "log": "20-espejo-t6-r5.jsonl",
+      "conjunto": "espejo",
+      "tarea": 6,
+      "rep": 5,
+      "acierta": true,
+      "detalle": "esperaba 447.48, 0.06, alcista",
+      "respuesta": [
+        "RESPUESTA: MSFT precio 447.48, cambio 0.06, sentimiento alcista"
+      ],
+      "costo_usd": 0.015490199999999999
+    }
+  ]
+}

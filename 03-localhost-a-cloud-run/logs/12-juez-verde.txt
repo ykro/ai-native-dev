@@ -1,0 +1,25 @@
+PASA   api · la imagen se construye
+PASA   web · la imagen se construye
+PASA   api · no corre como root   (uid efectivo: 10001)
+PASA   api · ningún .env ni su contenido entra a la imagen
+PASA   api · la imagen pesa menos de 350 MB   (61 MB)
+PASA   api · escucha en el puerto que dice $PORT   (HTTP 200)
+PASA   web · no corre como root   (uid efectivo: 10001)
+PASA   web · ningún .env ni su contenido entra a la imagen
+PASA   web · la imagen pesa menos de 450 MB   (93 MB)
+PASA   web · escucha en $PORT y lee API_URL al arrancar   (HTTP 200)
+PASA   web · el token no llega al navegador   (revisados 6 scripts)
+PASA   web · atiende SIGTERM en menos de 5 s   (0.2 s)
+PASA   api · atiende SIGTERM en menos de 5 s   (0.4 s)
+PASA   api · no define PORT (Cloud Run lo inyecta)
+PASA   api · el token viene de Secret Manager
+PASA   api · usa una cuenta de servicio propia   (traderpulse-api@${PROJECT_ID}.iam.gserviceaccount.com)
+PASA   api · tiene startup probe HTTP   ({'path': '/salud'})
+PASA   api · sin IDs de proyecto escritos a mano   (usa ${PROJECT_ID} como variable)
+PASA   web · no define PORT (Cloud Run lo inyecta)
+PASA   web · el token viene de Secret Manager
+PASA   web · usa una cuenta de servicio propia   (traderpulse-web@${PROJECT_ID}.iam.gserviceaccount.com)
+PASA   web · tiene startup probe HTTP   ({'path': '/'})
+PASA   web · sin IDs de proyecto escritos a mano   (usa ${PROJECT_ID} como variable)
+
+juez de despliegue: 23 de 23

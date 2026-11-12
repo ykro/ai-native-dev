@@ -1,0 +1,8 @@
+$ curl -s -o /dev/null -w "%{http_code}
+" "$API_URL/api/v1/panel/NVDA"
+401
+$ curl -s -o /dev/null -w "%{http_code}
+" -H "X-TraderPulse-Token: $TOKEN" "$API_URL/api/v1/panel/NVDA"
+401
+$ curl -s "$WEB_URL/?simbolo=NVDA" | grep -c 'data-testid="precio"'
+0

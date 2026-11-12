@@ -1,0 +1,3 @@
+{"fecha": "2026-11-11", "proyecto": "traderpulse", "caso": "ACME", "modelo": "gemini-3.8-flash", "tokens_entrada": 126, "tokens_salida": 429, "detalle": {"candidatos": 63, "razonamiento": 366}}
+{"fecha": "2026-11-11", "proyecto": "traderpulse", "caso": "BOLT", "modelo": "gemini-3.8-flash", "tokens_entrada": 125, "tokens_salida": 477, "detalle": {"candidatos": 66, "razonamiento": 411}}
+{"fecha": "2026-11-11", "proyecto": "traderpulse", "caso": "CORE", "modelo": "gemini-3.8-flash", "tokens_entrada": 124, "tokens_salida": 606, "detalle": {"candidatos": 68, "razonamiento": 538}}

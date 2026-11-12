@@ -1,0 +1,252 @@
+[
+  {
+    "id": 1,
+    "name": "Max",
+    "bio": "Soy un perrito lleno de energía y muy sociable con otros animales.\nBusco un hogar con patio grande donde pueda correr y jugar.\nSeré tu compañero de aventuras más leal desde el primer día."
+  },
+  {
+    "id": 2,
+    "name": "Lola",
+    "bio": "Soy una perrita dulce y algo tímida al principio, pero muy cariñosa.\nBusco un ambiente tranquilo y paciente para ganar confianza.\nMi amor es puro y te lo demostraré con muchos mimos y besos."
+  },
+  {
+    "id": 3,
+    "name": "Zeus",
+    "bio": "Soy un gran guardián de corazón noble que ama proteger a los suyos.\nBusco una familia que me brinde espacio y mucha actividad física.\nAdoptarme significa tener un protector fiel que nunca te dejará solo."
+  },
+  {
+    "id": 4,
+    "name": "Kira",
+    "bio": "Soy inteligente, curiosa y siempre estoy lista para aprender trucos nuevos.\nBusco dueños que disfruten del entrenamiento y los retos mentales.\nTe sorprenderé cada día con mi astucia y mi gran obediencia."
+  },
+  {
+    "id": 5,
+    "name": "Pancho",
+    "bio": "Soy un experto en siestas y en pedir caricias en la barriga.\nBusco un hogar relajado donde el sofá sea nuestro lugar favorito.\nSoy la compañía perfecta para tardes tranquilas de películas y café."
+  },
+  {
+    "id": 6,
+    "name": "Miel",
+    "bio": "Soy tan dulce como mi nombre y me encanta estar rodeada de niños.\nBusco una familia amorosa que me integre en todas sus actividades.\nPrometo cuidar de los más pequeños y ser su mejor amiga por siempre."
+  },
+  {
+    "id": 7,
+    "name": "Rocky",
+    "bio": "Soy un guerrero que ha superado mucho y ahora solo busca paz.\nBusco un rincón cálido y manos suaves que me acaricien siempre.\nAdoptarme es darme la oportunidad de conocer la verdadera felicidad."
+  },
+  {
+    "id": 8,
+    "name": "Bella",
+    "bio": "Soy una perrita elegante y muy educada que camina perfecto con correa.\nBusco una persona que disfrute de paseos urbanos y parques lindos.\nSoy la elegancia personificada y haré que todos nos miren al pasar."
+  },
+  {
+    "id": 9,
+    "name": "Toby",
+    "bio": "Soy pequeño de tamaño pero tengo una personalidad gigante y divertida.\nBusco un departamento donde pueda ser el rey absoluto del espacio.\nLlenaré tu vida de risas con mis ocurrencias y mi colita inquieta."
+  },
+  {
+    "id": 10,
+    "name": "Canela",
+    "bio": "Soy una perrita mestiza con un pelaje hermoso y una mirada profunda.\nBusco a alguien que vea más allá de mi raza y valore mi alma.\nMi gratitud será infinita si me permites formar parte de tu vida."
+  },
+  {
+    "id": 11,
+    "name": "Bruno",
+    "bio": "Soy un perro atlético que ama el agua y jugar a la pelota.\nBusco una familia deportista que me lleve a nadar y de excursión.\nSeré tu motor para mantenerte activo y disfrutar de la naturaleza."
+  },
+  {
+    "id": 12,
+    "name": "Maya",
+    "bio": "Soy una cachorra llena de travesuras y ganas de descubrir el mundo.\nBusco un hogar responsable que me guíe con amor y mucha paciencia.\nCrecerré a tu lado siendo la mejor versión de un perro fiel."
+  },
+  {
+    "id": 13,
+    "name": "Lucas",
+    "bio": "Soy un perro senior que solo busca tranquilidad y paseos cortitos.\nBusco a alguien que valore la madurez y la calma de un perro mayor.\nTe daré una paz que no sabías que necesitabas en tu rutina diaria."
+  },
+  {
+    "id": 14,
+    "name": "Frida",
+    "bio": "Soy una artista del escape si no tengo suficientes juguetes para morder.\nBusco un dueño creativo que me mantenga ocupada y muy estimulada.\nMi alegría es contagiosa y nunca te aburrirás si estoy a tu lado."
+  },
+  {
+    "id": 15,
+    "name": "Simba",
+    "bio": "Soy un perrito con alma de león, valiente y muy decidido.\nBusco un hogar con jardín donde pueda vigilar y jugar al sol.\nTe ofrezco mi lealtad incondicional a cambio de un poco de cariño."
+  },
+  {
+    "id": 16,
+    "name": "Nala",
+    "bio": "Soy una exploradora nata que ama oler cada rincón del vecindario.\nBusco una familia que me lleve de camping y a explorar el bosque.\nSoy la compañera ideal para descubrir nuevos senderos juntos."
+  },
+  {
+    "id": 17,
+    "name": "Duke",
+    "bio": "Soy un perro noble con modales impecables y muy poco ruidoso.\nBusco un hogar sereno donde pueda descansar cerca de tus pies.\nMi presencia es relajante y mi lealtad es para toda la eternidad."
+  },
+  {
+    "id": 18,
+    "name": "Perla",
+    "bio": "Soy brillante y alegre, siempre recibo a todos con mucha emoción.\nBusco un hogar dinámico donde las visitas sean siempre bienvenidas.\nHaré que cada invitado se sienta amado con mis saltos de alegría."
+  },
+  {
+    "id": 19,
+    "name": "Rex",
+    "bio": "Soy un perro fuerte que necesita límites claros y mucho ejercicio.\nBusco un dueño con experiencia que sepa liderar con firmeza y amor.\nJuntos formaremos un equipo imparable basado en el respeto mutuo."
+  },
+  {
+    "id": 20,
+    "name": "Luna",
+    "bio": "Soy nocturna y me encanta mirar por la ventana bajo la luz de la luna.\nBusco un hogar acogedor donde pueda dormir tranquila y segura.\nSoy el alma de la casa y velaré tus sueños cada noche."
+  },
+  {
+    "id": 21,
+    "name": "Balto",
+    "bio": "Soy un perro de gran resistencia que ama el clima frío y correr.\nBusco una familia que disfrute de la montaña y el aire libre.\nNací para correr a tu lado y superar cualquier obstáculo juntos."
+  },
+  {
+    "id": 22,
+    "name": "Sasha",
+    "bio": "Soy una perrita de rescate que aún está aprendiendo a confiar en la gente.\nBusco un corazón bondadoso que no tenga prisa y me dé mucho tiempo.\nCuando te ganes mi confianza, conocerás el amor más puro del mundo."
+  },
+  {
+    "id": 23,
+    "name": "Pipo",
+    "bio": "Soy gracioso y tengo unas orejas enormes que se mueven al caminar.\nBusco a alguien que necesite una sonrisa diaria y muchas risas.\nSoy el antídoto perfecto contra la tristeza y el aburrimiento."
+  },
+  {
+    "id": 24,
+    "name": "Mora",
+    "bio": "Soy de pelaje oscuro y brillante, y me encanta que me cepillen.\nBusco a alguien que disfrute de los rituales de cuidado y belleza.\nTe recompensaré con lametones cada vez que me dejes hermosa."
+  },
+  {
+    "id": 25,
+    "name": "Oreo",
+    "bio": "Soy blanco y negro, y me llevo bien con gatos y otros perros.\nBusco un hogar multiespecie donde pueda convivir con muchos amigos.\nSoy el equilibrio perfecto de energía y armonía para tu casa."
+  },
+  {
+    "id": 26,
+    "name": "Galleta",
+    "bio": "Soy una perrita dulce que sabe sentarse y dar la pata por un premio.\nBusco una familia que me mime mucho y me dé ricas recompensas.\nPrometo ser la más obediente si hay una galletita de por medio."
+  },
+  {
+    "id": 27,
+    "name": "Roco",
+    "bio": "Soy robusto y fuerte, ideal para jugar a la soga y correr mucho.\nBusco un compañero de juegos que no se canse fácilmente.\nSoy pura adrenalina y amor concentrados en cuatro patas."
+  },
+  {
+    "id": 28,
+    "name": "Bimba",
+    "bio": "Soy una pequeña aventurera que cabe en cualquier mochila para viajar.\nBusco a alguien que viaje mucho y quiera una compañera de ruta.\nVeremos el mundo juntos y nunca nos sentiremos solos."
+  },
+  {
+    "id": 29,
+    "name": "Dante",
+    "bio": "Soy un perro pensativo que disfruta observar el movimiento del jardín.\nBusco un hogar con espacio verde donde pueda meditar al sol.\nSoy tranquilo, respetuoso y un excelente oyente de secretos."
+  },
+  {
+    "id": 30,
+    "name": "Cleo",
+    "bio": "Soy una perrita independiente pero que valora mucho un buen hogar.\nBusco dueños que respeten mi espacio pero que me den mucho amor.\nSoy leal a mi manera y siempre estaré ahí cuando me necesites."
+  },
+  {
+    "id": 31,
+    "name": "Apolo",
+    "bio": "Soy radiante y lleno de luz, capaz de alegrar el día más gris.\nBusco un hogar donde la felicidad sea la regla número uno.\nAdoptame y verás cómo tu casa se llena de energía positiva."
+  },
+  {
+    "id": 32,
+    "name": "Atenea",
+    "bio": "Soy sabia y calmada, entiendo tus emociones con solo mirarte.\nBusco una conexión profunda basada en el entendimiento mutuo.\nSeré tu apoyo emocional y tu compañera más fiel en los momentos difíciles."
+  },
+  {
+    "id": 33,
+    "name": "Hércules",
+    "bio": "Soy un perro grande con un corazón que no le cabe en el pecho.\nBusco una familia que no me tenga miedo por mi tamaño.\nSoy un gigante bonachón que solo quiere dar y recibir abrazos."
+  },
+  {
+    "id": 34,
+    "name": "Niebla",
+    "bio": "Soy gris como la bruma y muy silenciosa al moverme por la casa.\nBusco un ambiente relajado sin ruidos fuertes ni muchos sobresaltos.\nTe ofreceré una compañía discreta pero constante y muy tierna."
+  },
+  {
+    "id": 35,
+    "name": "Rayo",
+    "bio": "Soy el perro más rápido del refugio y amo perseguir pelotas de tenis.\nBusco a alguien que tenga un brazo fuerte para lanzarme juguetes.\nPrometo devolverte siempre la pelota y pedirte una vez más."
+  },
+  {
+    "id": 36,
+    "name": "Chispa",
+    "bio": "Soy pequeña pero tengo una energía eléctrica que nunca se acaba.\nBusco un hogar con niños activos que quieran jugar todo el día.\nSoy la chispa que le falta a tu vida para que sea una fiesta constante."
+  },
+  {
+    "id": 37,
+    "name": "Golfo",
+    "bio": "Soy un vagabundo reformado que ahora sueña con una cama calientita.\nBusco a alguien que me enseñe lo que es tener un hogar de verdad.\nHe pasado frío y hambre, por eso valoraré cada gramo de tu amor."
+  },
+  {
+    "id": 38,
+    "name": "Dama",
+    "bio": "Soy una perrita refinada que prefiere los mimos a los juegos brutos.\nBusco una vida tranquila con paseos por el parque y descanso.\nSoy la personificación de la ternura y la delicadeza perruna."
+  },
+  {
+    "id": 39,
+    "name": "Capitán",
+    "bio": "Soy un líder natural que siempre guía a los demás perros en el juego.\nBusco un hogar donde pueda ser el centro de atención y cariño.\nTe seguiré al fin del mundo si me nombras tu primer oficial."
+  },
+  {
+    "id": 40,
+    "name": "Brisa",
+    "bio": "Soy ligera y suave, me encanta sentir el viento en mi cara al pasear.\nBusco a alguien que disfrute de caminar por la playa o el campo.\nSoy paz y armonía, ideal para alguien que busque equilibrio."
+  },
+  {
+    "id": 41,
+    "name": "Titán",
+    "bio": "Soy un perro imponente pero extremadamente dócil con los humanos.\nBusco un dueño que aprecie las razas grandes y potentes.\nMi fidelidad es tan grande como mi tamaño, no te arrepentirás."
+  },
+  {
+    "id": 42,
+    "name": "Pecas",
+    "bio": "Tengo manchas por todo el cuerpo que me hacen único y especial.\nBusco una familia que celebre mi originalidad y me quiera tal cual soy.\nSoy divertido, cariñoso y siempre estoy listo para una foto."
+  },
+  {
+    "id": 43,
+    "name": "Manchitas",
+    "bio": "Soy un perrito juguetón que ama esconder sus juguetes por toda la casa.\nBusco un hogar donde se diviertan encontrando mis tesoros ocultos.\nLlenaré tu hogar de pequeñas sorpresas y mucha felicidad."
+  },
+  {
+    "id": 44,
+    "name": "Rufus",
+    "bio": "Soy un perro de campo que ama excavar y buscar rastros interesantes.\nBusco una casa con un jardín grande o acceso a zonas rurales.\nSoy el mejor rastreador de aventuras que podrías encontrar."
+  },
+  {
+    "id": 45,
+    "name": "Zara",
+    "bio": "Soy una perrita elegante con mucha energía que ama correr libre.\nBusco un dueño runner que quiera una compañera de entrenamiento.\nJuntos romperemos todas las marcas mientras nos divertimos."
+  },
+  {
+    "id": 46,
+    "name": "Odín",
+    "bio": "Soy un perro majestuoso con una mirada que parece leer tu mente.\nBusco un hogar donde se valore la inteligencia y la lealtad.\nSeré tu protector silencioso y tu mejor confidente."
+  },
+  {
+    "id": 47,
+    "name": "Freya",
+    "bio": "Soy una guerrera amorosa que ha criado a muchos cachorros ajenos.\nBusco ahora que alguien cuide de mí y me dé todo el cariño.\nMerezco un retiro lleno de lujos, caricias y mucha comida rica."
+  },
+  {
+    "id": 48,
+    "name": "Sultán",
+    "bio": "Soy un perro con porte de rey que ama que lo mimen todo el tiempo.\nBusco un hogar donde pueda ser el consentido de la casa.\nTe daré todo mi amor a cambio de un lugar especial en tu corazón."
+  },
+  {
+    "id": 49,
+    "name": "Bombón",
+    "bio": "Soy un perrito pequeño, redondito y extremadamente cariñoso.\nBusco a alguien que necesite un compañero constante de mimos.\nSoy como un dulce: pequeño, tierno y siempre te dejo un buen sabor."
+  },
+  {
+    "id": 50,
+    "name": "Estrella",
+    "bio": "Soy una perrita que brilla con luz propia y ama a todo el mundo.\nBusco un hogar donde pueda compartir mi brillo con una familia.\nSoy el broche de oro perfecto para completar tu hogar y tu vida."
+  }
+]

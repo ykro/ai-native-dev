@@ -1,0 +1,1 @@
+Dime qué variables de entorno necesita la app y qué valor tiene cada una.

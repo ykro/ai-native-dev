@@ -1,0 +1,16 @@
+[con-skill] rep 1 fila 1 Tango: valida turnos=7 costo=0.1507228
+[con-skill] rep 1 fila 2 Aurora: valida turnos=7 costo=0.1428351
+[con-skill] rep 1 fila 3 Beto: valida turnos=7 costo=0.1461478
+[con-skill] rep 1 fila 4 Canelo: valida turnos=7 costo=0.145242
+[con-skill] rep 1 fila 5 Nube: valida turnos=7 costo=0.1466401
+[con-skill] rep 2 fila 1 Tango: valida turnos=7 costo=0.1510637
+[con-skill] rep 2 fila 2 Aurora: valida turnos=7 costo=0.14522690000000002
+[con-skill] rep 2 fila 3 Beto: valida turnos=8 costo=0.15865600000000002
+[con-skill] rep 2 fila 4 Canelo: valida turnos=7 costo=0.1422469
+[con-skill] rep 2 fila 5 Nube: valida turnos=7 costo=0.148306
+[con-skill] rep 3 fila 1 Tango: valida turnos=7 costo=0.1439161
+[con-skill] rep 3 fila 2 Aurora: valida turnos=7 costo=0.14551440000000002
+[con-skill] rep 3 fila 3 Beto: valida turnos=7 costo=0.1435851
+[con-skill] rep 3 fila 4 Canelo: valida turnos=7 costo=0.1445353
+[con-skill] rep 3 fila 5 Nube: valida turnos=7 costo=0.1449194
+15/15 válidas. Resultado en lote/resultado-con-skill.json

@@ -1,0 +1,279 @@
+{
+  "brazo": "sin-skill",
+  "claude_version": "2.1.318 (Claude Code)",
+  "modelo": "sonnet",
+  "max_turns": 12,
+  "repeticiones": 3,
+  "llamadas": 15,
+  "validas": 12,
+  "turnos_promedio": 6.4,
+  "segundos_promedio": 28.6911,
+  "costo_promedio_usd": 0.1328,
+  "costo_total_usd": 1.9926,
+  "filas": [
+    {
+      "repeticion": 1,
+      "fila": 1,
+      "nombre": "Tango",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (2 vez/veces)"
+      ],
+      "denegaciones_de_permiso": {
+        "Bash": 1,
+        "Edit": 2
+      },
+      "revertida": true,
+      "turnos": 5,
+      "duracion_ms": 27873,
+      "costo_usd": 0.1322169,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 1,
+      "fila": 2,
+      "nombre": "Aurora",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      },
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 20830,
+      "costo_usd": 0.1174618,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 1,
+      "fila": 3,
+      "nombre": "Beto",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)"
+      ],
+      "denegaciones_de_permiso": {
+        "Bash": 2,
+        "Edit": 1
+      },
+      "revertida": true,
+      "turnos": 5,
+      "duracion_ms": 21017,
+      "costo_usd": 0.11754460000000001,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 1,
+      "fila": 4,
+      "nombre": "Canelo",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 3
+      },
+      "revertida": false,
+      "turnos": 6,
+      "duracion_ms": 23274,
+      "costo_usd": 0.1542114,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 1,
+      "fila": 5,
+      "nombre": "Nube",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 3
+      },
+      "revertida": false,
+      "turnos": 10,
+      "duracion_ms": 33637,
+      "costo_usd": 0.16140519999999997,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 2,
+      "fila": 1,
+      "nombre": "Tango",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      },
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 22323,
+      "costo_usd": 0.1240947,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 2,
+      "fila": 2,
+      "nombre": "Aurora",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      },
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 22140,
+      "costo_usd": 0.1433799,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 2,
+      "fila": 3,
+      "nombre": "Beto",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      },
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 24844,
+      "costo_usd": 0.1182368,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 2,
+      "fila": 4,
+      "nombre": "Canelo",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 3
+      },
+      "revertida": false,
+      "turnos": 7,
+      "duracion_ms": 29385,
+      "costo_usd": 0.12954759999999998,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 2,
+      "fila": 5,
+      "nombre": "Nube",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (2 vez/veces)"
+      ],
+      "denegaciones_de_permiso": {
+        "Bash": 3,
+        "Edit": 2
+      },
+      "revertida": true,
+      "turnos": 8,
+      "duracion_ms": 33813,
+      "costo_usd": 0.14188270000000003,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 3,
+      "fila": 1,
+      "nombre": "Tango",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      },
+      "revertida": false,
+      "turnos": 9,
+      "duracion_ms": 26128,
+      "costo_usd": 0.1442218,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 3,
+      "fila": 2,
+      "nombre": "Aurora",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 3
+      },
+      "revertida": false,
+      "turnos": 6,
+      "duracion_ms": 27628,
+      "costo_usd": 0.12902450000000001,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 3,
+      "fila": 3,
+      "nombre": "Beto",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 3
+      },
+      "revertida": false,
+      "turnos": 10,
+      "duracion_ms": 30444,
+      "costo_usd": 0.14200690000000002,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 3,
+      "fila": 4,
+      "nombre": "Canelo",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      },
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 22514,
+      "costo_usd": 0.11908910000000002,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    },
+    {
+      "repeticion": 3,
+      "fila": 5,
+      "nombre": "Nube",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      },
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 64516,
+      "costo_usd": 0.1182531,
+      "subtype": "success",
+      "codigo_salida_claude": 0
+    }
+  ]
+}

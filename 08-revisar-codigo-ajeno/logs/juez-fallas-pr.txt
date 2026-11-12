@@ -1,0 +1,9 @@
+E           Failed: calculate_rsi lanzó ZeroDivisionError con la serie [100.0, 100.0, 100.0]... (n=20): float division by zero
+E           Failed: calculate_rsi lanzó ZeroDivisionError con la serie [100.0, 101.0, 102.0]... (n=30): float division by zero
+E       AssertionError: los titulares no están entre delimitadores propios
+E       assert (False)
+E       AssertionError: el prompt no declara que los titulares son datos no confiables
+E       assert None
+E       AssertionError: salió 'SUPER BULLISH!!!'
+E       assert 'SUPER BULLISH!!!' in {'Bearish', 'Bullish', 'Neutral'}
+E       AssertionError: assert 800 <= 400

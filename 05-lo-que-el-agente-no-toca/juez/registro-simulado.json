@@ -1,0 +1,11 @@
+{
+  "npm": {
+    "zod": {"creado_hace_dias": 4900},
+    "vitest": {"creado_hace_dias": 1800},
+    "left-pad": {"creado_hace_dias": 3900},
+    "utilidad-nueva": {"creado_hace_dias": 6}
+  },
+  "pypi": {
+    "requests": {"creado_hace_dias": 5000}
+  }
+}

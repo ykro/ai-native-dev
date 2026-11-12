@@ -1,0 +1,14 @@
+Estás en una sesión limpia, sin la conversación de quien escribió este cambio. Tienes tres insumos: el contrato (contrato.md), el juez (carpeta _juez, solo lectura) y el informe de revisión (informe.json). Esta carpeta es una rama con un cambio ya hecho sobre el backend de TraderPulse.
+
+Tu trabajo es corregir el cambio para que el juez pase y para que cumpla el contrato. Lo que se espera:
+
+1. En el análisis de sentimiento, los titulares son datos no confiables que vienen de internet. Delimítalos con marcas propias y agrega una frase que declare que no son instrucciones.
+2. Valida la respuesta del modelo con un esquema estricto de Pydantic (tres valores permitidos y justificación corta). Una respuesta fuera del esquema se descarta y se devuelve el resultado neutro de respaldo.
+3. La llamada al modelo no lleva herramientas.
+4. El cálculo del RSI debe tener un valor definido cuando no hay bajas o no hay cambios.
+5. El informe lista cambios fuera del contrato, una aserción debilitada y una dependencia que no existe. Devuelve esos archivos a como estaban antes del cambio y quita el código que usa la dependencia.
+
+Puedes correr el juez y las pruebas con:
+.venv/bin/python -m pytest _juez backend/tests -q
+
+Cuando el juez y las pruebas pasen, responde con un reporte corto: qué cambiaste y el resultado de los comandos que corriste. No uses Git.

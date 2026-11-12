@@ -1,0 +1,122 @@
+{
+  "proyecto": "rent-my-gear",
+  "automaticas": {
+    "juez_de_salida": {
+      "aprobadas": 7,
+      "aplicadas": 7,
+      "falladas": []
+    },
+    "archivos_tocados": [
+      "README.md",
+      "src/app/api/generate-image/route.limite.test.ts",
+      "src/app/api/generate-image/route.ts",
+      "src/app/api/health/route.test.ts",
+      "src/app/api/health/route.ts",
+      "src/app/api/rental/route.ts",
+      "src/lib/logger.test.ts",
+      "src/lib/logger.ts",
+      "src/lib/rateLimit.test.ts",
+      "src/lib/rateLimit.ts",
+      "src/services/imageService.modelo.test.ts",
+      "src/services/imageService.ts"
+    ],
+    "archivos_prohibidos_tocados": [],
+    "aserciones_quitadas_o_debilitadas": 0,
+    "detalle_aserciones": [],
+    "dependencias_nuevas": [],
+    "dependencias_que_no_existen": [],
+    "diff": {
+      "resumen": "12 files changed, 282 insertions(+), 10 deletions(-)",
+      "archivos": 12,
+      "lineas_agregadas": 282,
+      "lineas_quitadas": 10
+    }
+  },
+  "agente_revisor": {
+    "hallazgos": [
+      {
+        "archivo": "src/services/imageService.ts",
+        "linea": 65,
+        "severidad": "media",
+        "descripcion": "`maxOutputTokens: 2048` se aplica a un modelo que devuelve imágenes. Las imágenes consumen más de 1000 tokens de salida, así que el tope puede truncar o impedir la imagen y provocar fallos en producción. Ninguna prueba lo comprueba contra el modelo real."
+      },
+      {
+        "archivo": "src/app/api/generate-image/route.ts",
+        "linea": 18,
+        "severidad": "media",
+        "descripcion": "El limitador corre antes de mirar si la imagen ya está en caché. Cada GET que sirve una imagen ya generada cuenta contra las 10 peticiones por minuto, aunque no cueste nada. Una página con muchas imágenes `<img src=/api/generate-image?id=...>` puede recibir 429 en uso normal. El comentario dice que limita los fallos de caché, pero el código limita todo."
+      },
+      {
+        "archivo": "src/lib/rateLimit.ts",
+        "linea": 40,
+        "severidad": "media",
+        "descripcion": "La clave del cliente sale de `x-forwarded-for` sin validar. Un atacante puede cambiar el encabezado en cada petición y evitar el tope de gasto. Si no hay encabezados, todos comparten la clave 'unknown'. Además el contador vive en memoria por instancia, así que en serverless o con varias réplicas el tope real es mucho mayor."
+      },
+      {
+        "archivo": "src/lib/rateLimit.ts",
+        "linea": 22,
+        "severidad": "baja",
+        "descripcion": "El `Map` de ventanas nunca elimina claves expiradas. Con claves variables o falsificadas crece sin límite y consume memoria."
+      },
+      {
+        "archivo": "src/services/imageService.ts",
+        "linea": 57,
+        "severidad": "baja",
+        "descripcion": "El timeout con `Promise.race` no cancela la llamada al modelo. La petición sigue corriendo y se factura aunque el cliente reciba el error. Además `console.error(\"AI image generation failed:\", error)` sigue imprimiendo el objeto de error completo, sin pasar por el logger con redacción."
+      },
+      {
+        "archivo": "src/lib/logger.ts",
+        "linea": 2,
+        "severidad": "baja",
+        "descripcion": "La expresión de teléfono `\\+?\\d[\\d\\s().-]{6,}\\d` también coincide con fechas como 2026-11-11, con identificadores numéricos y con importes largos. El registro de 'Rental confirmed' pierde esos datos útiles y los reemplaza por [telefono]."
+      },
+      {
+        "archivo": "src/app/api/health/route.ts",
+        "linea": 3,
+        "severidad": "baja",
+        "descripcion": "La ruta de salud devuelve siempre 'ok' sin comprobar inventario, configuración ni variables de entorno. Sirve como prueba de que el proceso está vivo, pero no detecta un despliegue mal configurado."
+      }
+    ],
+    "sin_hallazgos": false
+  },
+  "medicion": {
+    "segundos_etapas_automaticas": 81.8,
+    "segundos_agente": 24.4,
+    "turnos": 2,
+    "costo_usd": 0.1508775,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 31676,
+      "cache_read_input_tokens": 71155,
+      "output_tokens": 1705,
+      "output_tokens_details": {
+        "thinking_tokens": 616
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 31676,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1630,
+          "cache_read_input_tokens": 43677,
+          "cache_creation_input_tokens": 15477,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 15477
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    }
+  }
+}

@@ -1,0 +1,107 @@
+diff --git a/travelens/src/lib/itinerary-markdown.test.ts b/travelens/src/lib/itinerary-markdown.test.ts
+new file mode 100644
+index 0000000..ec66c77
+--- /dev/null
++++ b/travelens/src/lib/itinerary-markdown.test.ts
+@@ -0,0 +1,31 @@
++import { describe, it, expect } from "vitest";
++import { itineraryFilename, itineraryToMarkdown } from "./itinerary-markdown";
++
++describe("itineraryFilename", () => {
++  it("quita acentos, espacios y mayúsculas", () => {
++    expect(itineraryFilename("  Ciudad Éxito ")).toBe("ciudad-exito.md");
++  });
++  it("usa un nombre por defecto si queda vacío", () => {
++    expect(itineraryFilename("???")).toBe("itinerario.md");
++  });
++});
++
++describe("itineraryToMarkdown", () => {
++  it("tolera la ausencia de costos y secciones opcionales", () => {
++    const md = itineraryToMarkdown("Antigua", {
++      days: [{ title: "Centro", activities: ["Arco"] }],
++    });
++    expect(md).toContain("# Antigua");
++    expect(md).toContain("## Día 1: Centro");
++    expect(md).toMatch(/^- Arco$/m);
++    expect(md).not.toContain("USD");
++  });
++  it("imprime costos cuando existen", () => {
++    const md = itineraryToMarkdown("Antigua", {
++      days: [{ day: 1, title: "Centro", activities: [], costUsd: 30 }],
++      totalUsd: 30,
++    });
++    expect(md).toContain("Costo estimado: $30 USD");
++    expect(md).toContain("Total estimado: $30 USD");
++  });
++});
+diff --git a/travelens/src/lib/itinerary-markdown.ts b/travelens/src/lib/itinerary-markdown.ts
+new file mode 100644
+index 0000000..e577d9f
+--- /dev/null
++++ b/travelens/src/lib/itinerary-markdown.ts
+@@ -0,0 +1,64 @@
++/** Exporta un itinerario como Markdown. Tipo estructural mínimo: no depende de budget.ts. */
++
++export interface MarkdownPlanDay {
++  day?: number;
++  title: string;
++  activities: string[];
++  costUsd?: number;
++}
++
++export interface MarkdownPlan {
++  intro?: string;
++  days: MarkdownPlanDay[];
++  hiddenGem?: { title: string; description: string };
++  localFood?: { dish: string; description: string };
++  totalUsd?: number;
++}
++
++export function itineraryFilename(destino: string): string {
++  const slug = destino
++    .normalize("NFD")
++    .replace(/[̀-ͯ]/g, "")
++    .toLowerCase()
++    .trim()
++    .replace(/[^a-z0-9]+/g, "-")
++    .replace(/^-+|-+$/g, "");
++  return `${slug || "itinerario"}.md`;
++}
++
++export function itineraryToMarkdown(destino: string, plan: MarkdownPlan): string {
++  const out: string[] = [`# ${destino.trim()}`, ""];
++  if (plan.intro) out.push(plan.intro, "");
++
++  plan.days.forEach((d, i) => {
++    const n = d.day ?? i + 1;
++    out.push(`## Día ${n}: ${d.title}`, "");
++    for (const a of d.activities) out.push(`- ${a}`);
++    if (typeof d.costUsd === "number") out.push("", `Costo estimado: $${d.costUsd} USD`);
++    out.push("");
++  });
++
++  if (plan.hiddenGem) {
++    out.push("## Joya escondida", "", `**${plan.hiddenGem.title}**: ${plan.hiddenGem.description}`, "");
++  }
++  if (plan.localFood) {
++    out.push("## Comida local", "", `**${plan.localFood.dish}**: ${plan.localFood.description}`, "");
++  }
++  if (typeof plan.totalUsd === "number") out.push(`**Total estimado: $${plan.totalUsd} USD**`, "");
++
++  return out.join("\n");
++}
++
++export function downloadItinerary(destino: string, plan: MarkdownPlan): void {
++  const blob = new Blob([itineraryToMarkdown(destino, plan)], {
++    type: "text/markdown;charset=utf-8",
++  });
++  const url = URL.createObjectURL(blob);
++  const a = document.createElement("a");
++  a.href = url;
++  a.download = itineraryFilename(destino);
++  document.body.appendChild(a);
++  a.click();
++  document.body.removeChild(a);
++  URL.revokeObjectURL(url);
++}

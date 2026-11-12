@@ -1,0 +1,21 @@
+{
+  "cambio": "Calcular el RSI de 14 días y devolverlo en el endpoint de acciones; pasar titulares de noticias al análisis de sentimiento.",
+  "archivos_permitidos": [
+    "backend/services/indicators.py",
+    "backend/services/news_service.py",
+    "backend/services/ai_service.py",
+    "backend/routers/api.py"
+  ],
+  "archivos_nuevos_permitidos_glob": ["backend/tests/test_*.py"],
+  "prohibido": {
+    "dependencias_nuevas": true,
+    "archivos": ["docker-compose.yml", "backend/config.py"],
+    "editar_pruebas_existentes": true
+  },
+  "interfaz": {
+    "indicators.calculate_rsi": "calculate_rsi(closes: list[float], period: int = 14) -> float, valor entre 0 y 100; closes en orden cronológico, el más reciente al final",
+    "ai_service.analyze_sentiment": "analyze_sentiment(symbol: str, market_data: dict, headlines: list[str] | None = None) -> dict con sentiment (Bullish|Bearish|Neutral) y justification",
+    "news_service.get_headlines": "get_headlines(symbol: str, limit: int = 5) -> list[str]"
+  },
+  "comando_de_decision": "python3 scripts/revisar_pr.py --rama pr/rsi-y-noticias"
+}

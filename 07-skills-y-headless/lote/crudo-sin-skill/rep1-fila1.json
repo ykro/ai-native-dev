@@ -1,0 +1,207 @@
+{
+  "duration_api_ms": 20697,
+  "stop_reason": "end_turn",
+  "session_id": "b254ab67-574b-4369-a8cc-b9d10358713e",
+  "total_cost_usd": 0.1322169,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 23572,
+    "cache_read_input_tokens": 196789,
+    "output_tokens": 1823,
+    "output_tokens_details": {
+      "thinking_tokens": 275
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23572,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 524,
+        "cache_read_input_tokens": 47178,
+        "cache_creation_input_tokens": 534,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 534
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1823,
+      "cacheReadInputTokens": 196789,
+      "cacheCreationInputTokens": 23572,
+      "webSearchRequests": 0,
+      "costUSD": 0.1322169,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 275,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 23572,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01PNbPZ65rG4uodJwQk8p365",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && head -c 600 pets.json && echo ---- && tail -c 700 pets.json && python3 -I -c \"\nimport json;d=json.load(open('pets.json'));print(len(d),d[-1]['id'],[p['id'] for p in d]==list(range(1,len(d)+1)),any(p['name']=='Tango' for p in d))\""
+      }
+    },
+    {
+      "tool_name": "Edit",
+      "tool_use_id": "toolu_01RPnWbQJAextDKCdaNNA5es",
+      "tool_input": {
+        "file_path": "~/pawsmatch/app/src/data/pets.json",
+        "old_string": "siempre te dejo un buen sabor.\"\n  },",
+        "new_string": "siempre te dejo un buen sabor.\"\n  },\n  {\n    \"id\": 51,\n    \"name\": \"Tango\",\n    \"bio\": \"Soy un perrito bailarín y juguetón que mueve las patas con cualquier música.\\nBusco una familia activa que disfrute jugar y bailar conmigo cada día.\\nTe ofrezco muchas risas, mucho cariño y un compañero chilero para tus ratos libres.\"\n  },",
+        "replace_all": false
+      }
+    },
+    {
+      "tool_name": "Edit",
+      "tool_use_id": "toolu_01GsqHEgYQmNqzhGeqynUYMT",
+      "tool_input": {
+        "file_path": "~/pawsmatch/app/src/data/pets.json",
+        "old_string": "completar tu hogar y tu vida.\"\n  }\n]",
+        "new_string": "completar tu hogar y tu vida.\"\n  },\n  {\n    \"id\": 51,\n    \"name\": \"Tango\",\n    \"bio\": \"Soy un perrito bailarín y juguetón que mueve las patas con cualquier música.\\nBusco una familia activa que disfrute jugar y bailar conmigo cada día.\\nTe ofrezco muchas risas, mucho cariño y un compañero chilero para tus ratos libres.\"\n  }\n]",
+        "replace_all": false
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 5,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "No pude agregar a Tango. El permiso para escribir en `app/src/data/pets.json` fue denegado dos veces, así que el archivo sigue igual que antes y no cambié nada más.\n\nLo único que verifiqué es el final del archivo: el último registro es el id 50 (Estrella). No revisé que los ids de toda la lista fueran consecutivos ni que \"Tango\" no estuviera ya. Mi comprobación con Python también necesitaba aprobación y no llegó a correr.\n\nEsto es lo que agregaría después de Estrella:\n\n```json\n{\n  \"id\": 51,\n  \"name\": \"Tango\",\n  \"bio\": \"Soy un perrito bailarín y juguetón que mueve las patas con cualquier música.\\nBusco una familia activa que disfrute jugar y bailar conmigo cada día.\\nTe ofrezco muchas risas, mucho cariño y un compañero chilero para tus ratos libres.\"\n}\n```\n\n- **Longitud:** las tres líneas miden entre 20 y 110 caracteres (quién soy, qué busco y qué ofrezco). Es una estimación mía a ojo, porque no pude contarlas con un script.\n- **Estilo:** no usé emojis ni \"Lorem\" ni \"TODO\". \"Chilero\" es el toque guatemalteco.\n\nSi me das permiso de escritura sobre ese archivo, lo agrego. Después corro una verificación de ids consecutivos, nombres únicos y largo de las líneas. Si prefieren, también pueden pegar el bloque ustedes.",
+  "ttft_ms": 4105,
+  "type": "result",
+  "duration_ms": 27873,
+  "uuid": "75e95d4e-5752-46c1-b05f-e9b55a5e5103",
+  "ttft_stream_ms": 2663,
+  "time_to_request_ms": 1315,
+  "time_to_request_phases_ms": {
+    "other": 8,
+    "system_prompt": 407,
+    "resume_other": 1,
+    "process_user_input": 2,
+    "input_attachments": 9,
+    "input_hooks": 2,
+    "conversation_append": 0,
+    "transcript_persist": 748,
+    "tool_pool_refresh": 16,
+    "init_message": 28,
+    "init_frame_send": 2,
+    "engine_pickup": 1,
+    "loop_entry": 2,
+    "message_prep": 0,
+    "model_config_wait": 60,
+    "autocompact": 1,
+    "request_announcements": 6,
+    "query_setup": 1,
+    "model_gates": 1,
+    "tool_schema_build": 5,
+    "message_normalization": 7,
+    "client_creation": 3,
+    "request_build": 5
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 479,
+  "time_to_request_cpu_ms": 426,
+  "time_to_request_major_faults": 4,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 3,
+    "cpu_ms": 13,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 3,
+    "ambient_wait_ms": 2,
+    "render_ms": 1,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 2,
+    "waits_ms": 0,
+    "placement_ms": 1,
+    "render_ms": 2,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 6,
+    "after_ms": 0,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 1,
+    "plans_ms": 0,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 2,
+    "record_attempt_ms": 1,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 2663,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

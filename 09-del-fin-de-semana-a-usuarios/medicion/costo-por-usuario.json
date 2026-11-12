@@ -1,0 +1,78 @@
+{
+  "tarifa": {
+    "modelo": "gemini-3.8-flash",
+    "fecha_de_consulta": "2026-11-11",
+    "entrada_por_millon": 0.75,
+    "salida_por_millon": 3.75,
+    "url": "https://aistudio.google.com/docs/pricing"
+  },
+  "supuestos": {
+    "peticiones_por_persona_al_dia": [
+      3,
+      10
+    ],
+    "personas": [
+      100,
+      1000
+    ],
+    "dias": 30
+  },
+  "proyectos": {
+    "traderpulse": {
+      "peticiones_medidas": 3,
+      "tokens_entrada_promedio": 125.0,
+      "tokens_salida_promedio": 504.0,
+      "costo_por_peticion_usd": 0.001984,
+      "escenarios": [
+        {
+          "personas": 100,
+          "peticiones_por_persona_al_dia": 3,
+          "costo_mensual_usd": 17.85
+        },
+        {
+          "personas": 100,
+          "peticiones_por_persona_al_dia": 10,
+          "costo_mensual_usd": 59.51
+        },
+        {
+          "personas": 1000,
+          "peticiones_por_persona_al_dia": 3,
+          "costo_mensual_usd": 178.54
+        },
+        {
+          "personas": 1000,
+          "peticiones_por_persona_al_dia": 10,
+          "costo_mensual_usd": 595.12
+        }
+      ]
+    },
+    "travelens": {
+      "peticiones_medidas": 3,
+      "tokens_entrada_promedio": 190.3,
+      "tokens_salida_promedio": 1534.0,
+      "costo_por_peticion_usd": 0.005895,
+      "escenarios": [
+        {
+          "personas": 100,
+          "peticiones_por_persona_al_dia": 3,
+          "costo_mensual_usd": 53.06
+        },
+        {
+          "personas": 100,
+          "peticiones_por_persona_al_dia": 10,
+          "costo_mensual_usd": 176.86
+        },
+        {
+          "personas": 1000,
+          "peticiones_por_persona_al_dia": 3,
+          "costo_mensual_usd": 530.57
+        },
+        {
+          "personas": 1000,
+          "peticiones_por_persona_al_dia": 10,
+          "costo_mensual_usd": 1768.58
+        }
+      ]
+    }
+  }
+}

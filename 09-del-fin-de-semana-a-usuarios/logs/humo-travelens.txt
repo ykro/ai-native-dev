@@ -1,0 +1,3 @@
+OK    pagina principal (200)
+OK    ruta de salud (200)
+OK    peticion de ejemplo (400 controlado en 20 s)

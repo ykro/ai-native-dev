@@ -1,0 +1,29 @@
+log                00-contrato.jsonl  (claude-sonnet-5-5)
+turnos             28
+herramientas       27  {'Bash': 12, 'Edit': 8, 'Read': 7}
+intentos fallidos  7  (bloqueados por permisos 5, fallaron al ejecutarse 2)
+   - Read
+   - make contrato && make compilar
+corridas del juez  1
+tokens entrada     33,675 nuevos + 675,896 desde caché
+tokens salida      4,540
+duración           63.9 s
+
+log                11-una-linea.jsonl  (claude-sonnet-5-5)
+turnos             20
+herramientas       19  {'Read': 10, 'Write': 6, 'Bash': 3}
+intentos fallidos  2  (bloqueados por permisos 2, fallaron al ejecutarse 0)
+corridas del juez  0
+tokens entrada     34,316 nuevos + 303,874 desde caché
+tokens salida      7,510
+duración           61.6 s
+
+log                12-contra-el-juez.jsonl  (claude-sonnet-5-5)
+turnos             21
+herramientas       20  {'Read': 8, 'Write': 7, 'Bash': 5}
+intentos fallidos  2  (bloqueados por permisos 2, fallaron al ejecutarse 0)
+corridas del juez  2
+tokens entrada     40,627 nuevos + 441,823 desde caché
+tokens salida      5,731
+duración           209.1 s
+

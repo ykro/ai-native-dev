@@ -1,0 +1,26 @@
+:root {
+  --papel: #f7f6f2;
+  --tinta: #0f2547;
+  --suave: #3b5b8c;
+  --sube: #1f7a4d;
+  --baja: #b3261e;
+  font-family: Inter, system-ui, sans-serif;
+  color: var(--tinta);
+  background: var(--papel);
+}
+body { margin: 0; }
+main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 28px; margin: 0 0 4px; }
+.sub { color: var(--suave); margin: 0 0 24px; }
+form { display: flex; gap: 8px; margin-bottom: 24px; }
+input { flex: 1; font: inherit; padding: 10px 12px; border: 1px solid #c9cfd9; border-radius: 8px; text-transform: uppercase; }
+button { font: inherit; padding: 10px 16px; border: 0; border-radius: 8px; background: var(--tinta); color: white; cursor: pointer; }
+.tarjeta { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgb(0 0 0 / 0.06); margin-bottom: 16px; }
+.precio { font-size: 40px; font-weight: 700; margin: 4px 0; }
+.sube { color: var(--sube); }
+.baja { color: var(--baja); }
+.etiqueta { display: inline-block; padding: 2px 10px; border-radius: 999px; background: #eef1f6; font-weight: 600; }
+.aviso { color: var(--baja); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips a { color: var(--suave); text-decoration: none; border: 1px solid #c9cfd9; border-radius: 999px; padding: 4px 10px; }
+small { color: var(--suave); }

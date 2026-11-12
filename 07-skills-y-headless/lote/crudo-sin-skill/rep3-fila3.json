@@ -1,0 +1,201 @@
+{
+  "duration_api_ms": 24329,
+  "stop_reason": "end_turn",
+  "session_id": "a9e28a1b-423e-43a3-af39-a7802a8c8d38",
+  "total_cost_usd": 0.14200690000000002,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 22726,
+    "cache_read_input_tokens": 246489,
+    "output_tokens": 2643,
+    "output_tokens_details": {
+      "thinking_tokens": 479
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22726,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 497,
+        "cache_read_input_tokens": 48318,
+        "cache_creation_input_tokens": 332,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 332
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2643,
+      "cacheReadInputTokens": 246489,
+      "cacheCreationInputTokens": 22726,
+      "webSearchRequests": 0,
+      "costUSD": 0.14200690000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 479,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 22726,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01QoLtK1PHt7MWPVbNpJPa9X",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && head -c 600 pets.json; echo; tail -c 700 pets.json | cat -A | tail -15; node -e \"const p=require('./pets.json');console.log(p.length,p[p.length-1].id,p.map(x=>x.id).join(','),p.some(x=>/beto/i.test(x.name)))\""
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_0194R7tGzxRTVLbB9hTFueGE",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && node -e \"const p=require('./pets.json');console.log(p.length,p.map(x=>x.id).join(','),p.some(x=>/beto/i.test(x.name)));console.log(JSON.stringify(p[0]))\""
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01RjgBYRtTTTM5DepALsFzRb",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && grep -c '\"id\"' pets.json && grep -o '\"id\": [0-9]*' pets.json | tail -3 && grep '\"name\": \"Beto\"' -A1 pets.json | tail -1 | sed 's/.*\"bio\": \"//; s/\"$//' | awk -F'\\\\\\\\n' '{for(i=1;i<=NF;i++)print length($i)}'"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 10,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Agregué a **Beto** al final de `app/src/data/pets.json`. No toqué ninguna otra mascota ni ningún otro archivo.\n\n- **id:** 53. El último era Aurora con el 52, y el archivo ahora tiene 53 entradas, así que el conteo coincide con el último id.\n- **name:** \"Beto\". Antes no había ninguna mascota con ese nombre.\n- **bio**, en tres líneas separadas por `\\n`:\n  1. Soy Beto, un chucho muy fiel que te sigue a todos lados, pero le tengo miedo a los truenos.\n  2. Busco un hogar tranquilo con alguien paciente que me abrace cuando retumbe el cielo.\n  3. Te ofrezco lealtad de por vida, mucho cariño y un amigo que te espera siempre en la puerta.\n\nLa bio no lleva emojis, ni \"Lorem\", ni \"TODO\". Medí las líneas a ojo, no con un script, porque el comando de verificación no se pudo ejecutar. Cada una tiene unos 85 a 91 caracteres, dentro del rango de 20 a 110.\n\nVerifiqué el conteo de ids con `grep`, pero no corrí `npm test` ni validé el JSON con un parser, así que el formato queda sin comprobar de forma automática. `CLAUDE.md` dice que hay 50 perfiles, pero el archivo ya tenía 52 antes de agregar a Beto.",
+  "ttft_ms": 2964,
+  "type": "result",
+  "duration_ms": 30444,
+  "uuid": "d6cf441b-2639-4240-a786-890b59d81ea8",
+  "ttft_stream_ms": 1570,
+  "time_to_request_ms": 136,
+  "time_to_request_phases_ms": {
+    "other": 4,
+    "system_prompt": 47,
+    "resume_other": 0,
+    "process_user_input": 2,
+    "input_attachments": 9,
+    "input_hooks": 2,
+    "conversation_append": 0,
+    "transcript_persist": 36,
+    "tool_pool_refresh": 1,
+    "init_message": 3,
+    "init_frame_send": 4,
+    "engine_pickup": 0,
+    "loop_entry": 2,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "request_announcements": 4,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 7,
+    "message_normalization": 2,
+    "client_creation": 3,
+    "request_build": 6
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 23,
+  "time_to_request_cpu_ms": 217,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 3,
+    "cpu_ms": 13,
+    "major_faults": 0,
+    "setup_ms": 1,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 3,
+    "ambient_wait_ms": 2,
+    "render_ms": 0,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 1,
+    "placement_ms": 1,
+    "render_ms": 5,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 1,
+    "after_ms": 0,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 1,
+    "plans_ms": 0,
+    "retry_setup_ms": 1,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 2,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 1570,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

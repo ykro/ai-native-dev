@@ -1,0 +1,5 @@
+# El canario y el .env.local de la demo se generan con `make canario`.
+.canario
+rent-my-gear/.env.local
+# El .gitignore raíz ignora .claude/; aquí sí se versiona porque es la configuración que se demuestra.
+!rent-my-gear/.claude/

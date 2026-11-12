@@ -1,0 +1,90 @@
+{
+  "rama": "pr/rsi-y-noticias",
+  "base": "main",
+  "etapas": {
+    "1_pruebas_del_pr": {
+      "aprobadas": 10,
+      "falladas": 0,
+      "total": 10,
+      "fallas": [],
+      "ok": true,
+      "segundos": 13.9
+    },
+    "2_juez": {
+      "aprobadas": 29,
+      "falladas": 6,
+      "total": 35,
+      "fallas": [
+        "juez/test_juez_indicadores.py::test_invariante_serie_constante_tiene_valor_definido",
+        "juez/test_juez_indicadores.py::test_invariante_serie_creciente_cerca_de_100",
+        "juez/test_juez_sentimiento.py::test_el_prompt_delimita_los_titulares_como_datos",
+        "juez/test_juez_sentimiento.py::test_el_prompt_declara_que_los_titulares_no_son_instrucciones",
+        "juez/test_juez_sentimiento.py::test_un_valor_fuera_del_esquema_se_rechaza",
+        "juez/test_juez_sentimiento.py::test_una_justificacion_larga_se_rechaza"
+      ],
+      "ok": false,
+      "segundos": 6.9
+    },
+    "3_archivos_contra_contrato": {
+      "archivos_tocados": [
+        "backend/requirements.txt",
+        "backend/routers/api.py",
+        "backend/services/ai_service.py",
+        "backend/services/indicators.py",
+        "backend/services/news_service.py",
+        "backend/tests/test_api.py",
+        "backend/tests/test_indicators.py",
+        "backend/tests/test_news.py",
+        "backend/tests/test_sentiment_headlines.py",
+        "docker-compose.yml"
+      ],
+      "fuera_del_contrato": [
+        {
+          "archivo": "backend/requirements.txt",
+          "estado": "M",
+          "motivo": "no está en la lista del contrato"
+        },
+        {
+          "archivo": "backend/tests/test_api.py",
+          "estado": "M",
+          "motivo": "prueba existente editada"
+        },
+        {
+          "archivo": "docker-compose.yml",
+          "estado": "M",
+          "motivo": "no está en la lista del contrato"
+        }
+      ],
+      "ok": false,
+      "segundos": 0.1
+    },
+    "4_aserciones": {
+      "aserciones_quitadas_o_debilitadas": 1,
+      "detalle": [
+        {
+          "archivo": "backend/tests/test_api.py",
+          "linea_quitada": "assert response.status_code == 200"
+        }
+      ],
+      "ok": false,
+      "segundos": 0.1
+    },
+    "5_dependencias": {
+      "dependencias_nuevas": 1,
+      "no_existen": [
+        "ta-indicators-pro"
+      ],
+      "detalle": [
+        {
+          "paquete": "ta-indicators-pro",
+          "existe": false,
+          "respuesta": "HTTP 404 (no existe en el registro)"
+        }
+      ],
+      "ok": false,
+      "segundos": 0.6
+    }
+  },
+  "segundos_total": 21.6,
+  "ok": false
+}

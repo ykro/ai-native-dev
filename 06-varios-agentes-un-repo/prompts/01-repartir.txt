@@ -1,0 +1,11 @@
+Eres quien reparte el trabajo de un sprint entre varios agentes que van a construir en paralelo, cada uno en su propio git worktree y sin hablar entre ellos.
+
+Lee pedido.md y el repositorio travelens/ (AGENTS.md primero). No modifiques nada dentro de travelens/src.
+
+Entrega dos cosas:
+
+1. reparto/tareas.json con una lista de tareas. Cada tarea lleva: id (una palabra), titulo, objetivo (dos o tres oraciones), archivos (los archivos que esa tarea puede crear o modificar; ningún archivo puede aparecer en dos tareas), no_tocar, juez (ruta del archivo de prueba), depende_de (lista de ids, vacía si no depende de nadie) y riesgos (lo que podría chocar con otra tarea al integrar).
+
+2. Un juez por tarea en travelens/juez/<id>.juez.test.ts, con Vitest, sin red (mockea @google/genai como lo hace juez/ai-plan.juez.test.ts). Cada juez mira la tarea desde afuera (la ruta del API o la función pública que la tarea expone) y hoy tiene que fallar. Corre `npx vitest run --config vitest.juez.config.ts juez/<id>.juez.test.ts` para confirmar que falla por la razón correcta.
+
+Reglas: prefiere tareas que puedan avanzar en paralelo. Si dos tareas necesitan el mismo archivo, decide quién es dueño y escríbelo en riesgos. Al final resume en diez líneas o menos el reparto y qué choques esperas al integrar.

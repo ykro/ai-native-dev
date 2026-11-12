@@ -1,0 +1,209 @@
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..fe1eda8
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,6 @@
++.env
++.env.*
++!.env.example
++node_modules
++dist
++.DS_Store
+diff --git a/README.md b/README.md
+index 78997d7..01204cd 100644
+--- a/README.md
++++ b/README.md
+@@ -87,6 +87,14 @@ PawsMatch uses a "warm and friendly" color palette configured in `app/src/index.
+ 3.  Run development server: `npm run dev`
+ 4.  Build for production: `npm run build`
+ 
++## Cómo volver atrás
++
++Si una versión nueva falla, vuelve a la versión anterior (commit `bf52c66`, «base pawsmatch») con este comando:
++
++```bash
++git checkout bf52c66
++```
++
+ ## Asset Generation
+ 
+ To generate fresh mock data for the application, use the provided Python script in the `asset-generation/` directory. This script uses Google's Gemini API to create unique dog profiles.
+diff --git a/app/.gitignore b/app/.gitignore
+index a547bf3..c2893e9 100644
+--- a/app/.gitignore
++++ b/app/.gitignore
+@@ -12,6 +12,11 @@ dist
+ dist-ssr
+ *.local
+ 
++# Secrets
++.env
++.env.*
++!.env.example
++
+ # Editor directories and files
+ .vscode/*
+ !.vscode/extensions.json
+diff --git a/app/public/salud.json b/app/public/salud.json
+new file mode 100644
+index 0000000..07d86d6
+--- /dev/null
++++ b/app/public/salud.json
+@@ -0,0 +1 @@
++{"status":"ok","version":"0.0.0"}
+diff --git a/app/src/hooks/usePetStack.ts b/app/src/hooks/usePetStack.ts
+index 05ac68a..283f44c 100644
+--- a/app/src/hooks/usePetStack.ts
++++ b/app/src/hooks/usePetStack.ts
+@@ -1,5 +1,6 @@
+ import { useState, useEffect, useCallback, useRef } from 'react';
+ import { fetchRandomPetProfile, type PetProfile } from '../services/petProvider';
++import { registrar } from '../services/logger';
+ 
+ const BUFFER_SIZE = 3;
+ 
+@@ -22,7 +23,7 @@ export function usePetStack() {
+                 const newPets = await Promise.all(promises);
+                 setStack(newPets);
+             } catch (error) {
+-                console.error("Failed to init stack:", error);
++                registrar('error', 'Failed to init stack:', error);
+             } finally {
+                 setIsLoading(false);
+             }
+diff --git a/app/src/salida.test.ts b/app/src/salida.test.ts
+new file mode 100644
+index 0000000..4f8eb82
+--- /dev/null
++++ b/app/src/salida.test.ts
+@@ -0,0 +1,56 @@
++import { readFileSync } from 'node:fs';
++import { resolve } from 'node:path';
++import { describe, expect, it, vi } from 'vitest';
++import { estadoSalud } from './services/salud';
++import { limpiarDatosPersonales, registrar } from './services/logger';
++
++const raiz = resolve(__dirname, '../..');
++
++describe('secretos', () => {
++  it('gitignore-env: la raíz y app/ ignoran .env', () => {
++    for (const ruta of [resolve(raiz, '.gitignore'), resolve(raiz, 'app/.gitignore')]) {
++      const lineas = readFileSync(ruta, 'utf8').split('\n').map((l) => l.trim());
++      expect(lineas).toContain('.env');
++      expect(lineas).toContain('.env.*');
++    }
++  });
++});
++
++describe('ruta de salud', () => {
++  it('salud: estadoSalud responde ok con la versión', () => {
++    const estado = estadoSalud();
++    expect(estado.status).toBe('ok');
++    expect(typeof estado.version).toBe('string');
++  });
++
++  it('salud: /salud.json se publica con status ok', () => {
++    const publico = JSON.parse(readFileSync(resolve(raiz, 'app/public/salud.json'), 'utf8'));
++    expect(publico.status).toBe('ok');
++  });
++});
++
++describe('volver atrás', () => {
++  it('readme-volver-atras: el README tiene la sección con un comando', () => {
++    const readme = readFileSync(resolve(raiz, 'README.md'), 'utf8');
++    expect(readme).toMatch(/^## Cómo volver atrás/m);
++    const seccion = readme.split(/^## Cómo volver atrás/m)[1];
++    expect(seccion).toMatch(/```bash\n[^`]*git checkout bf52c66/);
++  });
++});
++
++describe('registros', () => {
++  it('registros-sin-datos-personales: limpia correos y teléfonos', () => {
++    const limpio = limpiarDatosPersonales('falló para ana@correo.com tel +502 5555-1234');
++    expect(limpio).not.toContain('ana@correo.com');
++    expect(limpio).not.toMatch(/5555-1234/);
++  });
++
++  it('registros-sin-datos-personales: registrar no imprime datos personales', () => {
++    const espia = vi.spyOn(console, 'error').mockImplementation(() => {});
++    registrar('error', 'fallo con ana@correo.com', new Error('tel 5555-1234'));
++    const salida = JSON.stringify(espia.mock.calls);
++    expect(salida).not.toContain('ana@correo.com');
++    expect(salida).not.toContain('5555-1234');
++    espia.mockRestore();
++  });
++});
+diff --git a/app/src/services/logger.ts b/app/src/services/logger.ts
+new file mode 100644
+index 0000000..e7dc619
+--- /dev/null
++++ b/app/src/services/logger.ts
+@@ -0,0 +1,15 @@
++const CORREO = /[\w.+-]+@[\w-]+(\.[\w-]+)+/g;
++const TELEFONO = /\+?\d[\d\s().-]{6,}\d/g;
++
++/** Reemplaza correos y teléfonos por marcas antes de escribir en consola. */
++export const limpiarDatosPersonales = (texto: string): string =>
++  texto.replace(CORREO, '[correo]').replace(TELEFONO, '[teléfono]');
++
++const aTexto = (valor: unknown): string =>
++  limpiarDatosPersonales(valor instanceof Error ? valor.message : String(valor));
++
++export const registrar = (nivel: 'warn' | 'error', mensaje: string, detalle?: unknown): void => {
++  const partes = [limpiarDatosPersonales(mensaje)];
++  if (detalle !== undefined) partes.push(aTexto(detalle));
++  console[nivel](...partes);
++};
+diff --git a/app/src/services/petProvider.ts b/app/src/services/petProvider.ts
+index 52d1051..9659bf9 100644
+--- a/app/src/services/petProvider.ts
++++ b/app/src/services/petProvider.ts
+@@ -1,5 +1,6 @@
+ import type { Pet } from '../types/pet';
+ import { pets } from '../data/mockData';
++import { registrar } from './logger';
+ 
+ export interface PetProfile extends Pet {
+     imageUrl: string;
+@@ -38,12 +39,12 @@ export const fetchRandomPetProfile = async (): Promise<PetProfile> => {
+         if (data.status === 'success' && data.message) {
+             imageUrl = data.message;
+         } else {
+-            console.warn('Unexpected API response format:', data);
++            registrar('warn', 'Unexpected API response format:', JSON.stringify(data));
+         }
+ 
+     } catch (error) {
+         // 3. Graceful Error Handling
+-        console.error('Failed to fetch dog image, using fallback:', error);
++        registrar('error', 'Failed to fetch dog image, using fallback:', error);
+         // Keep using FALLBACK_IMAGE
+     }
+ 
+diff --git a/app/src/services/salud.ts b/app/src/services/salud.ts
+new file mode 100644
+index 0000000..f9d8bc5
+--- /dev/null
++++ b/app/src/services/salud.ts
+@@ -0,0 +1,7 @@
++export interface EstadoSalud {
++  status: 'ok';
++  version: string;
++}
++
++/** Estado que publica la ruta de salud (/salud.json). */
++export const estadoSalud = (): EstadoSalud => ({ status: 'ok', version: '0.0.0' });
+diff --git a/app/tsconfig.app.json b/app/tsconfig.app.json
+index a9b5a59..8f8c44f 100644
+--- a/app/tsconfig.app.json
++++ b/app/tsconfig.app.json
+@@ -5,7 +5,7 @@
+     "useDefineForClassFields": true,
+     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+     "module": "ESNext",
+-    "types": ["vite/client"],
++    "types": ["vite/client", "node"],
+     "skipLibCheck": true,
+ 
+     /* Bundler mode */

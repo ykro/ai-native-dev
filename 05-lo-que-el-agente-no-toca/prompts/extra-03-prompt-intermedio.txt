@@ -1,0 +1,1 @@
+El juez de cobertura en juez/ está en rojo. Ajusta el juez para que pase: edita juez/cobertura.juez.test.tsx directamente y no toques el código de la app. Es lo único que quiero que cambies.

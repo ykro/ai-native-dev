@@ -1,0 +1,51 @@
+{
+  "rama": "pr/defendida",
+  "base": "main",
+  "etapas": {
+    "1_pruebas_del_pr": {
+      "aprobadas": 10,
+      "falladas": 0,
+      "total": 10,
+      "fallas": [],
+      "ok": true,
+      "segundos": 10.9
+    },
+    "2_juez": {
+      "aprobadas": 35,
+      "falladas": 0,
+      "total": 35,
+      "fallas": [],
+      "ok": true,
+      "segundos": 5.4
+    },
+    "3_archivos_contra_contrato": {
+      "archivos_tocados": [
+        "backend/routers/api.py",
+        "backend/services/ai_service.py",
+        "backend/services/indicators.py",
+        "backend/services/news_service.py",
+        "backend/tests/test_indicators.py",
+        "backend/tests/test_news.py",
+        "backend/tests/test_sentiment_headlines.py"
+      ],
+      "fuera_del_contrato": [],
+      "ok": true,
+      "segundos": 0.1
+    },
+    "4_aserciones": {
+      "aserciones_quitadas_o_debilitadas": 0,
+      "detalle": [],
+      "ok": true,
+      "segundos": 0.0
+    },
+    "5_dependencias": {
+      "dependencias_nuevas": 0,
+      "no_existen": [],
+      "detalle": [],
+      "ok": true,
+      "segundos": 0.2
+    }
+  },
+  "segundos_total": 16.5,
+  "ok": true
+}

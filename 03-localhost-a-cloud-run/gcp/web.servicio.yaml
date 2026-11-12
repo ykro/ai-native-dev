@@ -1,0 +1,32 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: traderpulse-web
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "5"
+    spec:
+      serviceAccountName: traderpulse-web@${PROJECT_ID}.iam.gserviceaccount.com
+      containers:
+        - image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/traderpulse/web:${TAG}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: API_URL
+              value: ${API_URL}
+            - name: TRADERPULSE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: traderpulse-token
+                  key: latest
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /
+            periodSeconds: 3
+            failureThreshold: 10

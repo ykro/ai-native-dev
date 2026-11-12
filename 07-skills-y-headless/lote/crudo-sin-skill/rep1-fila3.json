@@ -1,0 +1,204 @@
+{
+  "duration_api_ms": 15135,
+  "stop_reason": "end_turn",
+  "session_id": "64c034e5-c893-4873-8435-98e1ead3d6db",
+  "total_cost_usd": 0.11754460000000001,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 21724,
+    "cache_read_input_tokens": 151626,
+    "output_tokens": 1547,
+    "output_tokens_details": {
+      "thinking_tokens": 202
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 21724,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 409,
+        "cache_read_input_tokens": 46725,
+        "cache_creation_input_tokens": 921,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 921
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1547,
+      "cacheReadInputTokens": 151626,
+      "cacheCreationInputTokens": 21724,
+      "webSearchRequests": 0,
+      "costUSD": 0.11754460000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 202,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 21724,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_011NNKhWR4MywJugUBLMbz1y",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && head -c 600 pets.json; echo; tail -c 500 pets.json; python3 -I -c \"\nimport json;d=json.load(open('pets.json'));print(len(d),d[-1]['id'],[p['id'] for p in d]==list(range(d[0]['id'],d[0]['id']+len(d))));print([p['name'] for p in d])\""
+      }
+    },
+    {
+      "tool_name": "Edit",
+      "tool_use_id": "toolu_01HWDaZZ8r5HCwgy2JibcNoH",
+      "tool_input": {
+        "file_path": "~/pawsmatch/app/src/data/pets.json",
+        "old_string": "una nueva aventura cada día.\"\n  }\n]",
+        "new_string": "una nueva aventura cada día.\"\n  },\n  {\n    \"id\": 52,\n    \"name\": \"Beto\",\n    \"bio\": \"Soy Beto, un perro muy fiel que te sigue a todos lados como sombra.\\nBusco una familia paciente que me abrace fuerte cuando truene y me dé confianza.\\nTe ofrezco lealtad de verdad, mucho cariño y un compañero para toda la vida.\"\n  }\n]",
+        "replace_all": false
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_017PMyG47wLkXKFu9B9azMCC",
+      "tool_input": {
+        "command": "node -e \"\nconst d=require('./pets.json');const b=d.at(-1);console.log(d.length,b.id,b.bio.split('\\n').map(l=>l.length));console.log(d.every((p,i)=>p.id===i+1),new Set(d.map(p=>p.name)).size)\""
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 5,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "No pude agregar a Beto porque el permiso para escribir en `app/src/data/pets.json` no fue concedido, así que el archivo sigue igual. Tampoco pude correr la validación.\n\nEsto es lo que iba a agregar. Es el id 52, porque el último es Aurora con id 51, y \"Beto\" no está repetido:\n\n```json\n{\n  \"id\": 52,\n  \"name\": \"Beto\",\n  \"bio\": \"Soy Beto, un perro muy fiel que te sigue a todos lados como sombra.\\nBusco una familia paciente que me abrace fuerte cuando truene y me dé confianza.\\nTe ofrezco lealtad de verdad, mucho cariño y un compañero para toda la vida.\"\n}\n```\n\nLa bio tiene tres líneas: quién soy (fiel), qué busco (alguien que lo acompañe en los truenos) y qué ofrezco. No usa emojis, \"Lorem\" ni \"TODO\". Medí las líneas a ojo y deberían estar entre unos 62 y 80 caracteres, pero no lo verifiqué con código.\n\nSi me das el permiso de escritura, hago el cambio y corro la verificación de ids, nombres y largo de las líneas.",
+  "ttft_ms": 3105,
+  "type": "result",
+  "duration_ms": 21017,
+  "uuid": "363f0597-b5ac-4e0f-bc37-4655ec86aaf0",
+  "ttft_stream_ms": 1632,
+  "time_to_request_ms": 268,
+  "time_to_request_phases_ms": {
+    "other": 14,
+    "system_prompt": 26,
+    "resume_other": 0,
+    "process_user_input": 2,
+    "input_attachments": 28,
+    "input_hooks": 1,
+    "conversation_append": 0,
+    "transcript_persist": 108,
+    "tool_pool_refresh": 2,
+    "init_message": 2,
+    "init_frame_send": 18,
+    "engine_pickup": 40,
+    "loop_entry": 7,
+    "message_prep": 0,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "request_announcements": 3,
+    "query_setup": 1,
+    "model_gates": 1,
+    "tool_schema_build": 4,
+    "message_normalization": 2,
+    "client_creation": 2,
+    "request_build": 5
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 94,
+  "time_to_request_cpu_ms": 228,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 3,
+    "cpu_ms": 18,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 4,
+    "ambient_wait_ms": 3,
+    "render_ms": 19,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 1,
+    "placement_ms": 0,
+    "render_ms": 2,
+    "after_ms": 1,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 0,
+    "after_ms": 1,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 1,
+    "plans_ms": 0,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 2,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 1632,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

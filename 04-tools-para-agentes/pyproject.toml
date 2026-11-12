@@ -1,0 +1,16 @@
+[project]
+name = "traderpulse-tools"
+version = "2027.1.0"
+description = "Dos conjuntos de herramientas MCP sobre el BFF de TraderPulse y el juez que los compara."
+requires-python = ">=3.13"
+dependencies = [
+    "mcp>=2.3.0",
+    "httpx>=0.28.0",
+    "traderpulse-api",
+]
+
+[tool.uv.sources]
+traderpulse-api = { path = "../03-localhost-a-cloud-run/traderpulse/backend", editable = true }
+
+[tool.uv]
+package = false

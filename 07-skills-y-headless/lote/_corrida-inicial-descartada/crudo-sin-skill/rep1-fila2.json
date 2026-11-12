@@ -1,0 +1,194 @@
+{
+  "duration_api_ms": 18034,
+  "stop_reason": "end_turn",
+  "session_id": "8afe3f7e-22d7-4f2a-9fdd-551f9436f2f0",
+  "total_cost_usd": 0.1182343,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 21353,
+    "cache_read_input_tokens": 151063,
+    "output_tokens": 1770,
+    "output_tokens_details": {
+      "thinking_tokens": 343
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 21353,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 617,
+        "cache_read_input_tokens": 46209,
+        "cache_creation_input_tokens": 1070,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1070
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1770,
+      "cacheReadInputTokens": 151063,
+      "cacheCreationInputTokens": 21353,
+      "webSearchRequests": 0,
+      "costUSD": 0.1182343,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 343,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 21353,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_0185tj6qdUUytWW7biD8SNxK",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && head -c 600 pets.json; echo; tail -c 500 pets.json; node -e 'const p=require(\"./pets.json\");console.log(p.length,p.map(x=>x.id).join(\",\"),p.some(x=>x.name==\"Aurora\"))'"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_012YoyVW76FjtuTDLtU6ofW4",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && python3 -I -c '\nimport json\np=json.load(open(\"pets.json\"))\nprint(len(p),[x[\"id\"] for x in p]==list(range(1,len(p)+1)),len({x[\"name\"] for x in p})==len(p))\nprint([len(l) for l in p[-1][\"bio\"].split(\"\\n\")])'"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 5,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Agregué a **Aurora** al final de `app/src/data/pets.json`, con id 52. No toqué ninguna otra mascota ni otro archivo.\n\n```json\n{\n  \"id\": 52,\n  \"name\": \"Aurora\",\n  \"bio\": \"Soy una perrita madrugadora y curiosa que despierta con el primer rayo de sol.\\nBusco una familia que disfrute las mañanas y los paseos para explorar cada rincón.\\nTe ofrezco cariño, mucha alegría y una compañera que te levanta con ganas de vivir.\"\n}\n```\n\n- **Id:** el archivo tenía 51 entradas y la última era el id 51 (Tango), así que 52 sigue sin saltos. No revisé uno por uno los ids intermedios.\n- **Nombre:** `grep` no encontró ningún \"Aurora\" antes de agregarla. No comparé el resto de los nombres entre sí.\n- **Bio:** tiene tres líneas separadas por `\\n`: quién soy, qué busco y qué ofrezco. Calculo que miden unos 78, 81 y 83 caracteres, dentro del rango de 20 a 110. Las conté a ojo. No tiene emojis, \"Lorem\" ni \"TODO\".\n\nNo pude correr el script que validaba el JSON completo, porque la herramienta pidió aprobación y la sesión no es interactiva. Si quieres, ejecuta `npm test` o parsea el archivo para confirmar.",
+  "ttft_ms": 2851,
+  "type": "result",
+  "duration_ms": 22362,
+  "uuid": "084d0d98-bf2d-4c01-a471-077c8f3a4877",
+  "ttft_stream_ms": 1664,
+  "time_to_request_ms": 243,
+  "time_to_request_phases_ms": {
+    "other": 3,
+    "system_prompt": 41,
+    "resume_other": 0,
+    "process_user_input": 5,
+    "input_attachments": 43,
+    "input_hooks": 3,
+    "conversation_append": 0,
+    "transcript_persist": 99,
+    "tool_pool_refresh": 3,
+    "init_message": 3,
+    "init_frame_send": 4,
+    "engine_pickup": 1,
+    "loop_entry": 2,
+    "message_prep": 0,
+    "model_config_wait": 1,
+    "autocompact": 8,
+    "request_announcements": 5,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 3,
+    "message_normalization": 2,
+    "client_creation": 3,
+    "request_build": 13
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 124,
+  "time_to_request_cpu_ms": 221,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 24,
+    "cpu_ms": 21,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 5,
+    "ambient_wait_ms": 24,
+    "render_ms": 11,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 0,
+    "placement_ms": 1,
+    "render_ms": 2,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 0,
+    "after_ms": 0,
+    "other_ms": 1,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 1,
+    "plans_ms": 0,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 10,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 1664,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

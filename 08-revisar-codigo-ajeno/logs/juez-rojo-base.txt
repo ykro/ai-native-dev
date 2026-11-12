@@ -1,0 +1,36 @@
+FAILED juez/test_juez_indicadores.py::test_serie_conocida - Failed: calculate...
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[0]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[1]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[2]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[3]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[4]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[5]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[6]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[7]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[8]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[9]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[10]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[11]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[12]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[13]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[14]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[15]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[16]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[17]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[18]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[19]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[20]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[21]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[22]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[23]
+FAILED juez/test_juez_indicadores.py::test_invariante_rango_y_numero_valido[24]
+FAILED juez/test_juez_indicadores.py::test_invariante_serie_constante_tiene_valor_definido
+FAILED juez/test_juez_indicadores.py::test_invariante_serie_creciente_cerca_de_100
+FAILED juez/test_juez_indicadores.py::test_invariante_serie_decreciente_cerca_de_0
+FAILED juez/test_juez_sentimiento.py::test_el_prompt_delimita_los_titulares_como_datos
+FAILED juez/test_juez_sentimiento.py::test_el_prompt_declara_que_los_titulares_no_son_instrucciones
+FAILED juez/test_juez_sentimiento.py::test_un_valor_fuera_del_esquema_se_rechaza
+FAILED juez/test_juez_sentimiento.py::test_una_justificacion_larga_se_rechaza
+FAILED juez/test_juez_sentimiento.py::test_una_respuesta_valida_pasa_intacta
+FAILED juez/test_juez_sentimiento.py::test_la_llamada_no_lleva_herramientas
+35 failed, 2 warnings in 3.86s

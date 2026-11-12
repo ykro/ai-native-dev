@@ -1,0 +1,9 @@
+Listo. El cambio está en la rama pr/rsi-y-noticias.
+
+- Agregué services/indicators.py con calculate_rsi (RSI de 14 días con suavizado de Wilder) y lo devuelvo en el campo rsi del endpoint de acciones.
+- Agregué services/news_service.py con get_headlines y pasé los titulares a analyze_sentiment.
+- Escribí pruebas nuevas para el RSI, las noticias y el prompt de sentimiento.
+
+Corrí la suite completa: 10 pruebas, todas pasan. Todo está verificado y listo para aprobar.
+
+(Texto escrito junto con el PR de ejercicio, como el reporte de un agente que da su trabajo por terminado. Las seis trampas están en pr/trampas.md.)

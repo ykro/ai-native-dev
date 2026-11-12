@@ -1,0 +1,204 @@
+{
+  "duration_api_ms": 19144,
+  "stop_reason": "end_turn",
+  "session_id": "7eef11f1-9655-41f3-a617-082b12d60dd7",
+  "total_cost_usd": 0.1314247,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 23388,
+    "cache_read_input_tokens": 199727,
+    "output_tokens": 1788,
+    "output_tokens_details": {
+      "thinking_tokens": 195
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23388,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 477,
+        "cache_read_input_tokens": 48441,
+        "cache_creation_input_tokens": 871,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 871
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1788,
+      "cacheReadInputTokens": 199727,
+      "cacheCreationInputTokens": 23388,
+      "webSearchRequests": 0,
+      "costUSD": 0.1314247,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 195,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 23388,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01YTXp6ApgM16snKpPnXno6f",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && python3 -I -c \"\nimport json\nd=json.load(open('pets.json'))\nprint(len(d),d[-1],[p['id'] for p in d][-3:],any(p['name']=='Nube' for p in d))\nprint(sorted(p['id'] for p in d)==list(range(d[0]['id'],d[0]['id']+len(d))))\n\"; tail -c 300 pets.json | cat -A | tail -8; head -c 300 pets.json"
+      }
+    },
+    {
+      "tool_name": "Edit",
+      "tool_use_id": "toolu_01EoVW6wb266tm67nqZNngRy",
+      "tool_input": {
+        "file_path": "~/pawsmatch/app/src/data/pets.json",
+        "old_string": "sobre todo para los más pequeños de la casa.\"\n  }\n]",
+        "new_string": "sobre todo para los más pequeños de la casa.\"\n  },\n  {\n    \"id\": 54,\n    \"name\": \"Nube\",\n    \"bio\": \"Soy Nube, una perrita bien tranquila que se pasa el día echando siestas.\\nBusco un hogar calmado donde pueda dormir sin prisa en un rincón calientito.\\nTe ofrezco compañía serena, mucho cariño y alguien que te acompañe en tus ratos de descanso.\"\n  }\n]",
+        "replace_all": false
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_012aGwDuxRs7XcEbYo8MAMtT",
+      "tool_input": {
+        "command": "python3 -I -c \"\nimport json\nd=json.load(open('pets.json'))\nprint([p['id'] for p in d]==list(range(1,len(d)+1)), len({p['name'] for p in d})==len(d))\nprint([len(l) for l in d[-1]['bio'].split('\\n')])\""
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 7,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "No pude agregar a Nube: el permiso para escribir en `app/src/data/pets.json` no está concedido, así que el archivo sigue igual. Tampoco se aprobó el comando de validación.\n\nRevisé el archivo y la última mascota es Estrella o Canelo según el orden. La última entrada es Canelo, con id 53, y no existe ninguna mascota llamada Nube. El nuevo id sería 54.\n\nEsta es la entrada que iba a agregar al final de la lista:\n\n```json\n{\n  \"id\": 54,\n  \"name\": \"Nube\",\n  \"bio\": \"Soy Nube, una perrita bien tranquila que se pasa el día echando siestas.\\nBusco un hogar calmado donde pueda dormir sin prisa en un rincón calientito.\\nTe ofrezco compañía serena, mucho cariño y alguien que te acompañe en tus ratos de descanso.\"\n}\n```\n\nLa bio tiene tres líneas: quién soy, qué busco y qué ofrezco. Calculé que cada línea mide entre 20 y 110 caracteres, pero no lo verifiqué con código. No lleva emojis, \"Lorem\" ni \"TODO\".\n\nSi me das permiso de escritura sobre ese archivo, lo agrego y valido que los ids sigan seguidos, que los nombres no se repitan y que el largo de las líneas sea correcto. No toqué ningún otro archivo.",
+  "ttft_ms": 3537,
+  "type": "result",
+  "duration_ms": 24917,
+  "uuid": "cae12741-1553-4b3d-95f6-b8b6e99c6fe2",
+  "ttft_stream_ms": 1916,
+  "time_to_request_ms": 270,
+  "time_to_request_phases_ms": {
+    "other": 13,
+    "system_prompt": 51,
+    "resume_other": 0,
+    "process_user_input": 2,
+    "input_attachments": 14,
+    "input_hooks": 1,
+    "conversation_append": 0,
+    "transcript_persist": 47,
+    "tool_pool_refresh": 1,
+    "init_message": 3,
+    "init_frame_send": 1,
+    "engine_pickup": 1,
+    "loop_entry": 2,
+    "message_prep": 0,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "request_announcements": 4,
+    "query_setup": 0,
+    "model_gates": 116,
+    "tool_schema_build": 4,
+    "message_normalization": 1,
+    "client_creation": 2,
+    "request_build": 5
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 30,
+  "time_to_request_cpu_ms": 287,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 6,
+    "cpu_ms": 16,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 5,
+    "ambient_wait_ms": 6,
+    "render_ms": 1,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 1,
+    "placement_ms": 0,
+    "render_ms": 3,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 0,
+    "after_ms": 0,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 0,
+    "headers_ms": 1,
+    "cache_break_record_ms": 0,
+    "plans_ms": 1,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 2,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 1916,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

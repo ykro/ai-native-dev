@@ -1,0 +1,199 @@
+diff --git a/gcp/api.servicio.yaml b/gcp/api.servicio.yaml
+new file mode 100644
+index 0000000..8b15b75
+--- /dev/null
++++ b/gcp/api.servicio.yaml
+@@ -0,0 +1,50 @@
++# Despliegue: gcloud run services replace gcp/api.servicio.yaml --region ${REGION}
++# (sustituye las variables antes: envsubst < gcp/api.servicio.yaml)
++apiVersion: serving.knative.dev/v1
++kind: Service
++metadata:
++  name: traderpulse-api
++  labels:
++    app: traderpulse
++spec:
++  template:
++    metadata:
++      annotations:
++        autoscaling.knative.dev/minScale: "0"
++        autoscaling.knative.dev/maxScale: "5"
++    spec:
++      serviceAccountName: traderpulse-api@${PROJECT_ID}.iam.gserviceaccount.com
++      containerConcurrency: 40
++      timeoutSeconds: 60
++      containers:
++        - image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/traderpulse/api:latest
++          ports:
++            - containerPort: 8080
++          env:
++            - name: SENTIMIENTO_FUENTE
++              value: vertex
++            - name: GOOGLE_CLOUD_PROJECT
++              value: ${PROJECT_ID}
++            - name: GOOGLE_CLOUD_LOCATION
++              value: global
++            # El token nunca va en claro: se resuelve desde Secret Manager al arrancar la instancia.
++            - name: TRADERPULSE_TOKEN
++              valueFrom:
++                secretKeyRef:
++                  name: traderpulse-token
++                  key: latest
++          resources:
++            limits:
++              cpu: "1"
++              memory: 512Mi
++          startupProbe:
++            httpGet:
++              path: /salud
++              port: 8080
++            periodSeconds: 3
++            failureThreshold: 10
++          livenessProbe:
++            httpGet:
++              path: /salud
++              port: 8080
++            periodSeconds: 30
+diff --git a/gcp/web.servicio.yaml b/gcp/web.servicio.yaml
+new file mode 100644
+index 0000000..4abdf82
+--- /dev/null
++++ b/gcp/web.servicio.yaml
+@@ -0,0 +1,42 @@
++# Despliegue: gcloud run services replace gcp/web.servicio.yaml --region ${REGION}
++# Variables: ${PROJECT_ID}, ${REGION} y ${API_URL} (URL del servicio traderpulse-api, ya desplegado:
++#   gcloud run services describe traderpulse-api --region ${REGION} --format 'value(status.url)').
++apiVersion: serving.knative.dev/v1
++kind: Service
++metadata:
++  name: traderpulse-web
++  labels:
++    app: traderpulse
++spec:
++  template:
++    metadata:
++      annotations:
++        autoscaling.knative.dev/minScale: "0"
++        autoscaling.knative.dev/maxScale: "5"
++    spec:
++      serviceAccountName: traderpulse-web@${PROJECT_ID}.iam.gserviceaccount.com
++      containerConcurrency: 80
++      timeoutSeconds: 60
++      containers:
++        - image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/traderpulse/web:latest
++          ports:
++            - containerPort: 8080
++          env:
++            # Ambos se leen en runtime desde el servidor de Next.js (src/lib/api.ts).
++            - name: API_URL
++              value: ${API_URL}
++            # Mismo secreto que el BFF: el servidor de Next lo manda en X-TraderPulse-Token.
++            - name: TRADERPULSE_TOKEN
++              valueFrom:
++                secretKeyRef:
++                  name: traderpulse-token
++                  key: latest
++          resources:
++            limits:
++              cpu: "1"
++              memory: 512Mi
++          startupProbe:
++            tcpSocket:
++              port: 8080
++            periodSeconds: 3
++            failureThreshold: 10
+diff --git a/traderpulse/backend/.dockerignore b/traderpulse/backend/.dockerignore
+new file mode 100644
+index 0000000..72a4afd
+--- /dev/null
++++ b/traderpulse/backend/.dockerignore
+@@ -0,0 +1,11 @@
++.venv
++.env
++.env.*
++__pycache__
++*.pyc
++.pytest_cache
++.ruff_cache
++tests
++scripts
++Dockerfile
++.dockerignore
+diff --git a/traderpulse/backend/Dockerfile b/traderpulse/backend/Dockerfile
+new file mode 100644
+index 0000000..f4d0f3d
+--- /dev/null
++++ b/traderpulse/backend/Dockerfile
+@@ -0,0 +1,26 @@
++# syntax=docker/dockerfile:1
++FROM python:3.13-slim AS build
++COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
++ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never
++WORKDIR /app
++
++# Dependencias primero: esta capa solo se reconstruye si cambia el lockfile.
++COPY pyproject.toml uv.lock ./
++RUN --mount=type=cache,target=/root/.cache/uv \
++    uv sync --frozen --no-dev --no-install-project
++
++# Paquete instalado (no editable): main.py lee su versión con importlib.metadata.
++COPY traderpulse_api ./traderpulse_api
++RUN --mount=type=cache,target=/root/.cache/uv \
++    uv sync --frozen --no-dev --no-editable
++
++FROM python:3.13-slim
++ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
++WORKDIR /app
++COPY --from=build /app/.venv /app/.venv
++RUN useradd --system --uid 10001 app
++USER app
++
++# Cloud Run inyecta PORT (8080 por defecto). TRADERPULSE_TOKEN llega desde Secret Manager.
++EXPOSE 8080
++CMD ["sh", "-c", "exec uvicorn traderpulse_api.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+diff --git a/traderpulse/frontend/.dockerignore b/traderpulse/frontend/.dockerignore
+new file mode 100644
+index 0000000..dd7e8bf
+--- /dev/null
++++ b/traderpulse/frontend/.dockerignore
+@@ -0,0 +1,9 @@
++node_modules
++.next
++.env
++.env.*
++tests
++vitest.config.ts
++*.tsbuildinfo
++Dockerfile
++.dockerignore
+diff --git a/traderpulse/frontend/Dockerfile b/traderpulse/frontend/Dockerfile
+new file mode 100644
+index 0000000..d379dc6
+--- /dev/null
++++ b/traderpulse/frontend/Dockerfile
+@@ -0,0 +1,25 @@
++# syntax=docker/dockerfile:1
++FROM node:24-slim AS deps
++WORKDIR /app
++COPY package.json package-lock.json ./
++RUN --mount=type=cache,target=/root/.npm npm ci
++
++FROM node:24-slim AS build
++WORKDIR /app
++ENV NEXT_TELEMETRY_DISABLED=1
++COPY --from=deps /app/node_modules ./node_modules
++COPY . .
++# API_URL y TRADERPULSE_TOKEN no entran al build: se leen en runtime (ver src/lib/api.ts).
++RUN npm run build
++
++FROM node:24-slim
++WORKDIR /app
++ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME=0.0.0.0
++# Salida standalone (next.config.ts): server.js + solo las dependencias que usa.
++COPY --from=build --chown=node:node /app/.next/standalone ./
++COPY --from=build --chown=node:node /app/.next/static ./.next/static
++USER node
++
++# Cloud Run inyecta PORT (8080 por defecto); Next lo lee del entorno.
++EXPOSE 8080
++CMD ["node", "server.js"]

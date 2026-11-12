@@ -1,0 +1,7 @@
+Usa solo las herramientas de TraderPulse que tienes disponibles para responder esta pregunta.
+
+Pregunta: {pregunta}
+
+Termina con una última línea con este formato exacto y nada después de ella:
+RESPUESTA: <respuesta corta>
+Reglas de esa línea: precios y porcentajes como números con punto decimal (por ejemplo 123.45 o -1.97), fechas como AAAA-MM-DD, el sentimiento como alcista, bajista o neutral, y los símbolos en mayúsculas. Cuando la pregunta diga «mayor cambio», significa el mayor movimiento en valor absoluto, suba o baje.

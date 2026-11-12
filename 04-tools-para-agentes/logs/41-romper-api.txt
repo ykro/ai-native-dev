@@ -1,0 +1,7 @@
+$ gcloud run services update traderpulse-web --region "$REGION" --update-env-vars API_URL=https://invalido.example
+Deploying...
+Creating Revision.................................................................................done
+Routing traffic.....done
+Done.
+Service [traderpulse-web] revision [traderpulse-web-00002-j4r] has been deployed and is serving 100 percent of traffic.
+Service URL: {{URL_WEB}}

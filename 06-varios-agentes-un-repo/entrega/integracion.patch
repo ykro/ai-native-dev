@@ -1,0 +1,773 @@
+diff --git a/travelens/src/app/api/ai-plan/route.test.ts b/travelens/src/app/api/ai-plan/route.test.ts
+index fb015a6..e7f329a 100644
+--- a/travelens/src/app/api/ai-plan/route.test.ts
++++ b/travelens/src/app/api/ai-plan/route.test.ts
+@@ -3,7 +3,7 @@ import type { TravelPlan } from "@/services/schemas";
+ import { VALID_ITINERARY_FIXTURE } from "@/services/__fixtures__/itinerary.fixture";
+ 
+ const generateTravelPlan = vi.fn<
+-  (destination: string, context?: string) => Promise<TravelPlan | null>
++  (destination: string, context?: string, days?: number) => Promise<TravelPlan | null>
+ >(async () => VALID_ITINERARY_FIXTURE);
+ 
+ vi.mock("@/services/gemini", () => ({
+@@ -28,6 +28,18 @@ describe("POST /api/ai-plan", () => {
+     expect((await res.json()).plan.days).toHaveLength(3);
+   });
+ 
++  it("pasa days al servicio (3 por defecto)", async () => {
++    await post({ destination: "Antigua" });
++    expect(generateTravelPlan).toHaveBeenLastCalledWith("Antigua", undefined, 3);
++    await post({ destination: "Antigua", days: 6 });
++    expect(generateTravelPlan).toHaveBeenLastCalledWith("Antigua", undefined, 6);
++  });
++
++  it.each([1, 8, 3.5, "5", null])("responde 400 con days=%j", async (days) => {
++    const res = await post({ destination: "Antigua", days });
++    expect(res.status).toBe(400);
++  });
++
+   it("responde 502 cuando el servicio no devuelve un plan válido", async () => {
+     generateTravelPlan.mockResolvedValueOnce(null);
+     const res = await post({ destination: "Antigua" });
+diff --git a/travelens/src/app/api/ai-plan/route.ts b/travelens/src/app/api/ai-plan/route.ts
+index 7b4fc5b..8307c2c 100644
+--- a/travelens/src/app/api/ai-plan/route.ts
++++ b/travelens/src/app/api/ai-plan/route.ts
+@@ -1,5 +1,6 @@
+ import { NextResponse } from 'next/server';
+ import { GeminiService } from '@/services/gemini';
++import { DEFAULT_DAYS, DaysSchema } from '@/services/schemas';
+ 
+ export async function POST(request: Request) {
+     try {
+@@ -10,7 +11,12 @@ export async function POST(request: Request) {
+             return NextResponse.json({ error: 'Destination is required' }, { status: 400 });
+         }
+ 
+-        const plan = await GeminiService.generateTravelPlan(destination, context);
++        const parsedDays = DaysSchema.safeParse(body.days === undefined ? DEFAULT_DAYS : body.days);
++        if (!parsedDays.success) {
++            return NextResponse.json({ error: 'days must be an integer between 2 and 7' }, { status: 400 });
++        }
++
++        const plan = await GeminiService.generateTravelPlan(destination, context, parsedDays.data);
+         if (plan === null) {
+             return NextResponse.json({ error: 'invalid_plan' }, { status: 502 });
+         }
+diff --git a/travelens/src/components/features/AiTravelSidebar.tsx b/travelens/src/components/features/AiTravelSidebar.tsx
+index ac2579e..8d96963 100644
+--- a/travelens/src/components/features/AiTravelSidebar.tsx
++++ b/travelens/src/components/features/AiTravelSidebar.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useState } from "react";
+-import { Sparkles, MapPin, Utensils, Share2 } from "lucide-react";
++import { Sparkles, MapPin, Utensils, Share2, Download } from "lucide-react";
+ import { Skeleton } from "@/components/ui/skeleton";
+ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+ import { Button } from "@/components/ui/button";
+@@ -13,56 +13,36 @@ import { Badge } from "@/components/ui/badge";
+ // Update: User has shadcn/ui, usually comes with sonner or toaster. I'll stick to simple logic first.
+ 
+ import { Destination } from "@/services/unsplash";
++import type { BudgetPlan } from "@/lib/budget";
++import { requestPlan } from "@/lib/plan-client";
++import { downloadItinerary } from "@/lib/itinerary-markdown";
+ 
+-interface TravelPlan {
+-    intro: string;
+-    days: {
+-        day: number;
+-        title: string;
+-        activities: string[];
+-    }[];
+-    hiddenGem: {
+-        title: string;
+-        description: string;
+-    };
+-    localFood: {
+-        dish: string;
+-        description: string;
+-    };
+-}
++const DAY_OPTIONS = [2, 3, 4, 5, 6, 7];
+ 
+ interface AiTravelSidebarProps {
+     destination: Destination;
+ }
+ 
+ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+-    const [plan, setPlan] = useState<TravelPlan | null>(null);
+-    const [loading, setLoading] = useState(true);
++    const [days, setDays] = useState(3);
++    const [loaded, setLoaded] = useState<{ destination: Destination; days: number; plan: BudgetPlan | null } | null>(null);
+ 
+     useEffect(() => {
+-        const fetchPlan = async () => {
+-            try {
+-                const res = await fetch("/api/ai-plan", {
+-                    method: "POST",
+-                    headers: { "Content-Type": "application/json" },
+-                    body: JSON.stringify({
+-                        destination: destination.title,
+-                        context: destination.cityName || destination.location
+-                    }),
+-                });
+-                const data = await res.json();
+-                if (data.plan) {
+-                    setPlan(data.plan);
+-                }
+-            } catch (error) {
+-                console.error("Failed to load plan", error);
+-            } finally {
+-                setLoading(false);
+-            }
++        let cancelled = false;
++        requestPlan({
++            destination: destination.title,
++            context: destination.cityName || destination.location,
++            days,
++        }).then((result) => {
++            if (!cancelled) setLoaded({ destination, days, plan: result });
++        });
++        return () => {
++            cancelled = true;
+         };
++    }, [destination, days]);
+ 
+-        fetchPlan();
+-    }, [destination]);
++    const loading = !loaded || loaded.destination !== destination || loaded.days !== days;
++    const plan = loading ? null : loaded.plan;
+ 
+     const handleShare = async () => {
+         if (typeof navigator.share !== 'function') {
+@@ -105,20 +85,44 @@ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+                     <Sparkles className="h-4 w-4 text-purple-500" />
+                     <span>Plan de Viaje AI</span>
+                 </h2>
+-                <Button
+-                    variant="ghost"
+-                    size="icon"
+-                    onClick={handleShare}
+-                    className="text-muted-foreground hover:text-primary transition-colors"
+-                    title="Compartir Plan"
+-                >
+-                    <Share2 className="h-4 w-4" />
+-                </Button>
++                <div className="flex items-center gap-1">
++                    <Button
++                        variant="ghost"
++                        size="icon"
++                        onClick={() => plan && downloadItinerary(destination.title, plan)}
++                        disabled={!plan}
++                        className="text-muted-foreground hover:text-primary transition-colors"
++                        title="Descargar itinerario (.md)"
++                    >
++                        <Download className="h-4 w-4" />
++                    </Button>
++                    <Button
++                        variant="ghost"
++                        size="icon"
++                        onClick={handleShare}
++                        className="text-muted-foreground hover:text-primary transition-colors"
++                        title="Compartir Plan"
++                    >
++                        <Share2 className="h-4 w-4" />
++                    </Button>
++                </div>
+             </div>
+ 
+             <ScrollArea className="flex-1 p-6">
+                 <div className="space-y-6 pb-20">
+-
++                    <label className="flex items-center justify-between text-sm text-muted-foreground">
++                        <span>Duración del viaje</span>
++                        <select
++                            value={days}
++                            onChange={(e) => setDays(Number(e.target.value))}
++                            disabled={loading}
++                            className="rounded-md border border-border bg-background px-2 py-1 text-foreground"
++                        >
++                            {DAY_OPTIONS.map((n) => (
++                                <option key={n} value={n}>{n} días</option>
++                            ))}
++                        </select>
++                    </label>
+ 
+                     {/* AI Plan Content */}
+                     {loading ? (
+@@ -148,6 +152,7 @@ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+                                             <CardTitle className="text-sm font-bold flex items-center justify-between">
+                                                 <div className="flex items-center gap-2">
+                                                     <Badge variant="outline" className="bg-background text-primary border-primary/20">Día {day.day}</Badge>
++                                                    <span className="text-xs font-semibold text-primary">${day.costUsd} USD</span>
+                                                 </div>
+                                                 <span className="text-foreground/70 font-normal truncate max-w-[150px] text-right text-xs">{day.title}</span>
+                                             </CardTitle>
+@@ -166,6 +171,11 @@ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+                                 ))}
+                             </div>
+ 
++                            <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm font-semibold">
++                                <span>Total estimado</span>
++                                <span>${plan.totalUsd} USD</span>
++                            </div>
++
+                             {/* Recommendations Grid */}
+                             <div className="grid grid-cols-1 gap-4 pt-2">
+                                 {/* Hidden Gem */}
+diff --git a/travelens/src/lib/budget.test.ts b/travelens/src/lib/budget.test.ts
+new file mode 100644
+index 0000000..94d81d4
+--- /dev/null
++++ b/travelens/src/lib/budget.test.ts
+@@ -0,0 +1,37 @@
++import { describe, it, expect } from "vitest";
++import { applyBudget } from "./budget";
++
++const base = {
++  intro: "Intro",
++  days: [
++    { day: 1, title: "A", activities: ["x"], costUsd: 40 },
++    { day: 2, title: "B", activities: ["y"], costUsd: 25 },
++  ],
++  hiddenGem: { title: "g", description: "d" },
++  localFood: { dish: "p", description: "d" },
++};
++
++describe("applyBudget", () => {
++  it("suma los días e ignora el total del modelo", () => {
++    const r = applyBudget({ ...base, totalUsd: 999 });
++    expect(r.ok && r.plan.totalUsd).toBe(65);
++  });
++
++  it("acepta costo 0", () => {
++    const days = [{ ...base.days[0], costUsd: 0 }];
++    const r = applyBudget({ ...base, days });
++    expect(r.ok && r.plan.totalUsd).toBe(0);
++  });
++
++  it.each([-1, 1.5, "3", undefined, Number.NaN, Infinity])("rechaza costo %s", (cost) => {
++    const days = [{ ...base.days[0], costUsd: cost }];
++    expect(applyBudget({ ...base, days }).ok).toBe(false);
++  });
++
++  it.each([null, "x", [], {}, { ...base, days: [] }, { ...base, hiddenGem: null }])(
++    "rechaza forma inválida %#",
++    (plan) => {
++      expect(applyBudget(plan).ok).toBe(false);
++    },
++  );
++});
+diff --git a/travelens/src/lib/budget.ts b/travelens/src/lib/budget.ts
+new file mode 100644
+index 0000000..71c21e6
+--- /dev/null
++++ b/travelens/src/lib/budget.ts
+@@ -0,0 +1,65 @@
++export interface BudgetDay {
++  day: number;
++  title: string;
++  activities: string[];
++  costUsd: number;
++}
++
++export interface BudgetPlan {
++  intro: string;
++  days: BudgetDay[];
++  hiddenGem: { title: string; description: string };
++  localFood: { dish: string; description: string };
++  totalUsd: number;
++}
++
++export type BudgetResult = { ok: true; plan: BudgetPlan } | { ok: false };
++
++function isRecord(v: unknown): v is Record<string, unknown> {
++  return typeof v === "object" && v !== null && !Array.isArray(v);
++}
++
++function isNonEmptyString(v: unknown): v is string {
++  return typeof v === "string" && v.trim().length > 0;
++}
++
++/**
++ * Valida el plan (cada día con costUsd entero >= 0) y calcula totalUsd como la
++ * suma de los días, ignorando el total que traiga el modelo.
++ */
++export function applyBudget(plan: unknown): BudgetResult {
++  if (!isRecord(plan) || !isNonEmptyString(plan.intro)) return { ok: false };
++  const { days, hiddenGem, localFood } = plan;
++  if (!Array.isArray(days) || days.length === 0) return { ok: false };
++  if (!isRecord(hiddenGem) || !isNonEmptyString(hiddenGem.title) || !isNonEmptyString(hiddenGem.description)) {
++    return { ok: false };
++  }
++  if (!isRecord(localFood) || !isNonEmptyString(localFood.dish) || !isNonEmptyString(localFood.description)) {
++    return { ok: false };
++  }
++
++  const parsedDays: BudgetDay[] = [];
++  for (const d of days) {
++    if (!isRecord(d)) return { ok: false };
++    const { day, title, activities, costUsd } = d;
++    if (typeof day !== "number" || !Number.isFinite(day)) return { ok: false };
++    if (!isNonEmptyString(title)) return { ok: false };
++    if (!Array.isArray(activities) || activities.length === 0 || !activities.every(isNonEmptyString)) {
++      return { ok: false };
++    }
++    if (typeof costUsd !== "number" || !Number.isInteger(costUsd) || costUsd < 0) return { ok: false };
++    parsedDays.push({ day, title, activities, costUsd });
++  }
++
++  const totalUsd = parsedDays.reduce((sum, d) => sum + d.costUsd, 0);
++  return {
++    ok: true,
++    plan: {
++      intro: plan.intro,
++      days: parsedDays,
++      hiddenGem: { title: hiddenGem.title, description: hiddenGem.description },
++      localFood: { dish: localFood.dish, description: localFood.description },
++      totalUsd,
++    },
++  };
++}
+diff --git a/travelens/src/lib/itinerary-markdown.test.ts b/travelens/src/lib/itinerary-markdown.test.ts
+new file mode 100644
+index 0000000..ec66c77
+--- /dev/null
++++ b/travelens/src/lib/itinerary-markdown.test.ts
+@@ -0,0 +1,31 @@
++import { describe, it, expect } from "vitest";
++import { itineraryFilename, itineraryToMarkdown } from "./itinerary-markdown";
++
++describe("itineraryFilename", () => {
++  it("quita acentos, espacios y mayúsculas", () => {
++    expect(itineraryFilename("  Ciudad Éxito ")).toBe("ciudad-exito.md");
++  });
++  it("usa un nombre por defecto si queda vacío", () => {
++    expect(itineraryFilename("???")).toBe("itinerario.md");
++  });
++});
++
++describe("itineraryToMarkdown", () => {
++  it("tolera la ausencia de costos y secciones opcionales", () => {
++    const md = itineraryToMarkdown("Antigua", {
++      days: [{ title: "Centro", activities: ["Arco"] }],
++    });
++    expect(md).toContain("# Antigua");
++    expect(md).toContain("## Día 1: Centro");
++    expect(md).toMatch(/^- Arco$/m);
++    expect(md).not.toContain("USD");
++  });
++  it("imprime costos cuando existen", () => {
++    const md = itineraryToMarkdown("Antigua", {
++      days: [{ day: 1, title: "Centro", activities: [], costUsd: 30 }],
++      totalUsd: 30,
++    });
++    expect(md).toContain("Costo estimado: $30 USD");
++    expect(md).toContain("Total estimado: $30 USD");
++  });
++});
+diff --git a/travelens/src/lib/itinerary-markdown.ts b/travelens/src/lib/itinerary-markdown.ts
+new file mode 100644
+index 0000000..e577d9f
+--- /dev/null
++++ b/travelens/src/lib/itinerary-markdown.ts
+@@ -0,0 +1,64 @@
++/** Exporta un itinerario como Markdown. Tipo estructural mínimo: no depende de budget.ts. */
++
++export interface MarkdownPlanDay {
++  day?: number;
++  title: string;
++  activities: string[];
++  costUsd?: number;
++}
++
++export interface MarkdownPlan {
++  intro?: string;
++  days: MarkdownPlanDay[];
++  hiddenGem?: { title: string; description: string };
++  localFood?: { dish: string; description: string };
++  totalUsd?: number;
++}
++
++export function itineraryFilename(destino: string): string {
++  const slug = destino
++    .normalize("NFD")
++    .replace(/[̀-ͯ]/g, "")
++    .toLowerCase()
++    .trim()
++    .replace(/[^a-z0-9]+/g, "-")
++    .replace(/^-+|-+$/g, "");
++  return `${slug || "itinerario"}.md`;
++}
++
++export function itineraryToMarkdown(destino: string, plan: MarkdownPlan): string {
++  const out: string[] = [`# ${destino.trim()}`, ""];
++  if (plan.intro) out.push(plan.intro, "");
++
++  plan.days.forEach((d, i) => {
++    const n = d.day ?? i + 1;
++    out.push(`## Día ${n}: ${d.title}`, "");
++    for (const a of d.activities) out.push(`- ${a}`);
++    if (typeof d.costUsd === "number") out.push("", `Costo estimado: $${d.costUsd} USD`);
++    out.push("");
++  });
++
++  if (plan.hiddenGem) {
++    out.push("## Joya escondida", "", `**${plan.hiddenGem.title}**: ${plan.hiddenGem.description}`, "");
++  }
++  if (plan.localFood) {
++    out.push("## Comida local", "", `**${plan.localFood.dish}**: ${plan.localFood.description}`, "");
++  }
++  if (typeof plan.totalUsd === "number") out.push(`**Total estimado: $${plan.totalUsd} USD**`, "");
++
++  return out.join("\n");
++}
++
++export function downloadItinerary(destino: string, plan: MarkdownPlan): void {
++  const blob = new Blob([itineraryToMarkdown(destino, plan)], {
++    type: "text/markdown;charset=utf-8",
++  });
++  const url = URL.createObjectURL(blob);
++  const a = document.createElement("a");
++  a.href = url;
++  a.download = itineraryFilename(destino);
++  document.body.appendChild(a);
++  a.click();
++  document.body.removeChild(a);
++  URL.revokeObjectURL(url);
++}
+diff --git a/travelens/src/lib/plan-client.test.ts b/travelens/src/lib/plan-client.test.ts
+new file mode 100644
+index 0000000..6ea6ea3
+--- /dev/null
++++ b/travelens/src/lib/plan-client.test.ts
+@@ -0,0 +1,38 @@
++import { describe, it, expect, vi, afterEach } from "vitest";
++import { requestPlan } from "./plan-client";
++
++afterEach(() => vi.unstubAllGlobals());
++
++const plan = {
++  intro: "i",
++  days: [{ day: 1, title: "t", activities: ["a"], costUsd: 10 }],
++  hiddenGem: { title: "g", description: "d" },
++  localFood: { dish: "f", description: "d" },
++  totalUsd: 10,
++};
++
++function stub(ok: boolean, status: number, body: unknown) {
++  const fn = vi.fn(async () => ({ ok, status, json: async () => body }));
++  vi.stubGlobal("fetch", fn);
++  return fn;
++}
++
++describe("requestPlan", () => {
++  it("usa 3 días por defecto y devuelve el plan", async () => {
++    const fn = stub(true, 200, { plan });
++    expect(await requestPlan({ destination: "Antigua" })).toEqual(plan);
++    const init = (fn.mock.calls[0] as unknown as [string, { body: string }])[1];
++    expect(JSON.parse(init.body).days).toBe(3);
++  });
++
++  it("devuelve null con 502", async () => {
++    stub(false, 502, { error: "invalid_plan" });
++    expect(await requestPlan({ destination: "Antigua", days: 4 })).toBeNull();
++  });
++
++  it("devuelve null si fetch lanza", async () => {
++    vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("red"); }));
++    vi.spyOn(console, "error").mockImplementation(() => {});
++    expect(await requestPlan({ destination: "Antigua" })).toBeNull();
++  });
++});
+diff --git a/travelens/src/lib/plan-client.ts b/travelens/src/lib/plan-client.ts
+new file mode 100644
+index 0000000..b8d61cf
+--- /dev/null
++++ b/travelens/src/lib/plan-client.ts
+@@ -0,0 +1,24 @@
++import type { BudgetPlan } from "@/lib/budget";
++
++export interface PlanRequest {
++  destination: string;
++  context?: string;
++  days?: number;
++}
++
++/** Pide el plan a /api/ai-plan. Devuelve null si el API falla o fetch lanza. */
++export async function requestPlan({ destination, context, days = 3 }: PlanRequest): Promise<BudgetPlan | null> {
++  try {
++    const res = await fetch("/api/ai-plan", {
++      method: "POST",
++      headers: { "Content-Type": "application/json" },
++      body: JSON.stringify({ destination, context, days }),
++    });
++    if (!res.ok) return null;
++    const data: { plan?: BudgetPlan } = await res.json();
++    return data.plan ?? null;
++  } catch (error) {
++    console.error("Failed to load plan", error);
++    return null;
++  }
++}
+diff --git a/travelens/src/services/__fixtures__/itinerary.fixture.ts b/travelens/src/services/__fixtures__/itinerary.fixture.ts
+index 98d16cc..847b69d 100644
+--- a/travelens/src/services/__fixtures__/itinerary.fixture.ts
++++ b/travelens/src/services/__fixtures__/itinerary.fixture.ts
+@@ -7,16 +7,19 @@ export const VALID_ITINERARY_FIXTURE: TravelPlan = {
+       day: 1,
+       title: "Centro histórico y conventos",
+       activities: ["Arco de Santa Catalina", "Ruinas de la Catedral", "Convento de Capuchinas"],
++      costUsd: 30,
+     },
+     {
+       day: 2,
+       title: "Volcanes y miradores",
+       activities: ["Ascenso matutino al Volcán Pacaya", "Mirador del Cerro de la Cruz"],
++      costUsd: 50,
+     },
+     {
+       day: 3,
+       title: "Ruta del café y gastronomía",
+       activities: ["Finca cafetalera en San Miguel Escobar", "Mercado de artesanías del Carmen"],
++      costUsd: 40,
+     },
+   ],
+   hiddenGem: {
+@@ -27,4 +30,5 @@ export const VALID_ITINERARY_FIXTURE: TravelPlan = {
+     dish: "Pepián antigüeño",
+     description: "Recado tradicional de semillas tostadas, chiles secos y especias servido con arroz.",
+   },
++  totalUsd: 120,
+ };
+diff --git a/travelens/src/services/gemini.test.ts b/travelens/src/services/gemini.test.ts
+index ddca829..7451981 100644
+--- a/travelens/src/services/gemini.test.ts
++++ b/travelens/src/services/gemini.test.ts
+@@ -43,6 +43,46 @@ describe("GeminiService.generateTravelPlan", () => {
+     expect(await GeminiService.generateTravelPlan("Antigua")).toBeNull();
+   });
+ 
++  it("pide N días en el prompt y exige exactamente N", async () => {
++    const five = {
++      ...VALID_ITINERARY_FIXTURE,
++      days: Array.from({ length: 5 }, (_, i) => ({ ...VALID_ITINERARY_FIXTURE.days[0], day: i + 1 })),
++    };
++    generateContent.mockResolvedValue({ text: JSON.stringify(five) });
++    const { GeminiService } = await import("./gemini");
++    const plan = await GeminiService.generateTravelPlan("Antigua", undefined, 5);
++    expect(plan?.days).toHaveLength(5);
++    expect(JSON.stringify(generateContent.mock.calls[0][0])).toContain("5-day");
++    expect(await GeminiService.generateTravelPlan("Antigua", undefined, 4)).toBeNull();
++  });
++
++  it("calcula totalUsd como suma de los días e ignora el del modelo", async () => {
++    generateContent.mockResolvedValue({ text: JSON.stringify({ ...VALID_ITINERARY_FIXTURE, totalUsd: 1 }) });
++    const { GeminiService } = await import("./gemini");
++    expect((await GeminiService.generateTravelPlan("Antigua"))?.totalUsd).toBe(120);
++  });
++
++  it.each([-1, 10.5, "20"])("devuelve null con costUsd inválido %j", async (costUsd) => {
++    const days = VALID_ITINERARY_FIXTURE.days.map((d, i) => (i === 0 ? { ...d, costUsd } : d));
++    generateContent.mockResolvedValue({ text: JSON.stringify({ ...VALID_ITINERARY_FIXTURE, days }) });
++    const { GeminiService } = await import("./gemini");
++    expect(await GeminiService.generateTravelPlan("Antigua")).toBeNull();
++  });
++
++  it("tolera un día sin costUsd: cuenta como 0 en totalUsd", async () => {
++    const days = VALID_ITINERARY_FIXTURE.days.map((d, i) => {
++      if (i !== 0) return d;
++      const { costUsd, ...rest } = d;
++      void costUsd;
++      return rest;
++    });
++    generateContent.mockResolvedValue({ text: JSON.stringify({ ...VALID_ITINERARY_FIXTURE, days }) });
++    const { GeminiService } = await import("./gemini");
++    const plan = await GeminiService.generateTravelPlan("Antigua");
++    expect(plan?.days[0].costUsd).toBe(0);
++    expect(plan?.totalUsd).toBe(120 - VALID_ITINERARY_FIXTURE.days[0].costUsd);
++  });
++
+   it("devuelve null si falta la API key", async () => {
+     delete process.env.GOOGLE_GENAI_API_KEY;
+     const { GeminiService } = await import("./gemini");
+diff --git a/travelens/src/services/gemini.ts b/travelens/src/services/gemini.ts
+index b5e8e41..221cfbe 100644
+--- a/travelens/src/services/gemini.ts
++++ b/travelens/src/services/gemini.ts
+@@ -1,4 +1,8 @@
+ import { GoogleGenAI } from "@google/genai";
++import { applyBudget } from "@/lib/budget";
++import { DEFAULT_DAYS, itineraryResponseSchema, type TravelPlan } from "./schemas";
++
++export type { TravelPlan };
+ 
+ export const PLAN_MODEL = "gemini-3.8-flash";
+ 
+@@ -11,54 +15,28 @@ function getClient(): GoogleGenAI {
+     return client;
+ }
+ 
+-export interface TravelPlan {
+-    intro: string;
+-    days: {
+-        day: number;
+-        title: string;
+-        activities: string[];
+-    }[];
+-    hiddenGem: {
+-        title: string;
+-        description: string;
+-    };
+-    localFood: {
+-        dish: string;
+-        description: string;
+-    };
+-}
+-
+-function isNonEmptyString(value: unknown): value is string {
+-    return typeof value === "string" && value.trim().length > 0;
+-}
+-
+-function isTravelPlan(value: unknown): value is TravelPlan {
+-    if (typeof value !== "object" || value === null) return false;
+-    const plan = value as Record<string, unknown>;
+-    if (!isNonEmptyString(plan.intro) || !Array.isArray(plan.days) || plan.days.length !== 3) return false;
+-    if (!plan.days.every((day) => {
+-        if (typeof day !== "object" || day === null) return false;
+-        const candidate = day as Record<string, unknown>;
+-        return typeof candidate.day === "number" && isNonEmptyString(candidate.title) &&
+-            Array.isArray(candidate.activities) && candidate.activities.length > 0 &&
+-            candidate.activities.every(isNonEmptyString);
+-    })) return false;
+-    if (typeof plan.hiddenGem !== "object" || plan.hiddenGem === null ||
+-        typeof plan.localFood !== "object" || plan.localFood === null) return false;
+-    const hiddenGem = plan.hiddenGem as Record<string, unknown>;
+-    const localFood = plan.localFood as Record<string, unknown>;
+-    return isNonEmptyString(hiddenGem.title) && isNonEmptyString(hiddenGem.description) &&
+-        isNonEmptyString(localFood.dish) && isNonEmptyString(localFood.description);
+-}
+-
+ function cleanJsonBlock(text: string): string {
+     const trimmed = text.trim();
+     const block = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+     return block ? block[1].trim() : trimmed;
+ }
+ 
++// Un día sin costUsd cuenta como 0 (ai-plan.juez exige 200 sin costos);
++// un costUsd presente pero inválido sigue dando null y, por tanto, 502.
++function withDefaultCosts(plan: unknown): unknown {
++    if (typeof plan !== "object" || plan === null || !("days" in plan) || !Array.isArray(plan.days)) return plan;
++    const days: unknown[] = plan.days.map((d: unknown) =>
++        typeof d === "object" && d !== null && !Array.isArray(d) && !("costUsd" in d) ? { ...d, costUsd: 0 } : d
++    );
++    return { ...plan, days };
++}
++
+ export const GeminiService = {
+-    generateTravelPlan: async (destinationName: string, context?: string): Promise<TravelPlan | null> => {
++    generateTravelPlan: async (
++        destinationName: string,
++        context?: string,
++        days: number = DEFAULT_DAYS
++    ): Promise<TravelPlan | null> => {
+         try {
+             if (!process.env.GOOGLE_GENAI_API_KEY) {
+                 console.error("Gemini Service: Missing GOOGLE_GENAI_API_KEY");
+@@ -66,18 +44,19 @@ export const GeminiService = {
+             }
+ 
+             const prompt = `
+-        Act as an expert travel guide. Create a 3-day itinerary for ${destinationName} ${context ? `(${context})` : ''}.
+-        
++        Act as an expert travel guide. Create a ${days}-day itinerary for ${destinationName} ${context ? `(${context})` : ''}.
++
+         Requirements:
+         - Tone: Enthusiastic, immersive, and practical.
+         - Language: Spanish (Español).
++        - The "days" array must have exactly ${days} items, each with an integer "costUsd" >= 0 (estimated cost of that day in USD per person).
+         - Output Format: JSON ONLY. Do not use Markdown code blocks.
+-        
++
+         JSON Schema:
+         {
+           "intro": "1 sentence hook",
+           "days": [
+-            { "day": 1, "title": "Theme of the day (e.g. Historic Center)", "activities": ["Activity 1", "Activity 2", "Activity 3"] }
++            { "day": 1, "title": "Theme of the day (e.g. Historic Center)", "activities": ["Activity 1", "Activity 2", "Activity 3"], "costUsd": 40 }
+           ],
+           "hiddenGem": { "title": "Name", "description": "Why it is special" },
+           "localFood": { "dish": "Name", "description": "What is it" }
+@@ -91,10 +70,11 @@ export const GeminiService = {
+             });
+             const text = response.text ?? "";
+ 
+-            // console.log("Gemini JSON Response:", text); // Debug removed per user request
+-
+             const parsed: unknown = JSON.parse(cleanJsonBlock(text));
+-            return isTravelPlan(parsed) ? parsed : null;
++            const budget = applyBudget(withDefaultCosts(parsed));
++            if (!budget.ok) return null;
++            const checked = itineraryResponseSchema(days).safeParse(budget.plan);
++            return checked.success ? checked.data : null;
+ 
+         } catch (error) {
+             console.error("Gemini AI Error:", error);
+diff --git a/travelens/src/services/schemas.ts b/travelens/src/services/schemas.ts
+index 3b657a1..29723e2 100644
+--- a/travelens/src/services/schemas.ts
++++ b/travelens/src/services/schemas.ts
+@@ -1,22 +1,36 @@
+ import { z } from "zod";
++import type { BudgetPlan } from "@/lib/budget";
++
++export const DEFAULT_DAYS = 3;
++export const MIN_DAYS = 2;
++export const MAX_DAYS = 7;
++
++/** Duración elegida: entero de 2 a 7. */
++export const DaysSchema = z.number().int().min(MIN_DAYS).max(MAX_DAYS);
+ 
+ export const ItineraryDaySchema = z.object({
+   day: z.number().int().positive(),
+   title: z.string().trim().min(1),
+   activities: z.array(z.string().trim().min(1)).min(1),
++  costUsd: z.number().int().min(0),
+ });
+ 
+-export const ItineraryResponseSchema = z.object({
+-  intro: z.string().trim().min(1),
+-  days: z.array(ItineraryDaySchema).length(3),
+-  hiddenGem: z.object({
+-    title: z.string().trim().min(1),
+-    description: z.string().trim().min(1),
+-  }),
+-  localFood: z.object({
+-    dish: z.string().trim().min(1),
+-    description: z.string().trim().min(1),
+-  }),
+-});
++/** Esquema del plan con exactamente `days` días; totalUsd lo calcula applyBudget. */
++export function itineraryResponseSchema(days: number) {
++  return z.object({
++    intro: z.string().trim().min(1),
++    days: z.array(ItineraryDaySchema).length(days),
++    hiddenGem: z.object({
++      title: z.string().trim().min(1),
++      description: z.string().trim().min(1),
++    }),
++    localFood: z.object({
++      dish: z.string().trim().min(1),
++      description: z.string().trim().min(1),
++    }),
++    totalUsd: z.number().int().min(0),
++  });
++}
+ 
+-export type TravelPlan = z.infer<typeof ItineraryResponseSchema>;
++/** Un solo tipo de plan: el de budget.ts. */
++export type TravelPlan = BudgetPlan;

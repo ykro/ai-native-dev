@@ -1,0 +1,8 @@
+[
+  {"id": 1, "tipo": "numero", "pregunta": "¿Cuál fue el último precio de cierre de NVDA?"},
+  {"id": 2, "tipo": "simbolo", "pregunta": "Entre AAPL, MSFT y NVDA, ¿cuál tuvo el mayor cambio porcentual del último día?"},
+  {"id": 3, "tipo": "categoria", "pregunta": "¿El sentimiento de TSLA es alcista, bajista o neutral?"},
+  {"id": 4, "tipo": "simbolo", "pregunta": "¿Cuál es el símbolo de Alphabet?"},
+  {"id": 5, "tipo": "maximo", "pregunta": "¿Cuál fue el cierre más alto de AAPL en el histórico disponible y en qué fecha?"},
+  {"id": 6, "tipo": "multiple", "pregunta": "Dame precio, cambio porcentual del último día y sentimiento de MSFT."}
+]

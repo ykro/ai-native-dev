@@ -1,0 +1,3 @@
+Abre {URL_WEB}, busca el símbolo NVDA y confirma que aparecen el precio, la tendencia del mes y el sentimiento. Si algo falta, dime qué falta y qué texto aparece en su lugar. No sigas enlaces que lleven fuera de la aplicación.
+
+Termina con una línea `VEREDICTO: ok` si aparecen los tres, o `VEREDICTO: falla` si falta alguno.

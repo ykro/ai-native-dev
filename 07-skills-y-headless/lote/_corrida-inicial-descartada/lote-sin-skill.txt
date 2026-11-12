@@ -1,0 +1,16 @@
+[sin-skill] rep 1 fila 1 Tango: valida turnos=4 costo=0.1420086
+[sin-skill] rep 1 fila 2 Aurora: valida turnos=5 costo=0.1182343
+[sin-skill] rep 1 fila 3 Beto: valida turnos=12 costo=0.16397260000000002
+[sin-skill] rep 1 fila 4 Canelo: INVALIDA turnos=7 costo=0.1295229
+[sin-skill] rep 1 fila 5 Nube: valida turnos=6 costo=0.1238062
+[sin-skill] rep 2 fila 1 Tango: valida turnos=7 costo=0.1354121
+[sin-skill] rep 2 fila 2 Aurora: INVALIDA turnos=5 costo=0.11750419999999999
+[sin-skill] rep 2 fila 3 Beto: valida turnos=11 costo=0.160322
+[sin-skill] rep 2 fila 4 Canelo: valida turnos=8 costo=0.1318193
+[sin-skill] rep 2 fila 5 Nube: INVALIDA turnos=7 costo=0.1314247
+[sin-skill] rep 3 fila 1 Tango: INVALIDA turnos=6 costo=0.1245936
+[sin-skill] rep 3 fila 2 Aurora: valida turnos=5 costo=0.1193854
+[sin-skill] rep 3 fila 3 Beto: INVALIDA turnos=5 costo=0.11648850000000001
+[sin-skill] rep 3 fila 4 Canelo: INVALIDA turnos=7 costo=0.13244450000000002
+[sin-skill] rep 3 fila 5 Nube: valida turnos=5 costo=0.1116557
+9/15 válidas. Resultado en lote/resultado-sin-skill.json

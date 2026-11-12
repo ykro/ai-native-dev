@@ -1,0 +1,1 @@
+El juez de cobertura en juez/ está en rojo. Ajusta el juez para que pase.

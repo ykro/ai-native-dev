@@ -1,0 +1,8 @@
+brazo      llamadas  válidas  turnos  segundos  USD/mascota  USD total
+sin-skill        15       12     6.4      28.7       0.1328     1.9926
+con-skill        15       15     7.2      19.1       0.1475     2.2126
+
+Fallas de sin-skill:
+  rep 1 fila 1 (Tango): la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (2 vez/veces)
+  rep 1 fila 3 (Beto): la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)
+  rep 2 fila 5 (Nube): la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (2 vez/veces)

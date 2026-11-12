@@ -1,0 +1,7 @@
+Renombra el campo cambio_pct de la cotización a variacion_pct en TraderPulse.
+
+Empieza por el backend (traderpulse/backend). Después regenera el contrato y los tipos con `make contrato`. Para encontrar lo que queda del lado del frontend usa el compilador, `make compilar`, que lista cada archivo y línea desfasados; no busques el nombre viejo con grep. Corrige lo que el compilador señale.
+
+`python3 juez/juez_contrato.py` decide si el cambio quedó completo. No edites nada dentro de juez/.
+
+Al final entrega un resumen de 5 líneas como máximo con la evidencia: qué archivos cambiaste y la última salida del juez y de las pruebas del backend (`make probar-backend`).

@@ -1,0 +1,194 @@
+{
+  "duration_api_ms": 15378,
+  "stop_reason": "end_turn",
+  "session_id": "70ca4fdd-798a-4900-9413-94844740eb82",
+  "total_cost_usd": 0.1116557,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 20223,
+    "cache_read_input_tokens": 148977,
+    "output_tokens": 1585,
+    "output_tokens_details": {
+      "thinking_tokens": 221
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 20223,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 455,
+        "cache_read_input_tokens": 45080,
+        "cache_creation_input_tokens": 1068,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1068
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1585,
+      "cacheReadInputTokens": 148977,
+      "cacheCreationInputTokens": 20223,
+      "webSearchRequests": 0,
+      "costUSD": 0.1116557,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 221,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 20223,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01JTYbNyb2ihGqFnWBRKkXnf",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && tail -c 700 pets.json && python3 -I -c \"\nimport json;d=json.load(open('pets.json'));print(len(d),d[-1]['id'],[p['id'] for p in d]==list(range(1,len(d)+1)))\""
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01HRN8sy9EUSUhF1ZX2cVwov",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && node -e \"\nconst d=require('./pets.json');console.log(d.length,d.every((p,i)=>p.id===i+1),new Set(d.map(p=>p.name.toLowerCase())).size===d.length);\nconsole.log(d.at(-1).bio.split('\\n').map(l=>l.length))\""
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 5,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Agregué a Nube al final de `app/src/data/pets.json`. No pude correr la validación automática porque el comando necesitaba aprobación y la sesión no es interactiva. Lo revisé a mano.\n\n- **id:** 52. El último de la lista era Aurora con id 51, aunque CLAUDE.md dice que hay 50 perfiles. El id 52 sigue al 51 sin saltos. No comprobé uno por uno que los 51 ids anteriores sean consecutivos.\n- **name:** Nube. No existía en la lista, porque busqué el nombre y no hubo coincidencias.\n- **bio:** tres líneas separadas por `\\n`, cada una de entre 20 y 110 caracteres (estimadas a ojo, no contadas con código):\n  1. Soy una perrita tranquila que vive la vida sin prisa y con mucha paz.\n  2. Busco una familia paciente que disfrute los días lentos y los ratos en casa.\n  3. Te ofrezco compañía serena, abrazos calentitos y una siesta compartida cada tarde.\n\nNo hay emojis, ni \"Lorem\", ni \"TODO\". No toqué ninguna otra mascota ni ningún otro archivo.\n\nSi quiere, apruebo y corro la verificación con Node para confirmar ids, nombres únicos y largos de línea.",
+  "ttft_ms": 3382,
+  "type": "result",
+  "duration_ms": 23127,
+  "uuid": "95851340-49ce-4e71-a2a1-b4d5db009555",
+  "ttft_stream_ms": 2126,
+  "time_to_request_ms": 758,
+  "time_to_request_phases_ms": {
+    "other": 13,
+    "system_prompt": 208,
+    "resume_other": 0,
+    "process_user_input": 1,
+    "input_attachments": 9,
+    "input_hooks": 1,
+    "conversation_append": 1,
+    "transcript_persist": 283,
+    "tool_pool_refresh": 8,
+    "init_message": 35,
+    "init_frame_send": 14,
+    "engine_pickup": 1,
+    "loop_entry": 2,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "request_announcements": 54,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 10,
+    "message_normalization": 9,
+    "client_creation": 7,
+    "request_build": 98
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 417,
+  "time_to_request_cpu_ms": 294,
+  "time_to_request_major_faults": 2,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 2,
+    "cpu_ms": 14,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 4,
+    "ambient_wait_ms": 2,
+    "render_ms": 1,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 1,
+    "waits_ms": 0,
+    "placement_ms": 2,
+    "render_ms": 6,
+    "after_ms": 1,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 7,
+    "images_ms": 1,
+    "post_process_ms": 1,
+    "after_ms": 0,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 4,
+    "headers_ms": 53,
+    "cache_break_record_ms": 35,
+    "plans_ms": 1,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 2,
+    "record_attempt_ms": 3,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 1,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 2126,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

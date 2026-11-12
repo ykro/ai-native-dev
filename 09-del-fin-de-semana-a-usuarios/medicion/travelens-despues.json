@@ -1,0 +1,46 @@
+{
+  "proyecto": "travelens",
+  "aplicadas": 7,
+  "aprobadas": 7,
+  "falladas": [],
+  "no_aplica": [],
+  "detalle": {
+    "1": {
+      "nombre": "comando único de verificación en verde",
+      "ok": true,
+      "motivo": "comando de verificación en verde"
+    },
+    "2": {
+      "nombre": "sin secretos versionados y .env ignorado",
+      "ok": true,
+      "motivo": "sin secretos y .env ignorado"
+    },
+    "3": {
+      "nombre": "auditoría de dependencias de producción sin hallazgos altos",
+      "ok": true,
+      "motivo": "sin hallazgos altos o críticos en producción"
+    },
+    "4": {
+      "nombre": "tiempo agotado y respuesta rota del modelo con error controlado (con prueba)",
+      "ok": true,
+      "motivo": "pruebas etiquetadas aprobadas: modelo-timeout, modelo-respuesta-rota"
+    },
+    "5": {
+      "nombre": "tope de salida del modelo y límite de peticiones por cliente (con prueba)",
+      "ok": true,
+      "motivo": "pruebas etiquetadas aprobadas: limite-peticiones"
+    },
+    "6": {
+      "nombre": "registros sin datos personales y ruta de salud (con prueba)",
+      "ok": true,
+      "motivo": "pruebas etiquetadas aprobadas: salud, registros-sin-datos-personales",
+      "debil": "los registros sin datos personales se comprueban solo con la prueba que escribió el proyecto"
+    },
+    "7": {
+      "nombre": "sección «Cómo volver atrás» en el README",
+      "ok": true,
+      "motivo": "sección con comando de reversa",
+      "debil": "solo comprueba que la sección y un comando existen, no que el comando funcione"
+    }
+  }
+}

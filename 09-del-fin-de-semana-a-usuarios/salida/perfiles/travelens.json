@@ -1,0 +1,59 @@
+{
+  "proyecto": "travelens",
+  "comprobaciones": {
+    "1": {
+      "aplica": true,
+      "comando": "npm run check"
+    },
+    "2": {
+      "aplica": true
+    },
+    "3": {
+      "aplica": true,
+      "tipo": "npm"
+    },
+    "4": {
+      "aplica": true,
+      "runner": "npx vitest run -t \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "modelo-timeout",
+          "min": 1
+        },
+        {
+          "filtro": "modelo-respuesta-rota",
+          "min": 1
+        }
+      ]
+    },
+    "5": {
+      "aplica": true,
+      "directorio_fuente": "src",
+      "tope_regex": "maxOutputTokens",
+      "runner": "npx vitest run -t \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "limite-peticiones",
+          "min": 1
+        }
+      ]
+    },
+    "6": {
+      "aplica": true,
+      "runner": "npx vitest run -t \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "salud",
+          "min": 1
+        },
+        {
+          "filtro": "registros-sin-datos-personales",
+          "min": 1
+        }
+      ]
+    },
+    "7": {
+      "aplica": true
+    }
+  }
+}

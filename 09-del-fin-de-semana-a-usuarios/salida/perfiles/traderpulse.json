@@ -1,0 +1,60 @@
+{
+  "proyecto": "traderpulse",
+  "comprobaciones": {
+    "1": {
+      "aplica": true,
+      "comando": "GEMINI_API_KEY=test-key {PY} -m pytest backend/tests -q"
+    },
+    "2": {
+      "aplica": true
+    },
+    "3": {
+      "aplica": true,
+      "tipo": "pip"
+    },
+    "4": {
+      "aplica": true,
+      "runner": "GEMINI_API_KEY=test-key {PY} -m pytest backend/tests -q -k \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "modelo_timeout",
+          "min": 1
+        },
+        {
+          "filtro": "modelo_respuesta_rota",
+          "min": 1
+        }
+      ]
+    },
+    "5": {
+      "aplica": true,
+      "directorio_fuente": "backend",
+      "tope_regex": "max_output_tokens",
+      "runner": "GEMINI_API_KEY=test-key {PY} -m pytest backend/tests -q -k \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "limite_peticiones",
+          "min": 1
+        }
+      ]
+    },
+    "6": {
+      "aplica": true,
+      "runner": "GEMINI_API_KEY=test-key {PY} -m pytest backend/tests -q -k \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "salud",
+          "min": 1
+        },
+        {
+          "filtro": "registros_sin_datos_personales",
+          "min": 1
+        }
+      ]
+    },
+    "7": {
+      "aplica": true,
+      "readme": "backend/README.md"
+    }
+  }
+}

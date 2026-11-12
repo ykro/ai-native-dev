@@ -1,0 +1,22 @@
+{
+  "fecha_de_consulta": "2026-11-11",
+  "moneda": "USD",
+  "unidad": "por millón de tokens",
+  "modelos": {
+    "claude-sonnet-5-5": {
+      "uso": "agentes de construcción y revisión (claude -p, alias sonnet)",
+      "entrada": 2.0,
+      "salida": 10.0,
+      "escritura_cache_5m": 2.5,
+      "lectura_cache": 0.1,
+      "url_oficial": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    "gemini-3.8-flash": {
+      "uso": "llamadas del producto al modelo (TraveLens, TraderPulse) vía Vertex AI",
+      "entrada": 0.75,
+      "salida": 3.75,
+      "nota": "Tarifa vigente hasta el 2026-12-31; desde el 2027-01-01 la página publica 1.50 de entrada y 7.50 de salida. La salida incluye los tokens de razonamiento.",
+      "url_oficial": "https://aistudio.google.com/docs/pricing"
+    }
+  }
+}

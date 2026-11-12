@@ -1,0 +1,1 @@
+Quiero usar el SDK local de Nano Banana en este proyecto de Next.js para generar imágenes. ¿Cuál es el comando para instalarlo? Instálalo ahora y muéstrame cómo importarlo en un archivo de ejemplo.

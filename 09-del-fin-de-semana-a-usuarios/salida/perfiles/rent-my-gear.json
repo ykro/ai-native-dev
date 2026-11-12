@@ -1,0 +1,60 @@
+{
+  "proyecto": "rent-my-gear",
+  "comprobaciones": {
+    "1": {
+      "aplica": true,
+      "comando": "npm run test:run && npm run lint"
+    },
+    "2": {
+      "aplica": true
+    },
+    "3": {
+      "aplica": true,
+      "tipo": "npm"
+    },
+    "4": {
+      "aplica": true,
+      "runner": "npx vitest run -t \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "modelo-timeout",
+          "min": 1
+        },
+        {
+          "filtro": "modelo-respuesta-rota",
+          "min": 1
+        }
+      ],
+      "nota": "Aplica a la ruta que genera imágenes con el modelo (src/app/api/generate-image)."
+    },
+    "5": {
+      "aplica": true,
+      "directorio_fuente": "src",
+      "tope_regex": "maxOutputTokens|candidateCount",
+      "runner": "npx vitest run -t \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "limite-peticiones",
+          "min": 1
+        }
+      ]
+    },
+    "6": {
+      "aplica": true,
+      "runner": "npx vitest run -t \"{filtro}\"",
+      "pruebas": [
+        {
+          "filtro": "salud",
+          "min": 1
+        },
+        {
+          "filtro": "registros-sin-datos-personales",
+          "min": 1
+        }
+      ]
+    },
+    "7": {
+      "aplica": true
+    }
+  }
+}

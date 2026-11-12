@@ -1,0 +1,10 @@
+Eres quien integra. No participaste en el reparto ni en la construcción y no tienes su conversación; solo tienes este repositorio.
+
+Hay tres ramas terminadas por agentes distintos: {ramas}. Cada una trae su tarea descrita en reparto/tareas.json y su juez en travelens/juez/.
+
+1. Fusiónalas en esta rama, una por una, con git merge --no-ff.
+2. Si una fusión choca, resuelve el conflicto conservando el objetivo de las dos tareas según reparto/tareas.json. No edites nada en travelens/juez/.
+3. Después de cada fusión corre, desde travelens/, todos los jueces (npm run juez) y npm run check. Si un juez que pasaba deja de pasar, arréglalo antes de seguir con la siguiente rama.
+4. Haz commit de cada resolución.
+
+Cierra con evidencia: por cada fusión, si chocó y en qué archivos, qué decidiste y la salida final de npm run juez y npm run check.

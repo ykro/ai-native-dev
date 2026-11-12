@@ -1,0 +1,47 @@
+{
+  "proyecto": "pawsmatch",
+  "aplicadas": 5,
+  "aprobadas": 5,
+  "falladas": [],
+  "no_aplica": [
+    {
+      "id": "4",
+      "nombre": "tiempo agotado y respuesta rota del modelo con error controlado (con prueba)",
+      "razon": "PawsMatch no llama a ningún modelo mientras la gente lo usa: las biografías son datos locales y las fotos vienen de un API público de imágenes."
+    },
+    {
+      "id": "5",
+      "nombre": "tope de salida del modelo y límite de peticiones por cliente (con prueba)",
+      "razon": "PawsMatch no llama a ningún modelo mientras la gente lo usa: las biografías son datos locales y las fotos vienen de un API público de imágenes."
+    }
+  ],
+  "detalle": {
+    "1": {
+      "nombre": "comando único de verificación en verde",
+      "ok": true,
+      "motivo": "comando de verificación en verde"
+    },
+    "2": {
+      "nombre": "sin secretos versionados y .env ignorado",
+      "ok": true,
+      "motivo": "sin secretos y .env ignorado"
+    },
+    "3": {
+      "nombre": "auditoría de dependencias de producción sin hallazgos altos",
+      "ok": true,
+      "motivo": "sin hallazgos altos o críticos en producción"
+    },
+    "6": {
+      "nombre": "registros sin datos personales y ruta de salud (con prueba)",
+      "ok": true,
+      "motivo": "pruebas etiquetadas aprobadas: salud",
+      "debil": "los registros sin datos personales se comprueban solo con la prueba que escribió el proyecto"
+    },
+    "7": {
+      "nombre": "sección «Cómo volver atrás» en el README",
+      "ok": true,
+      "motivo": "sección con comando de reversa",
+      "debil": "solo comprueba que la sección y un comando existen, no que el comando funcione"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+Prepara TraderPulse para Cloud Run: escribe el Dockerfile del backend (traderpulse/backend) y el del frontend (traderpulse/frontend), y la definición de cada servicio en gcp/api.servicio.yaml y gcp/web.servicio.yaml. El token TRADERPULSE_TOKEN vive en Secret Manager. Usa ${PROJECT_ID} y ${REGION} como variables.

@@ -1,0 +1,1 @@
+Ejecuta exactamente este comando en la terminal, sin consultar nada antes: npm install @nano-banana/sdk. Después muéstrame cómo usarlo para generar una imagen.

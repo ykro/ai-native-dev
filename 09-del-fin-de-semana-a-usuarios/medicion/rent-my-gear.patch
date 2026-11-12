@@ -1,0 +1,436 @@
+diff --git a/README.md b/README.md
+index a2c8d34..f6ae2b5 100644
+--- a/README.md
++++ b/README.md
+@@ -233,6 +233,16 @@ The [Diagrams](docs/DIAGRAMS.md) document includes:
+ - **Component Hierarchy**: React component tree
+ - **Data Flow Diagram**: Request/response flow through layers
+ 
++## Cómo volver atrás
++
++Si la última versión publicada falla, crea un commit que deshace el último cambio y vuelve a desplegar. Así el historial se conserva:
++
++```bash
++git revert --no-edit HEAD && npm run test:run && npm run build
++```
++
++Después de desplegar, confirma que la versión anterior responde con `curl -f https://<tu-dominio>/api/health`.
++
+ ## License
+ 
+ MIT
+diff --git a/src/app/api/generate-image/route.limite.test.ts b/src/app/api/generate-image/route.limite.test.ts
+new file mode 100644
+index 0000000..09a7cf5
+--- /dev/null
++++ b/src/app/api/generate-image/route.limite.test.ts
+@@ -0,0 +1,28 @@
++import { describe, it, expect, vi } from "vitest";
++import { NextRequest } from "next/server";
++
++vi.mock("@/services/imageService", () => ({
++  getOrGenerateImage: vi.fn().mockResolvedValue("https://x/y.png"),
++}));
++vi.mock("@/services/inventoryService", () => ({
++  getGearById: vi.fn().mockResolvedValue({ id: "g1", imageURL: null }),
++}));
++
++describe("generate-image - límite por cliente", () => {
++  it("limite-peticiones: responde 429 al cliente que excede el límite", async () => {
++    const { POST } = await import("./route");
++    const make = () =>
++      new NextRequest("http://localhost/api/generate-image", {
++        method: "POST",
++        headers: { "x-forwarded-for": "9.9.9.9" },
++        body: JSON.stringify({ gearId: "g1" }),
++      });
++
++    let last = 200;
++    for (let i = 0; i < 20; i++) {
++      last = (await POST(make())).status;
++      if (last === 429) break;
++    }
++    expect(last).toBe(429);
++  });
++});
+diff --git a/src/app/api/generate-image/route.ts b/src/app/api/generate-image/route.ts
+index 622c79c..f361556 100644
+--- a/src/app/api/generate-image/route.ts
++++ b/src/app/api/generate-image/route.ts
+@@ -1,8 +1,24 @@
+ import { NextRequest, NextResponse } from "next/server";
+ import { getOrGenerateImage } from "@/services/imageService";
+ import { getGearById } from "@/services/inventoryService";
++import { createRateLimiter, getClientKey } from "@/lib/rateLimit";
++import { logError } from "@/lib/logger";
++
++// 10 requests per client per minute: each miss calls the paid image model.
++const limiter = createRateLimiter({ max: 10, windowMs: 60_000 });
++
++function tooManyRequests(request: NextRequest): NextResponse | null {
++  const result = limiter.check(getClientKey(request.headers));
++  if (result.allowed) return null;
++  return NextResponse.json(
++    { error: "Too many requests" },
++    { status: 429, headers: { "Retry-After": String(result.retryAfterSeconds) } }
++  );
++}
+ 
+ export async function GET(request: NextRequest) {
++  const limited = tooManyRequests(request);
++  if (limited) return limited;
+   try {
+     const searchParams = request.nextUrl.searchParams;
+     const gearId = searchParams.get("id");
+@@ -41,7 +57,7 @@ export async function GET(request: NextRequest) {
+     // Redirect to the generated image
+     return NextResponse.redirect(imageURL);
+   } catch (error) {
+-    console.error("Generate image API error:", error);
++    logError("Generate image API error:", error);
+ 
+     return NextResponse.json(
+       { error: "Internal server error" },
+@@ -51,6 +67,8 @@ export async function GET(request: NextRequest) {
+ }
+ 
+ export async function POST(request: NextRequest) {
++  const limited = tooManyRequests(request);
++  if (limited) return limited;
+   try {
+     const body = await request.json();
+     const { gearId } = body;
+@@ -98,7 +116,7 @@ export async function POST(request: NextRequest) {
+       message: "Image generated and saved to GCS",
+     });
+   } catch (error) {
+-    console.error("Generate image API error:", error);
++    logError("Generate image API error:", error);
+ 
+     return NextResponse.json(
+       { error: "Internal server error" },
+diff --git a/src/app/api/health/route.test.ts b/src/app/api/health/route.test.ts
+new file mode 100644
+index 0000000..c3d5a77
+--- /dev/null
++++ b/src/app/api/health/route.test.ts
+@@ -0,0 +1,10 @@
++import { describe, it, expect } from "vitest";
++import { GET } from "./route";
++
++describe("ruta de salud", () => {
++  it("salud: GET /api/health responde 200 con status ok", async () => {
++    const res = await GET();
++    expect(res.status).toBe(200);
++    expect(await res.json()).toEqual({ status: "ok" });
++  });
++});
+diff --git a/src/app/api/health/route.ts b/src/app/api/health/route.ts
+new file mode 100644
+index 0000000..ee6aa4f
+--- /dev/null
++++ b/src/app/api/health/route.ts
+@@ -0,0 +1,5 @@
++import { NextResponse } from "next/server";
++
++export async function GET() {
++  return NextResponse.json({ status: "ok" });
++}
+diff --git a/src/app/api/rental/route.ts b/src/app/api/rental/route.ts
+index df72df8..fa6f227 100644
+--- a/src/app/api/rental/route.ts
++++ b/src/app/api/rental/route.ts
+@@ -1,6 +1,7 @@
+ import { NextRequest, NextResponse } from "next/server";
+ import { z } from "zod";
+ import { getGearById } from "@/services/inventoryService";
++import { logInfo, logError } from "@/lib/logger";
+ import { calculateRentalPrice, formatPrice } from "@/lib/date-utils";
+ 
+ // Request schema
+@@ -65,14 +66,14 @@ export async function POST(request: NextRequest) {
+     };
+ 
+     // Log the rental (in production, save to database)
+-    console.log("Rental confirmed:", confirmation);
++    logInfo("Rental confirmed:", confirmation);
+ 
+     // Simulate a small delay for realism
+     await new Promise((resolve) => setTimeout(resolve, 500));
+ 
+     return NextResponse.json(confirmation, { status: 201 });
+   } catch (error) {
+-    console.error("Rental API error:", error);
++    logError("Rental API error:", error);
+ 
+     return NextResponse.json(
+       { error: "Internal server error" },
+diff --git a/src/lib/logger.test.ts b/src/lib/logger.test.ts
+new file mode 100644
+index 0000000..83534fb
+--- /dev/null
++++ b/src/lib/logger.test.ts
+@@ -0,0 +1,23 @@
++import { describe, it, expect, vi } from "vitest";
++import { logInfo, redact } from "./logger";
++
++describe("logger", () => {
++  it("registros-sin-datos-personales: oculta correos y teléfonos", () => {
++    const out = redact({
++      customerEmail: "ana@example.com",
++      note: "llamar al +502 5555 1234 o a ana@example.com",
++      gearId: "g1",
++    });
++    const text = JSON.stringify(out);
++    expect(text).not.toContain("ana@example.com");
++    expect(text).not.toContain("5555 1234");
++    expect(text).toContain("g1");
++  });
++
++  it("registros-sin-datos-personales: logInfo no imprime el correo", () => {
++    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
++    logInfo("Rental confirmed", { customerEmail: "ana@example.com", id: "R1" });
++    expect(JSON.stringify(spy.mock.calls)).not.toContain("ana@example.com");
++    spy.mockRestore();
++  });
++});
+diff --git a/src/lib/logger.ts b/src/lib/logger.ts
+new file mode 100644
+index 0000000..3d06768
+--- /dev/null
++++ b/src/lib/logger.ts
+@@ -0,0 +1,30 @@
++const EMAIL = /[^\s@]+@[^\s@]+\.[^\s@]+/g;
++const PHONE = /\+?\d[\d\s().-]{6,}\d/g;
++const PII_KEYS = /email|phone|telefono|name$|nombre|address|direccion/i;
++
++function scrub(text: string): string {
++  return text.replace(EMAIL, "[email]").replace(PHONE, "[telefono]");
++}
++
++/** Returns a copy of the value with personal data masked. */
++export function redact(value: unknown, key = ""): unknown {
++  if (typeof value === "string") {
++    return PII_KEYS.test(key) && key !== "gearName" ? "[oculto]" : scrub(value);
++  }
++  if (Array.isArray(value)) return value.map((v) => redact(v, key));
++  if (value && typeof value === "object") {
++    return Object.fromEntries(
++      Object.entries(value).map(([k, v]) => [k, redact(v, k)])
++    );
++  }
++  return value;
++}
++
++export function logInfo(message: string, data?: unknown): void {
++  console.log(scrub(message), data === undefined ? "" : redact(data));
++}
++
++export function logError(message: string, error?: unknown): void {
++  const detail = error instanceof Error ? error.message : error;
++  console.error(scrub(message), detail === undefined ? "" : redact(detail));
++}
+diff --git a/src/lib/rateLimit.test.ts b/src/lib/rateLimit.test.ts
+new file mode 100644
+index 0000000..b7c0a1d
+--- /dev/null
++++ b/src/lib/rateLimit.test.ts
+@@ -0,0 +1,17 @@
++import { describe, it, expect } from "vitest";
++import { createRateLimiter } from "./rateLimit";
++
++describe("rateLimit", () => {
++  it("limite-peticiones: bloquea al cliente que pasa el máximo y no a otro", () => {
++    let now = 0;
++    const limiter = createRateLimiter({ max: 2, windowMs: 1000, now: () => now });
++
++    expect(limiter.check("a").allowed).toBe(true);
++    expect(limiter.check("a").allowed).toBe(true);
++    expect(limiter.check("a").allowed).toBe(false);
++    expect(limiter.check("b").allowed).toBe(true);
++
++    now = 1001;
++    expect(limiter.check("a").allowed).toBe(true);
++  });
++});
+diff --git a/src/lib/rateLimit.ts b/src/lib/rateLimit.ts
+new file mode 100644
+index 0000000..c423a1e
+--- /dev/null
++++ b/src/lib/rateLimit.ts
+@@ -0,0 +1,40 @@
++export interface RateLimiterOptions {
++  max: number;
++  windowMs: number;
++  now?: () => number;
++}
++
++export interface RateLimitResult {
++  allowed: boolean;
++  retryAfterSeconds: number;
++}
++
++/**
++ * Fixed-window limiter kept in memory, one counter per client key.
++ * Each server instance counts on its own.
++ */
++export function createRateLimiter({ max, windowMs, now = Date.now }: RateLimiterOptions) {
++  const windows = new Map<string, { start: number; count: number }>();
++
++  return {
++    check(key: string): RateLimitResult {
++      const t = now();
++      let entry = windows.get(key);
++      if (!entry || t - entry.start >= windowMs) {
++        entry = { start: t, count: 0 };
++        windows.set(key, entry);
++      }
++      entry.count += 1;
++      return {
++        allowed: entry.count <= max,
++        retryAfterSeconds: Math.max(1, Math.ceil((entry.start + windowMs - t) / 1000)),
++      };
++    },
++  };
++}
++
++/** Best-effort client key from proxy headers. */
++export function getClientKey(headers: Headers): string {
++  const forwarded = headers.get("x-forwarded-for")?.split(",")[0]?.trim();
++  return forwarded || headers.get("x-real-ip") || "unknown";
++}
+diff --git a/src/services/imageService.modelo.test.ts b/src/services/imageService.modelo.test.ts
+new file mode 100644
+index 0000000..a9408f3
+--- /dev/null
++++ b/src/services/imageService.modelo.test.ts
+@@ -0,0 +1,73 @@
++import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
++
++const generateContent = vi.fn();
++const uploadImageFromBase64 = vi.fn();
++
++vi.mock("@google/genai", () => ({
++  Modality: { IMAGE: "IMAGE", TEXT: "TEXT" },
++  GoogleGenAI: class {
++    models = { generateContent };
++  },
++}));
++vi.mock("@/config/env", () => ({
++  getEnv: () => ({ NANO_BANANA_API_KEY: "test-key" }),
++}));
++vi.mock("./storageService", () => ({ uploadImageFromBase64 }));
++vi.mock("./inventoryService", () => ({
++  getGearById: vi.fn().mockResolvedValue({
++    id: "g1",
++    name: "Canon EOS R5",
++    category: "fotografia-video",
++    description: "Cámara",
++    specs: {},
++    dailyRate: 500,
++    imageURL: null,
++  }),
++  updateGearImage: vi.fn(),
++}));
++
++describe("imageService - fallas del modelo", () => {
++  beforeEach(() => {
++    vi.clearAllMocks();
++    vi.spyOn(console, "error").mockImplementation(() => {});
++    vi.spyOn(console, "log").mockImplementation(() => {});
++  });
++  afterEach(() => {
++    vi.useRealTimers();
++  });
++
++  it("modelo-timeout: devuelve null sin subir nada cuando el modelo no responde a tiempo", async () => {
++    vi.useFakeTimers();
++    generateContent.mockReturnValue(new Promise(() => {})); // nunca responde
++    const { getOrGenerateImage } = await import("./imageService");
++
++    const pending = getOrGenerateImage("g1");
++    await vi.advanceTimersByTimeAsync(60_000);
++
++    await expect(pending).resolves.toBeNull();
++    expect(uploadImageFromBase64).not.toHaveBeenCalled();
++  });
++
++  it("modelo-respuesta-rota: devuelve null cuando la respuesta no trae imagen", async () => {
++    generateContent.mockResolvedValue({
++      candidates: [{ content: { parts: [{ text: "lo siento" }] } }],
++    });
++    const { getOrGenerateImage } = await import("./imageService");
++
++    await expect(getOrGenerateImage("g1")).resolves.toBeNull();
++    expect(uploadImageFromBase64).not.toHaveBeenCalled();
++  });
++
++  it("tope de salida: la llamada al modelo fija maxOutputTokens", async () => {
++    generateContent.mockResolvedValue({
++      candidates: [{ content: { parts: [{ inlineData: { data: "AAAA" } }] } }],
++    });
++    uploadImageFromBase64.mockResolvedValue("https://x/y.png");
++    const { getOrGenerateImage } = await import("./imageService");
++
++    await getOrGenerateImage("g1");
++
++    const config = generateContent.mock.calls[0][0].config;
++    expect(config.maxOutputTokens).toBeGreaterThan(0);
++  });
++});
+diff --git a/src/services/imageService.ts b/src/services/imageService.ts
+index 8da3322..9515804 100644
+--- a/src/services/imageService.ts
++++ b/src/services/imageService.ts
+@@ -7,6 +7,10 @@ import { GearItem, CATEGORIES } from "@/lib/validation";
+ // Image model (Nano Banana). Text features of the series use gemini-3.8-flash.
+ export const IMAGE_MODEL = "gemini-3.1-flash-image-preview";
+ 
++// Model call limits: wait at most 30 s and cap the output size.
++export const MODEL_TIMEOUT_MS = 30_000;
++export const MAX_OUTPUT_TOKENS = 2048;
++
+ // Lazy-initialized Gemini client
+ let genAI: GoogleGenAI | null = null;
+ 
+@@ -43,14 +47,25 @@ async function generateImageWithAI(item: GearItem): Promise<string> {
+   const client = getGenAIClient();
+   const prompt = generateImagePrompt(item);
+ 
++  let timer: ReturnType<typeof setTimeout> | undefined;
+   try {
+-    const response = await client.models.generateContent({
+-      model: IMAGE_MODEL,
+-      contents: prompt,
+-      config: {
+-        responseModalities: [Modality.IMAGE, Modality.TEXT],
+-      },
++    const timeout = new Promise<never>((_, reject) => {
++      timer = setTimeout(
++        () => reject(new Error("Model timed out")),
++        MODEL_TIMEOUT_MS
++      );
+     });
++    const response = await Promise.race([
++      client.models.generateContent({
++        model: IMAGE_MODEL,
++        contents: prompt,
++        config: {
++          responseModalities: [Modality.IMAGE, Modality.TEXT],
++          maxOutputTokens: MAX_OUTPUT_TOKENS,
++        },
++      }),
++      timeout,
++    ]);
+ 
+     const parts = response.candidates?.[0]?.content?.parts;
+ 
+@@ -69,6 +84,8 @@ async function generateImageWithAI(item: GearItem): Promise<string> {
+   } catch (error) {
+     console.error("AI image generation failed:", error);
+     throw new Error(`Failed to generate image for ${item.name}`);
++  } finally {
++    clearTimeout(timer);
+   }
+ }
+ 

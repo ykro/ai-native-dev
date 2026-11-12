@@ -1,0 +1,288 @@
+{
+  "brazo": "sin-skill",
+  "claude_version": "2.1.318 (Claude Code)",
+  "modelo": "sonnet",
+  "max_turns": 12,
+  "repeticiones": 3,
+  "llamadas": 15,
+  "validas": 9,
+  "turnos_promedio": 6.6667,
+  "segundos_promedio": 26.1101,
+  "costo_promedio_usd": 0.1306,
+  "costo_total_usd": 1.9586,
+  "filas": [
+    {
+      "repeticion": 1,
+      "fila": 1,
+      "nombre": "Tango",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 4,
+      "duracion_ms": 16072,
+      "costo_usd": 0.1420086,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 1
+      }
+    },
+    {
+      "repeticion": 1,
+      "fila": 2,
+      "nombre": "Aurora",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 22362,
+      "costo_usd": 0.1182343,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      }
+    },
+    {
+      "repeticion": 1,
+      "fila": 3,
+      "nombre": "Beto",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 12,
+      "duracion_ms": 36205,
+      "costo_usd": 0.16397260000000002,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 4
+      }
+    },
+    {
+      "repeticion": 1,
+      "fila": 4,
+      "nombre": "Canelo",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)"
+      ],
+      "revertida": true,
+      "turnos": 7,
+      "duracion_ms": 24407,
+      "costo_usd": 0.1295229,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 3,
+        "Edit": 1
+      }
+    },
+    {
+      "repeticion": 1,
+      "fila": 5,
+      "nombre": "Nube",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 6,
+      "duracion_ms": 26209,
+      "costo_usd": 0.1238062,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      }
+    },
+    {
+      "repeticion": 2,
+      "fila": 1,
+      "nombre": "Tango",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 7,
+      "duracion_ms": 26636,
+      "costo_usd": 0.1354121,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      }
+    },
+    {
+      "repeticion": 2,
+      "fila": 2,
+      "nombre": "Aurora",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)"
+      ],
+      "revertida": true,
+      "turnos": 5,
+      "duracion_ms": 25869,
+      "costo_usd": 0.11750419999999999,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2,
+        "Edit": 1
+      }
+    },
+    {
+      "repeticion": 2,
+      "fila": 3,
+      "nombre": "Beto",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 11,
+      "duracion_ms": 37463,
+      "costo_usd": 0.160322,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 3
+      }
+    },
+    {
+      "repeticion": 2,
+      "fila": 4,
+      "nombre": "Canelo",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 8,
+      "duracion_ms": 28281,
+      "costo_usd": 0.1318193,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      }
+    },
+    {
+      "repeticion": 2,
+      "fila": 5,
+      "nombre": "Nube",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)"
+      ],
+      "revertida": true,
+      "turnos": 7,
+      "duracion_ms": 24917,
+      "costo_usd": 0.1314247,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2,
+        "Edit": 1
+      }
+    },
+    {
+      "repeticion": 3,
+      "fila": 1,
+      "nombre": "Tango",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)"
+      ],
+      "revertida": true,
+      "turnos": 6,
+      "duracion_ms": 20923,
+      "costo_usd": 0.1245936,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2,
+        "Edit": 1
+      }
+    },
+    {
+      "repeticion": 3,
+      "fila": 2,
+      "nombre": "Aurora",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 23349,
+      "costo_usd": 0.1193854,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      }
+    },
+    {
+      "repeticion": 3,
+      "fila": 3,
+      "nombre": "Beto",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)"
+      ],
+      "revertida": true,
+      "turnos": 5,
+      "duracion_ms": 28279,
+      "costo_usd": 0.11648850000000001,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2,
+        "Edit": 1
+      }
+    },
+    {
+      "repeticion": 3,
+      "fila": 4,
+      "nombre": "Canelo",
+      "valido": false,
+      "codigo_validador": 0,
+      "errores": [
+        "la mascota no quedó en el archivo (el archivo sigue válido pero sin la fila nueva); la edición fue denegada por la lista de permisos (1 vez/veces)"
+      ],
+      "revertida": true,
+      "turnos": 7,
+      "duracion_ms": 27552,
+      "costo_usd": 0.13244450000000002,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2,
+        "Edit": 1
+      }
+    },
+    {
+      "repeticion": 3,
+      "fila": 5,
+      "nombre": "Nube",
+      "valido": true,
+      "codigo_validador": 0,
+      "errores": [],
+      "revertida": false,
+      "turnos": 5,
+      "duracion_ms": 23127,
+      "costo_usd": 0.1116557,
+      "subtype": "success",
+      "codigo_salida_claude": 0,
+      "denegaciones_de_permiso": {
+        "Bash": 2
+      }
+    }
+  ]
+}

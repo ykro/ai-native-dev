@@ -1,0 +1,635 @@
+{
+  "components": {
+    "schemas": {
+      "AnalisisSentimiento": {
+        "properties": {
+          "fuente": {
+            "description": "Modelo que generó el análisis, o 'ejemplo'.",
+            "title": "Fuente",
+            "type": "string"
+          },
+          "justificacion": {
+            "maxLength": 400,
+            "title": "Justificacion",
+            "type": "string"
+          },
+          "sentimiento": {
+            "$ref": "#/components/schemas/Sentimiento"
+          },
+          "simbolo": {
+            "title": "Simbolo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "simbolo",
+          "sentimiento",
+          "justificacion",
+          "fuente"
+        ],
+        "title": "AnalisisSentimiento",
+        "type": "object"
+      },
+      "Cotizacion": {
+        "properties": {
+          "cambio_pct": {
+            "description": "Cambio contra el cierre anterior, en puntos porcentuales.",
+            "title": "Cambio Pct",
+            "type": "number"
+          },
+          "fecha": {
+            "format": "date",
+            "title": "Fecha",
+            "type": "string"
+          },
+          "nombre": {
+            "title": "Nombre",
+            "type": "string"
+          },
+          "precio": {
+            "description": "Último cierre en dólares.",
+            "title": "Precio",
+            "type": "number"
+          },
+          "simbolo": {
+            "title": "Simbolo",
+            "type": "string"
+          },
+          "volumen": {
+            "minimum": 0.0,
+            "title": "Volumen",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "simbolo",
+          "nombre",
+          "precio",
+          "cambio_pct",
+          "volumen",
+          "fecha"
+        ],
+        "title": "Cotizacion",
+        "type": "object"
+      },
+      "ErrorApi": {
+        "properties": {
+          "codigo": {
+            "examples": [
+              "simbolo_desconocido"
+            ],
+            "title": "Codigo",
+            "type": "string"
+          },
+          "mensaje": {
+            "title": "Mensaje",
+            "type": "string"
+          }
+        },
+        "required": [
+          "codigo",
+          "mensaje"
+        ],
+        "title": "ErrorApi",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Instrumento": {
+        "properties": {
+          "nombre": {
+            "examples": [
+              "Apple"
+            ],
+            "title": "Nombre",
+            "type": "string"
+          },
+          "simbolo": {
+            "examples": [
+              "AAPL"
+            ],
+            "title": "Simbolo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "simbolo",
+          "nombre"
+        ],
+        "title": "Instrumento",
+        "type": "object"
+      },
+      "Panel": {
+        "description": "Todo lo que la pantalla de un símbolo necesita, en una sola respuesta.",
+        "properties": {
+          "cotizacion": {
+            "$ref": "#/components/schemas/Cotizacion"
+          },
+          "historico": {
+            "items": {
+              "$ref": "#/components/schemas/PuntoHistorico"
+            },
+            "title": "Historico",
+            "type": "array"
+          },
+          "sentimiento": {
+            "$ref": "#/components/schemas/AnalisisSentimiento"
+          }
+        },
+        "required": [
+          "cotizacion",
+          "historico",
+          "sentimiento"
+        ],
+        "title": "Panel",
+        "type": "object"
+      },
+      "PuntoHistorico": {
+        "properties": {
+          "cierre": {
+            "title": "Cierre",
+            "type": "number"
+          },
+          "fecha": {
+            "format": "date",
+            "title": "Fecha",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fecha",
+          "cierre"
+        ],
+        "title": "PuntoHistorico",
+        "type": "object"
+      },
+      "Salud": {
+        "properties": {
+          "estado": {
+            "default": "ok",
+            "title": "Estado",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "title": "Salud",
+        "type": "object"
+      },
+      "Sentimiento": {
+        "enum": [
+          "alcista",
+          "bajista",
+          "neutral"
+        ],
+        "title": "Sentimiento",
+        "type": "string"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "API que sirve a la pantalla de TraderPulse. Datos de mercado de ejemplo.",
+    "title": "TraderPulse BFF",
+    "version": "contrato"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/cotizaciones/{simbolo}": {
+      "get": {
+        "operationId": "cotizacion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "simbolo",
+            "required": true,
+            "schema": {
+              "title": "Simbolo",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-traderpulse-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Traderpulse-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cotizacion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "Token ausente o incorrecto."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "El símbolo no existe."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Obtener Cotizacion",
+        "tags": [
+          "mercado"
+        ]
+      }
+    },
+    "/api/v1/historico/{simbolo}": {
+      "get": {
+        "operationId": "historico",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "simbolo",
+            "required": true,
+            "schema": {
+              "title": "Simbolo",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-traderpulse-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Traderpulse-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PuntoHistorico"
+                  },
+                  "title": "Response Historico",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "Token ausente o incorrecto."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "El símbolo no existe."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Obtener Historico",
+        "tags": [
+          "mercado"
+        ]
+      }
+    },
+    "/api/v1/instrumentos": {
+      "get": {
+        "operationId": "buscarInstrumentos",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "default": "",
+              "maxLength": 40,
+              "title": "Q",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-traderpulse-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Traderpulse-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Instrumento"
+                  },
+                  "title": "Response Buscarinstrumentos",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "Token ausente o incorrecto."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Buscar Instrumentos",
+        "tags": [
+          "mercado"
+        ]
+      }
+    },
+    "/api/v1/panel/{simbolo}": {
+      "get": {
+        "operationId": "panel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "simbolo",
+            "required": true,
+            "schema": {
+              "title": "Simbolo",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-traderpulse-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Traderpulse-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Panel"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "Token ausente o incorrecto."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "El símbolo no existe."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Panel",
+        "tags": [
+          "pantalla"
+        ]
+      }
+    },
+    "/api/v1/sentimiento/{simbolo}": {
+      "get": {
+        "operationId": "sentimiento",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "simbolo",
+            "required": true,
+            "schema": {
+              "title": "Simbolo",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-traderpulse-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Traderpulse-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalisisSentimiento"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "Token ausente o incorrecto."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApi"
+                }
+              }
+            },
+            "description": "El símbolo no existe."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Obtener Sentimiento",
+        "tags": [
+          "mercado"
+        ]
+      }
+    },
+    "/salud": {
+      "get": {
+        "operationId": "salud",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Salud"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Salud",
+        "tags": [
+          "sistema"
+        ]
+      }
+    }
+  }
+}

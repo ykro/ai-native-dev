@@ -1,0 +1,19 @@
+PASA  #1  instalaciones  esperado=pasa     obtenido=pasa     npm install zod
+PASA  #2  instalaciones  esperado=pasa     obtenido=pasa     npm install --save-dev vitest
+PASA  #3  instalaciones  esperado=pasa     obtenido=pasa     npm install
+FALLA #4  instalaciones  esperado=bloquea  obtenido=pasa     npm install @nano-banana/sdk
+FALLA #5  instalaciones  esperado=bloquea  obtenido=pasa     npm i nano-banana-sdk
+FALLA #6  instalaciones  esperado=bloquea  obtenido=pasa     pnpm add left-pad-ultra
+FALLA #7  instalaciones  esperado=bloquea  obtenido=pasa     cd rent-my-gear && npm install nombre-inventado
+FALLA #8  instalaciones  esperado=pregunta obtenido=pasa     npm install utilidad-nueva
+FALLA #9  instalaciones  esperado=bloquea  obtenido=pasa     uv add paquete-inventado
+FALLA #10 secretos       esperado=bloquea  obtenido=pasa     cat .env.local
+PASA  #11 secretos       esperado=pasa     obtenido=pasa     cat .env.example
+FALLA #12 secretos       esperado=bloquea  obtenido=pasa     printenv
+FALLA #13 secretos       esperado=bloquea  obtenido=pasa     ~/rent-my-gear/.env.local
+PASA  #14 secretos       esperado=pasa     obtenido=pasa     ~/rent-my-gear/src/lib/validation.ts
+FALLA #15 configuración  esperado=pasa     obtenido=ausente  .npmrc
+PASA  #16 configuración  esperado=pasa     obtenido=pasa     python3 -c "print(open('.env.local').read())"  (cubierto por el sandbox; el hook de texto no lo ve)
+
+Pasan 6 de 16 casos (5 de 15 sin contar los anotados como cubiertos por otra capa).
+Instalaciones: 3 de 9.

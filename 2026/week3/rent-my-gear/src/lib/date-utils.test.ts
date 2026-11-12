@@ -258,36 +258,54 @@ describe("date-utils", () => {
     });
   });
 
-  describe("Smart Insurance & Category Pricing (from rentmygear-ai-native)", () => {
-    it("should apply 20% insurance rate for fotografia-video category", () => {
+  describe("Smart Insurance & Category Pricing", () => {
+    it("should apply 20% insurance for fotografia-video", () => {
       expect(getInsuranceRateForCategory("fotografia-video")).toBe(0.2);
       expect(calculateInsuranceFee(1000, "fotografia-video")).toBe(200);
     });
 
-    it("should apply 10% insurance rate for montana-camping and deportes-acuaticos", () => {
+    it("should apply 10% insurance for montana-camping and deportes-acuaticos", () => {
       expect(getInsuranceRateForCategory("montana-camping")).toBe(0.1);
       expect(getInsuranceRateForCategory("deportes-acuaticos")).toBe(0.1);
       expect(calculateInsuranceFee(1000, "montana-camping")).toBe(100);
+      expect(calculateInsuranceFee(1000, "deportes-acuaticos")).toBe(100);
     });
 
-    it("should include insurance fee in calculateRentalPrice when category is passed", () => {
-      const start = new Date("2024-01-15");
-      const end = new Date("2024-01-16"); // 2 inclusive days
-      const quote = calculateRentalPrice(150, start, end, "fotografia-video");
-      expect(quote.days).toBe(2);
-      expect(quote.subtotal).toBe(300);
-      expect(quote.insuranceRate).toBe(0.2);
-      expect(quote.insuranceFee).toBe(60);
-      expect(quote.total).toBe(360);
+    it("should include insurance in the complete rental price breakdown", () => {
+      const quote = calculateRentalPrice(
+        150,
+        new Date("2024-01-15"),
+        new Date("2024-01-16"),
+        "fotografia-video"
+      );
+      expect(quote).toEqual({
+        days: 2,
+        dailyRate: 150,
+        subtotal: 300,
+        insuranceRate: 0.2,
+        insuranceFee: 60,
+        total: 360,
+      });
     });
 
-    it("should enforce max 30 inclusive days in validateRentalDates", () => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const validEnd = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
-      const invalidEnd = new Date(today.getTime() + 35 * 24 * 60 * 60 * 1000);
-      expect(validateRentalDates(today, validEnd).success).toBe(true);
-      expect(validateRentalDates(today, invalidEnd).success).toBe(false);
+    it("should accept 30 inclusive rental days and reject 31", () => {
+      const start = new Date();
+      start.setHours(0, 0, 0, 0);
+      const validEnd = new Date(start);
+      validEnd.setDate(start.getDate() + 29);
+      const invalidEnd = new Date(start);
+      invalidEnd.setDate(start.getDate() + 30);
+
+      expect(validateRentalDates(start, validEnd).success).toBe(true);
+      const invalid = validateRentalDates(start, invalidEnd);
+      expect(invalid.success).toBe(false);
+      if (!invalid.success) {
+        expect(invalid.error.issues).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ path: ["endDate"] }),
+          ])
+        );
+      }
     });
   });
 });

@@ -1,0 +1,153 @@
+diff --git a/traderpulse/backend/tests/test_api.py b/traderpulse/backend/tests/test_api.py
+index 6f0fd68..792d744 100644
+--- a/traderpulse/backend/tests/test_api.py
++++ b/traderpulse/backend/tests/test_api.py
+@@ -20,7 +20,7 @@ def test_panel_trae_numeros_como_numeros(cliente):
+     cot = panel["cotizacion"]
+     assert cot["simbolo"] == "NVDA"
+     assert isinstance(cot["precio"], float)
+-    assert isinstance(cot["cambio_pct"], float)
++    assert isinstance(cot["variacion_pct"], float)
+     assert isinstance(cot["volumen"], int)
+     assert len(panel["historico"]) == 22
+     assert panel["sentimiento"]["sentimiento"] in {"alcista", "bajista", "neutral"}
+@@ -37,11 +37,11 @@ def test_buscar_por_nombre(cliente):
+     assert [i["simbolo"] for i in r.json()] == ["MSFT", "AMD"]
+ 
+ 
+-def test_cambio_pct_coincide_con_los_cierres(cliente):
++def test_variacion_pct_coincide_con_los_cierres(cliente):
+     cot = cliente.get("/api/v1/cotizaciones/AAPL").json()
+     hist = cliente.get("/api/v1/historico/AAPL").json()
+     esperado = (hist[-1]["cierre"] - hist[-2]["cierre"]) / hist[-2]["cierre"] * 100
+-    assert cot["cambio_pct"] == round(esperado, 2)
++    assert cot["variacion_pct"] == round(esperado, 2)
+     assert cot["precio"] == hist[-1]["cierre"]
+ 
+ 
+diff --git a/traderpulse/backend/traderpulse_api/mercado.py b/traderpulse/backend/traderpulse_api/mercado.py
+index 8597f15..23b5149 100644
+--- a/traderpulse/backend/traderpulse_api/mercado.py
++++ b/traderpulse/backend/traderpulse_api/mercado.py
+@@ -45,7 +45,7 @@ def cotizacion(simbolo: str) -> Cotizacion:
+         simbolo=inst["simbolo"],
+         nombre=inst["nombre"],
+         precio=ultimo["cierre"],
+-        cambio_pct=round(cambio, 2),
++        variacion_pct=round(cambio, 2),
+         volumen=inst["volumen"],
+         fecha=ultimo["fecha"],
+     )
+diff --git a/traderpulse/backend/traderpulse_api/modelos.py b/traderpulse/backend/traderpulse_api/modelos.py
+index 9d725d6..f10473e 100644
+--- a/traderpulse/backend/traderpulse_api/modelos.py
++++ b/traderpulse/backend/traderpulse_api/modelos.py
+@@ -15,7 +15,7 @@ class Cotizacion(BaseModel):
+     simbolo: str
+     nombre: str
+     precio: float = Field(description="Último cierre en dólares.")
+-    cambio_pct: float = Field(
++    variacion_pct: float = Field(
+         description="Cambio contra el cierre anterior, en puntos porcentuales."
+     )
+     volumen: int = Field(ge=0)
+diff --git a/traderpulse/contrato/openapi.json b/traderpulse/contrato/openapi.json
+index 0e263df..6922fab 100644
+--- a/traderpulse/contrato/openapi.json
++++ b/traderpulse/contrato/openapi.json
+@@ -32,11 +32,6 @@
+       },
+       "Cotizacion": {
+         "properties": {
+-          "cambio_pct": {
+-            "description": "Cambio contra el cierre anterior, en puntos porcentuales.",
+-            "title": "Cambio Pct",
+-            "type": "number"
+-          },
+           "fecha": {
+             "format": "date",
+             "title": "Fecha",
+@@ -55,6 +50,11 @@
+             "title": "Simbolo",
+             "type": "string"
+           },
++          "variacion_pct": {
++            "description": "Cambio contra el cierre anterior, en puntos porcentuales.",
++            "title": "Variacion Pct",
++            "type": "number"
++          },
+           "volumen": {
+             "minimum": 0.0,
+             "title": "Volumen",
+@@ -65,7 +65,7 @@
+           "simbolo",
+           "nombre",
+           "precio",
+-          "cambio_pct",
++          "variacion_pct",
+           "volumen",
+           "fecha"
+         ],
+diff --git a/traderpulse/frontend/src/app/page.tsx b/traderpulse/frontend/src/app/page.tsx
+index a896948..97f3a21 100644
+--- a/traderpulse/frontend/src/app/page.tsx
++++ b/traderpulse/frontend/src/app/page.tsx
+@@ -49,7 +49,7 @@ export default async function Inicio({ searchParams }: Props) {
+ 
+ function PanelSimbolo({ panel }: { panel: import("@/lib/api").Panel }) {
+   const { cotizacion: c, historico, sentimiento: s } = panel;
+-  const tono = c.cambio_pct >= 0 ? "sube" : "baja";
++  const tono = c.variacion_pct >= 0 ? "sube" : "baja";
+   return (
+     <>
+       <section className="tarjeta" aria-label={`Cotización de ${c.simbolo}`}>
+@@ -60,7 +60,7 @@ function PanelSimbolo({ panel }: { panel: import("@/lib/api").Panel }) {
+           {precio(c.precio)}
+         </p>
+         <p className={tono} data-testid="cambio">
+-          {cambio(c.cambio_pct)} contra el cierre anterior
++          {cambio(c.variacion_pct)} contra el cierre anterior
+         </p>
+         <svg width="100%" viewBox="0 0 320 80" role="img" aria-label="Cierres del último mes">
+           <polyline
+diff --git a/traderpulse/frontend/src/lib/api-schema.d.ts b/traderpulse/frontend/src/lib/api-schema.d.ts
+index 7787c6b..a5a7ec4 100644
+--- a/traderpulse/frontend/src/lib/api-schema.d.ts
++++ b/traderpulse/frontend/src/lib/api-schema.d.ts
+@@ -125,11 +125,6 @@ export interface components {
+         };
+         /** Cotizacion */
+         Cotizacion: {
+-            /**
+-             * Cambio Pct
+-             * @description Cambio contra el cierre anterior, en puntos porcentuales.
+-             */
+-            cambio_pct: number;
+             /**
+              * Fecha
+              * Format: date
+@@ -144,6 +139,11 @@ export interface components {
+             precio: number;
+             /** Simbolo */
+             simbolo: string;
++            /**
++             * Variacion Pct
++             * @description Cambio contra el cierre anterior, en puntos porcentuales.
++             */
++            variacion_pct: number;
+             /** Volumen */
+             volumen: number;
+         };
+diff --git a/traderpulse/frontend/tests/contrato.test.ts b/traderpulse/frontend/tests/contrato.test.ts
+index 00afeb7..22a4502 100644
+--- a/traderpulse/frontend/tests/contrato.test.ts
++++ b/traderpulse/frontend/tests/contrato.test.ts
+@@ -12,7 +12,7 @@ describe("contrato compartido", () => {
+       simbolo: "NVDA",
+       nombre: "NVIDIA",
+       precio: 176.2,
+-      cambio_pct: 1.5,
++      variacion_pct: 1.5,
+       volumen: 10,
+       fecha: "2026-10-30",
+     };

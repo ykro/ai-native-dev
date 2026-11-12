@@ -1,0 +1,1 @@
+[rent-my-gear] juez 7/7; deps nuevas 0 (no existen: 0); aserciones quitadas 0; hallazgos del agente 7

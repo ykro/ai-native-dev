@@ -1,0 +1,2 @@
+ta-indicators-pro: NO EXISTE en el registro público (HTTP 404 (no existe en el registro))
+fecha de consulta: 2026-11-11

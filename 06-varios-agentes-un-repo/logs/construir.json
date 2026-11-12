@@ -1,0 +1,66 @@
+{
+  "tareas": [
+    {
+      "log": "02-construir-presupuesto.jsonl",
+      "segundos": 45.6,
+      "salida": 0,
+      "tarea": "presupuesto",
+      "ola": 1,
+      "desde": "reparto",
+      "choque_al_arrancar": null,
+      "juez": {
+        "aprobadas": 8,
+        "total": 8,
+        "ok": true
+      },
+      "check": true
+    },
+    {
+      "log": "02-construir-descarga.jsonl",
+      "segundos": 42.9,
+      "salida": 0,
+      "tarea": "descarga",
+      "ola": 1,
+      "desde": "reparto",
+      "choque_al_arrancar": null,
+      "juez": {
+        "aprobadas": 3,
+        "total": 3,
+        "ok": true
+      },
+      "check": true
+    },
+    {
+      "log": "02-construir-api.jsonl",
+      "segundos": 80.3,
+      "salida": 0,
+      "tarea": "api",
+      "ola": 2,
+      "desde": "base/api",
+      "choque_al_arrancar": null,
+      "juez": {
+        "aprobadas": 15,
+        "total": 15,
+        "ok": true
+      },
+      "check": true
+    },
+    {
+      "log": "02-construir-ui.jsonl",
+      "segundos": 82.0,
+      "salida": 0,
+      "tarea": "ui",
+      "ola": 3,
+      "desde": "base/ui",
+      "choque_al_arrancar": null,
+      "juez": {
+        "aprobadas": 5,
+        "total": 5,
+        "ok": true
+      },
+      "check": true
+    }
+  ],
+  "segundos_de_reloj": 231.2,
+  "segundos_sumados": 250.8
+}

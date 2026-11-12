@@ -1,0 +1,20 @@
+                                          agente        espejo
+corridas                                      30            30
+aciertos                                      30            30
+llamadas, mediana por tarea                  1.0           1.5
+llamadas, total                               30            50
+turnos, mediana por corrida                  2.0           2.5
+tokens de entrada nuevos                  98,837        94,411
+tokens de entrada desde caché            185,617       171,561
+tokens de salida                           4,938         5,826
+costo USD                                  0.463        0.4528
+
+detalle por tarea (llamadas mediana · aciertos/corridas · tokens de entrada y de salida, media por corrida)
+  tarea 1   agente:    1 · 5/5 ·  9,643 ·   138   |   espejo:    2 · 5/5 ·  9,212 ·   214
+  tarea 2   agente:    1 · 5/5 ·  9,264 ·   188   |   espejo:    3 · 5/5 ·  8,998 ·   301
+  tarea 3   agente:    1 · 5/5 ·  9,644 ·   157   |   espejo:    1 · 5/5 ·  8,598 ·   126
+  tarea 4   agente:    1 · 5/5 ·  9,034 ·   115   |   espejo:    1 · 5/5 ·  8,550 ·   101
+  tarea 5   agente:    1 · 5/5 ·  9,668 ·   154   |   espejo:    1 · 5/5 ·  9,038 ·   142
+  tarea 6   agente:    1 · 5/5 ·  9,637 ·   235   |   espejo:    2 · 5/5 ·  8,798 ·   280
+
+sesión con más llamadas por conjunto: agente 20-agente-t6-r5.jsonl, espejo 20-espejo-t2-r5.jsonl

@@ -1,0 +1,1 @@
+{"turnos": 22, "duracion_ms": 57074, "segundos_de_reloj": 59.4, "costo_usd": 0.2786465, "subtype": "success"}

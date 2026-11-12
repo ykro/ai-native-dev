@@ -1,0 +1,238 @@
+diff --git a/travelens/src/components/features/AiTravelSidebar.tsx b/travelens/src/components/features/AiTravelSidebar.tsx
+index ac2579e..8d96963 100644
+--- a/travelens/src/components/features/AiTravelSidebar.tsx
++++ b/travelens/src/components/features/AiTravelSidebar.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useState } from "react";
+-import { Sparkles, MapPin, Utensils, Share2 } from "lucide-react";
++import { Sparkles, MapPin, Utensils, Share2, Download } from "lucide-react";
+ import { Skeleton } from "@/components/ui/skeleton";
+ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+ import { Button } from "@/components/ui/button";
+@@ -13,56 +13,36 @@ import { Badge } from "@/components/ui/badge";
+ // Update: User has shadcn/ui, usually comes with sonner or toaster. I'll stick to simple logic first.
+ 
+ import { Destination } from "@/services/unsplash";
++import type { BudgetPlan } from "@/lib/budget";
++import { requestPlan } from "@/lib/plan-client";
++import { downloadItinerary } from "@/lib/itinerary-markdown";
+ 
+-interface TravelPlan {
+-    intro: string;
+-    days: {
+-        day: number;
+-        title: string;
+-        activities: string[];
+-    }[];
+-    hiddenGem: {
+-        title: string;
+-        description: string;
+-    };
+-    localFood: {
+-        dish: string;
+-        description: string;
+-    };
+-}
++const DAY_OPTIONS = [2, 3, 4, 5, 6, 7];
+ 
+ interface AiTravelSidebarProps {
+     destination: Destination;
+ }
+ 
+ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+-    const [plan, setPlan] = useState<TravelPlan | null>(null);
+-    const [loading, setLoading] = useState(true);
++    const [days, setDays] = useState(3);
++    const [loaded, setLoaded] = useState<{ destination: Destination; days: number; plan: BudgetPlan | null } | null>(null);
+ 
+     useEffect(() => {
+-        const fetchPlan = async () => {
+-            try {
+-                const res = await fetch("/api/ai-plan", {
+-                    method: "POST",
+-                    headers: { "Content-Type": "application/json" },
+-                    body: JSON.stringify({
+-                        destination: destination.title,
+-                        context: destination.cityName || destination.location
+-                    }),
+-                });
+-                const data = await res.json();
+-                if (data.plan) {
+-                    setPlan(data.plan);
+-                }
+-            } catch (error) {
+-                console.error("Failed to load plan", error);
+-            } finally {
+-                setLoading(false);
+-            }
++        let cancelled = false;
++        requestPlan({
++            destination: destination.title,
++            context: destination.cityName || destination.location,
++            days,
++        }).then((result) => {
++            if (!cancelled) setLoaded({ destination, days, plan: result });
++        });
++        return () => {
++            cancelled = true;
+         };
++    }, [destination, days]);
+ 
+-        fetchPlan();
+-    }, [destination]);
++    const loading = !loaded || loaded.destination !== destination || loaded.days !== days;
++    const plan = loading ? null : loaded.plan;
+ 
+     const handleShare = async () => {
+         if (typeof navigator.share !== 'function') {
+@@ -105,20 +85,44 @@ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+                     <Sparkles className="h-4 w-4 text-purple-500" />
+                     <span>Plan de Viaje AI</span>
+                 </h2>
+-                <Button
+-                    variant="ghost"
+-                    size="icon"
+-                    onClick={handleShare}
+-                    className="text-muted-foreground hover:text-primary transition-colors"
+-                    title="Compartir Plan"
+-                >
+-                    <Share2 className="h-4 w-4" />
+-                </Button>
++                <div className="flex items-center gap-1">
++                    <Button
++                        variant="ghost"
++                        size="icon"
++                        onClick={() => plan && downloadItinerary(destination.title, plan)}
++                        disabled={!plan}
++                        className="text-muted-foreground hover:text-primary transition-colors"
++                        title="Descargar itinerario (.md)"
++                    >
++                        <Download className="h-4 w-4" />
++                    </Button>
++                    <Button
++                        variant="ghost"
++                        size="icon"
++                        onClick={handleShare}
++                        className="text-muted-foreground hover:text-primary transition-colors"
++                        title="Compartir Plan"
++                    >
++                        <Share2 className="h-4 w-4" />
++                    </Button>
++                </div>
+             </div>
+ 
+             <ScrollArea className="flex-1 p-6">
+                 <div className="space-y-6 pb-20">
+-
++                    <label className="flex items-center justify-between text-sm text-muted-foreground">
++                        <span>Duración del viaje</span>
++                        <select
++                            value={days}
++                            onChange={(e) => setDays(Number(e.target.value))}
++                            disabled={loading}
++                            className="rounded-md border border-border bg-background px-2 py-1 text-foreground"
++                        >
++                            {DAY_OPTIONS.map((n) => (
++                                <option key={n} value={n}>{n} días</option>
++                            ))}
++                        </select>
++                    </label>
+ 
+                     {/* AI Plan Content */}
+                     {loading ? (
+@@ -148,6 +152,7 @@ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+                                             <CardTitle className="text-sm font-bold flex items-center justify-between">
+                                                 <div className="flex items-center gap-2">
+                                                     <Badge variant="outline" className="bg-background text-primary border-primary/20">Día {day.day}</Badge>
++                                                    <span className="text-xs font-semibold text-primary">${day.costUsd} USD</span>
+                                                 </div>
+                                                 <span className="text-foreground/70 font-normal truncate max-w-[150px] text-right text-xs">{day.title}</span>
+                                             </CardTitle>
+@@ -166,6 +171,11 @@ export function AiTravelSidebar({ destination }: AiTravelSidebarProps) {
+                                 ))}
+                             </div>
+ 
++                            <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm font-semibold">
++                                <span>Total estimado</span>
++                                <span>${plan.totalUsd} USD</span>
++                            </div>
++
+                             {/* Recommendations Grid */}
+                             <div className="grid grid-cols-1 gap-4 pt-2">
+                                 {/* Hidden Gem */}
+diff --git a/travelens/src/lib/plan-client.test.ts b/travelens/src/lib/plan-client.test.ts
+new file mode 100644
+index 0000000..6ea6ea3
+--- /dev/null
++++ b/travelens/src/lib/plan-client.test.ts
+@@ -0,0 +1,38 @@
++import { describe, it, expect, vi, afterEach } from "vitest";
++import { requestPlan } from "./plan-client";
++
++afterEach(() => vi.unstubAllGlobals());
++
++const plan = {
++  intro: "i",
++  days: [{ day: 1, title: "t", activities: ["a"], costUsd: 10 }],
++  hiddenGem: { title: "g", description: "d" },
++  localFood: { dish: "f", description: "d" },
++  totalUsd: 10,
++};
++
++function stub(ok: boolean, status: number, body: unknown) {
++  const fn = vi.fn(async () => ({ ok, status, json: async () => body }));
++  vi.stubGlobal("fetch", fn);
++  return fn;
++}
++
++describe("requestPlan", () => {
++  it("usa 3 días por defecto y devuelve el plan", async () => {
++    const fn = stub(true, 200, { plan });
++    expect(await requestPlan({ destination: "Antigua" })).toEqual(plan);
++    const init = (fn.mock.calls[0] as unknown as [string, { body: string }])[1];
++    expect(JSON.parse(init.body).days).toBe(3);
++  });
++
++  it("devuelve null con 502", async () => {
++    stub(false, 502, { error: "invalid_plan" });
++    expect(await requestPlan({ destination: "Antigua", days: 4 })).toBeNull();
++  });
++
++  it("devuelve null si fetch lanza", async () => {
++    vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("red"); }));
++    vi.spyOn(console, "error").mockImplementation(() => {});
++    expect(await requestPlan({ destination: "Antigua" })).toBeNull();
++  });
++});
+diff --git a/travelens/src/lib/plan-client.ts b/travelens/src/lib/plan-client.ts
+new file mode 100644
+index 0000000..b8d61cf
+--- /dev/null
++++ b/travelens/src/lib/plan-client.ts
+@@ -0,0 +1,24 @@
++import type { BudgetPlan } from "@/lib/budget";
++
++export interface PlanRequest {
++  destination: string;
++  context?: string;
++  days?: number;
++}
++
++/** Pide el plan a /api/ai-plan. Devuelve null si el API falla o fetch lanza. */
++export async function requestPlan({ destination, context, days = 3 }: PlanRequest): Promise<BudgetPlan | null> {
++  try {
++    const res = await fetch("/api/ai-plan", {
++      method: "POST",
++      headers: { "Content-Type": "application/json" },
++      body: JSON.stringify({ destination, context, days }),
++    });
++    if (!res.ok) return null;
++    const data: { plan?: BudgetPlan } = await res.json();
++    return data.plan ?? null;
++  } catch (error) {
++    console.error("Failed to load plan", error);
++    return null;
++  }
++}

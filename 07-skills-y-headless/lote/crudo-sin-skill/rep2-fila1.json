@@ -1,0 +1,194 @@
+{
+  "duration_api_ms": 15906,
+  "stop_reason": "end_turn",
+  "session_id": "b4480389-1531-4a32-a069-5e9721a50644",
+  "total_cost_usd": 0.1240947,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 23073,
+    "cache_read_input_tokens": 149267,
+    "output_tokens": 1686,
+    "output_tokens_details": {
+      "thinking_tokens": 241
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23073,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 505,
+        "cache_read_input_tokens": 46123,
+        "cache_creation_input_tokens": 1090,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1090
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1686,
+      "cacheReadInputTokens": 149267,
+      "cacheCreationInputTokens": 23073,
+      "webSearchRequests": 0,
+      "costUSD": 0.1240947,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 241,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 23073,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01WbxEEKq6HJtviRgdStNXQn",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && tail -c 700 pets.json && python3 -I -c \"\nimport json;d=json.load(open('pets.json'));print(len(d),d[-1]['id'],[p['id'] for p in d]==list(range(d[0]['id'],d[0]['id']+len(d))),'Tango' in [p['name'] for p in d])\"; file pets.json"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01KeKhhpG2kdMxpHHWjJ4A4G",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && node -e \"\nconst d=require('./pets.json');console.log(d.length,d.every((p,i)=>p.id===i+1),new Set(d.map(p=>p.name)).size===d.length);\nconst l=d[d.length-1].bio.split('\\n');console.log(l.length,l.map(x=>x.length))\""
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 5,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Agregué a Tango al final de `app/src/data/pets.json`:\n\n```json\n{\n  \"id\": 51,\n  \"name\": \"Tango\",\n  \"bio\": \"Soy Tango, un perrito bailarín que mueve las patitas con cualquier música.\\nBusco una familia con ganas de jugar y bailar conmigo cada día.\\nTe ofrezco mucha alegría, travesuras y un compañero que te saca una sonrisa.\"\n}\n```\n\n- **id:** 51. La lista tenía 50 mascotas y la última era Estrella (id 50).\n- **Nombre:** Tango no aparecía antes en el archivo, según una búsqueda de texto.\n- **Bio:** tiene tres líneas separadas por `\\n`, en primera persona (quién soy, qué busco, qué ofrezco). Sin emojis, sin \"Lorem\" y sin \"TODO\". Las líneas miden unos 74, 63 y 76 caracteres, contados a mano, dentro del rango de 20 a 110.\n- **Otros cambios:** no toqué ninguna otra mascota ni ningún otro archivo.\n\nNo pude correr la validación automática: el sistema pidió aprobación para ejecutar `node` y no estaba disponible. Por eso no comprobé con código que el JSON siga siendo válido, ni que los ids sean consecutivos, ni los largos exactos. La comprobación del id 51 y del nombre salió de mi lectura del final del archivo y de la búsqueda de texto.",
+  "ttft_ms": 3536,
+  "type": "result",
+  "duration_ms": 22323,
+  "uuid": "3bd43c3e-ce18-4742-86dd-36409f3888f1",
+  "ttft_stream_ms": 2145,
+  "time_to_request_ms": 728,
+  "time_to_request_phases_ms": {
+    "other": 10,
+    "system_prompt": 127,
+    "resume_other": 14,
+    "process_user_input": 8,
+    "input_attachments": 44,
+    "input_hooks": 1,
+    "conversation_append": 1,
+    "transcript_persist": 349,
+    "tool_pool_refresh": 44,
+    "init_message": 3,
+    "init_frame_send": 11,
+    "engine_pickup": 1,
+    "loop_entry": 2,
+    "message_prep": 0,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "request_announcements": 60,
+    "query_setup": 2,
+    "model_gates": 0,
+    "tool_schema_build": 21,
+    "message_normalization": 2,
+    "client_creation": 15,
+    "request_build": 11
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 153,
+  "time_to_request_cpu_ms": 331,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 3,
+    "cpu_ms": 17,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 2,
+    "ambient_wait_ms": 2,
+    "render_ms": 38,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 1,
+    "placement_ms": 7,
+    "render_ms": 13,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 0,
+    "after_ms": 1,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 1,
+    "plans_ms": 0,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 7,
+    "other_ms": 1,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 2145,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

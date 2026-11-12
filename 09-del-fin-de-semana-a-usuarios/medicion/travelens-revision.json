@@ -1,0 +1,119 @@
+{
+  "proyecto": "travelens",
+  "automaticas": {
+    "juez_de_salida": {
+      "aprobadas": 7,
+      "aplicadas": 7,
+      "falladas": []
+    },
+    "archivos_tocados": [
+      "README.md",
+      "src/app/api/ai-plan/route.test.ts",
+      "src/app/api/ai-plan/route.ts",
+      "src/app/api/health/route.test.ts",
+      "src/app/api/health/route.ts",
+      "src/lib/rate-limit.test.ts",
+      "src/lib/rate-limit.ts",
+      "src/services/gemini.test.ts",
+      "src/services/gemini.ts"
+    ],
+    "archivos_prohibidos_tocados": [],
+    "aserciones_quitadas_o_debilitadas": 0,
+    "detalle_aserciones": [],
+    "dependencias_nuevas": [],
+    "dependencias_que_no_existen": [],
+    "diff": {
+      "resumen": "9 files changed, 144 insertions(+), 6 deletions(-)",
+      "archivos": 9,
+      "lineas_agregadas": 144,
+      "lineas_quitadas": 6
+    }
+  },
+  "agente_revisor": {
+    "hallazgos": [
+      {
+        "archivo": "src/app/api/ai-plan/route.ts",
+        "linea": 8,
+        "severidad": "media",
+        "descripcion": "El límite usa la cabecera x-forwarded-for tal como llega. Un cliente puede cambiarla en cada petición y saltarse el tope. Quienes no la envían comparten el cubo 'unknown' y se bloquean entre sí. Este límite es la única defensa contra el gasto del modelo."
+      },
+      {
+        "archivo": "src/lib/rate-limit.ts",
+        "linea": 10,
+        "severidad": "media",
+        "descripcion": "El Map en memoria nunca borra claves, así que crece sin límite con cada IP distinta y las IP falsas lo agravan. El contador además es por instancia, así que en serverless o con varias réplicas el tope real es mucho mayor que 10 por minuto. No hay tope global ni diario de gasto."
+      },
+      {
+        "archivo": "src/services/gemini.ts",
+        "linea": 98,
+        "severidad": "media",
+        "descripcion": "maxOutputTokens=2048 puede cortar el JSON de un plan válido de varios días, y el modelo cuenta sus tokens de razonamiento dentro de ese tope. Entonces el usuario recibe el 502 de forma sistemática. Las pruebas usan mocks y no cubren este caso."
+      },
+      {
+        "archivo": "src/services/gemini.ts",
+        "linea": 92,
+        "severidad": "baja",
+        "descripcion": "El timeout con Promise.race no cancela la llamada al modelo, porque no pasa AbortSignal. La petición sigue corriendo y se cobra aunque el usuario ya recibió el error."
+      },
+      {
+        "archivo": "src/app/api/ai-plan/route.ts",
+        "linea": 15,
+        "severidad": "baja",
+        "descripcion": "No se limita la longitud de destination ni de context antes de armar el prompt. Un cliente puede mandar entradas enormes y gastar tokens de entrada dentro del límite de peticiones."
+      },
+      {
+        "archivo": "README.md",
+        "linea": 98,
+        "severidad": "media",
+        "descripcion": "`git revert --no-edit HEAD` solo deshace el último commit, que puede no ser el que rompió la versión. Falla con commits de merge y no redespliega nada. Como instrucción de reversión es incompleta y puede engañar."
+      },
+      {
+        "archivo": "src/app/api/health/route.ts",
+        "linea": 3,
+        "severidad": "baja",
+        "descripcion": "La ruta de salud devuelve siempre 200 sin comprobar nada, ni la API key del modelo ni la configuración. Puede reportar 'ok' con un despliegue que no genera planes."
+      }
+    ],
+    "sin_hallazgos": false
+  },
+  "medicion": {
+    "segundos_etapas_automaticas": 32.7,
+    "segundos_agente": 28.7,
+    "turnos": 2,
+    "costo_usd": 0.1512236,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 31972,
+      "cache_read_input_tokens": 70676,
+      "output_tokens": 1626,
+      "output_tokens_details": {
+        "thinking_tokens": 683
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 31972,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1571,
+          "cache_read_input_tokens": 43202,
+          "cache_creation_input_tokens": 16244,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 16244
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    }
+  }
+}

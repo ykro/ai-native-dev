@@ -1,0 +1,179 @@
+{
+  "duration_api_ms": 12622,
+  "stop_reason": "end_turn",
+  "session_id": "0478cf25-956b-4fcc-ac05-00b7d44cd953",
+  "total_cost_usd": 0.14339590000000002,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 28990,
+    "cache_read_input_tokens": 159599,
+    "output_tokens": 1146,
+    "output_tokens_details": {
+      "thinking_tokens": 186
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 28990,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 204,
+        "cache_read_input_tokens": 54115,
+        "cache_creation_input_tokens": 800,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 800
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1146,
+      "cacheReadInputTokens": 159599,
+      "cacheCreationInputTokens": 28990,
+      "webSearchRequests": 0,
+      "costUSD": 0.14339590000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 186,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 28990,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 7,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Agregué a Canelo en `app/src/data/pets.json` con el id 54, y el validador respondió:\n\n`OK: 54 mascotas válidas en pets.json`\n\nSu biografía es:\n\n> Soy un perrito glotón que se derrite por cualquier premio sabroso.\n> Busco una familia con niños que quieran jugar y compartir conmigo.\n> Seré el mejor amigo de los más pequeños y los llenaré de cariño.\n\nUsé solo los rasgos que me diste (glotón y cariñoso con los niños). No cambié ninguna otra entrada ni el código de la app.",
+  "ttft_ms": 2760,
+  "type": "result",
+  "duration_ms": 18404,
+  "uuid": "853310b4-213a-4526-a1b6-05e9e0f3996f",
+  "ttft_stream_ms": 2043,
+  "time_to_request_ms": 558,
+  "time_to_request_phases_ms": {
+    "other": 3,
+    "system_prompt": 97,
+    "resume_other": 0,
+    "process_user_input": 6,
+    "input_attachments": 61,
+    "input_hooks": 6,
+    "conversation_append": 0,
+    "transcript_persist": 352,
+    "tool_pool_refresh": 1,
+    "init_message": 2,
+    "init_frame_send": 2,
+    "engine_pickup": 1,
+    "loop_entry": 2,
+    "message_prep": 0,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "request_announcements": 3,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 3,
+    "message_normalization": 2,
+    "client_creation": 4,
+    "request_build": 10
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 229,
+  "time_to_request_cpu_ms": 315,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 43,
+    "cpu_ms": 20,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 5,
+    "ambient_wait_ms": 43,
+    "render_ms": 11,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 1,
+    "placement_ms": 0,
+    "render_ms": 2,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 0,
+    "after_ms": 1,
+    "other_ms": 0,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 4,
+    "plans_ms": 1,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 2,
+    "other_ms": 1,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 2043,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

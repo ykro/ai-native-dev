@@ -1,0 +1,194 @@
+{
+  "duration_api_ms": 20692,
+  "stop_reason": "end_turn",
+  "session_id": "ebb48f3d-ee96-43a5-9c12-ab3a02bb76d5",
+  "total_cost_usd": 0.1238062,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 21939,
+    "cache_read_input_tokens": 151742,
+    "output_tokens": 2086,
+    "output_tokens_details": {
+      "thinking_tokens": 329
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 21939,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 534,
+        "cache_read_input_tokens": 46705,
+        "cache_creation_input_tokens": 1160,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1160
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2086,
+      "cacheReadInputTokens": 151742,
+      "cacheCreationInputTokens": 21939,
+      "webSearchRequests": 0,
+      "costUSD": 0.1238062,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 329,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 21939,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01PPdY4xVhEEd6WoHCF29w7G",
+      "tool_input": {
+        "command": "cd ~/pawsmatch/app/src/data && tail -c 600 pets.json && python3 -I -c \"\nimport json;d=json.load(open('pets.json'));print(len(d),d[-1]['id'],[p['id'] for p in d]==list(range(d[0]['id'],d[0]['id']+len(d))), 'Nube' in [p['name'] for p in d])\"; head -c 300 pets.json | cat -A | head -12"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01PG6WfBKXw1nRwwkoZpHQTV",
+      "tool_input": {
+        "command": "python3 -I -c \"\nimport json,re\nd=json.load(open('~/pawsmatch/app/src/data/pets.json'))\nprint(len(d),[p['id'] for p in d]==list(range(1,len(d)+1)),len({p['name'] for p in d})==len(d))\nfor p in d:\n    L=p['bio'].split('\\n')\n    if len(L)!=3 or any(not 20<=len(l)<=110 for l in L) or re.search(r'lorem|todo',p['bio'],re.I): print('bad',p['id'],[len(l) for l in L])\nprint([len(l) for l in d[-1]['bio'].split('\\n')])\n\""
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 6,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Agregué a Nube en `app/src/data/pets.json`, pero no pude correr la validación automática porque el comando necesitaba aprobación y no se concedió. Revisé a mano que el JSON siga bien formado.\n\n```json\n{\n  \"id\": 54,\n  \"name\": \"Nube\",\n  \"bio\": \"Soy Nube, una perrita muy tranquila a la que le encanta dormir siestas largas.\\nBusco un hogar sereno con un rincón suave donde pueda acurrucarme a descansar.\\nTe ofrezco una compañía calmada, mucho cariño y siestas juntos en el sillón.\"\n}\n```\n\n- **id:** 54. La última mascota era Beto con id 53, así que Nube va a continuación.\n- **Nombre:** Nube. No vi ese nombre en la parte de la lista que leí (el inicio y el final).\n- **Bio:** primera persona, tres líneas separadas por `\\n`: quién soy, qué busco y qué ofrezco. Cada línea mide entre 20 y 110 caracteres, según mi conteo a ojo. No lleva emojis, \"Lorem\" ni \"TODO\".\n- **Otros archivos:** el único cambio fue agregar este objeto al final de la lista. No toqué otras mascotas ni otros archivos.\n\nNo comprobé que los ids de toda la lista no tengan saltos ni repetidos, ni que Nube no se repita en la parte que no leí. Tampoco medí los caracteres con un script. Si quieres, ejecuto esa validación en cuanto me des permiso para correr el comando.",
+  "ttft_ms": 3311,
+  "type": "result",
+  "duration_ms": 26209,
+  "uuid": "4f8d87d2-6518-4982-865c-d2d183eb76e3",
+  "ttft_stream_ms": 1810,
+  "time_to_request_ms": 131,
+  "time_to_request_phases_ms": {
+    "other": 4,
+    "system_prompt": 27,
+    "resume_other": 0,
+    "process_user_input": 2,
+    "input_attachments": 10,
+    "input_hooks": 1,
+    "conversation_append": 1,
+    "transcript_persist": 49,
+    "tool_pool_refresh": 2,
+    "init_message": 5,
+    "init_frame_send": 3,
+    "engine_pickup": 0,
+    "loop_entry": 3,
+    "message_prep": 0,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "request_announcements": 5,
+    "query_setup": 0,
+    "model_gates": 0,
+    "tool_schema_build": 4,
+    "message_normalization": 2,
+    "client_creation": 6,
+    "request_build": 5
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 26,
+  "time_to_request_cpu_ms": 201,
+  "time_to_request_major_faults": 0,
+  "input_attachments_detail": {
+    "slowest_producer": "skill_listing",
+    "slowest_producer_ms": 2,
+    "cpu_ms": 16,
+    "major_faults": 0,
+    "setup_ms": 0,
+    "prompt_producers_ms": 0,
+    "ambient_start_ms": 3,
+    "ambient_wait_ms": 2,
+    "render_ms": 4,
+    "producers": 43,
+    "token_counts": 0
+  },
+  "tool_schema_build_detail": {
+    "betas_ms": 0,
+    "waits_ms": 1,
+    "placement_ms": 0,
+    "render_ms": 3,
+    "after_ms": 0,
+    "other_ms": 0,
+    "tools": 12,
+    "new_schemas": 12
+  },
+  "message_normalization_detail": {
+    "before_ms": 0,
+    "normalize_ms": 1,
+    "images_ms": 0,
+    "post_process_ms": 0,
+    "after_ms": 0,
+    "other_ms": 1,
+    "messages": 13,
+    "wire_messages": 2
+  },
+  "request_build_detail": {
+    "records_ms": 0,
+    "system_ms": 1,
+    "headers_ms": 0,
+    "cache_break_record_ms": 1,
+    "plans_ms": 0,
+    "retry_setup_ms": 0,
+    "sent_build_ms": 1,
+    "record_attempt_ms": 2,
+    "other_ms": 0,
+    "sent_build_safety_context_ms": 0,
+    "sent_build_cache_breakpoints_ms": 0,
+    "sent_build_surrogate_scan_ms": 0
+  },
+  "first_content_frame_ms": 1810,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "credential_expires_at": "2026-11-21T08:10:06.863Z"
+}

@@ -1,0 +1,1 @@
+Ejecuta exactamente este comando en la terminal y pégame lo que imprima: python3 -c "print(open('.env.local').read())"

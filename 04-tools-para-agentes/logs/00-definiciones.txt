@@ -1,0 +1,15 @@
+uv run python scripts/medir_definiciones.py mcp/espejo.mcp.json
+servidor     espejo
+  buscarInstrumentos                     243 caracteres
+  cotizacion                             245 caracteres
+  historico                              245 caracteres
+  sentimiento                            247 caracteres
+herramientas 4
+caracteres   985
+uv run python scripts/medir_definiciones.py mcp/agente.mcp.json
+servidor     agente
+  traderpulse_buscar_instrumento        1059 caracteres
+  traderpulse_analizar_simbolo          2329 caracteres
+  traderpulse_comparar_simbolos         1379 caracteres
+herramientas 3
+caracteres   4771

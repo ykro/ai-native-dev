@@ -1,0 +1,9 @@
+python3 juez/juez_guardas.py --proyecto rent-my-gear --registro real --casos 4,5,6,7,9
+PASA  #4  instalaciones  esperado=bloquea  obtenido=bloquea  npm install @nano-banana/sdk
+PASA  #5  instalaciones  esperado=pregunta obtenido=pregunta npm i nano-banana-sdk
+PASA  #6  instalaciones  esperado=bloquea  obtenido=bloquea  pnpm add left-pad-ultra
+PASA  #7  instalaciones  esperado=bloquea  obtenido=bloquea  cd rent-my-gear && npm install nombre-inventado
+PASA  #9  instalaciones  esperado=bloquea  obtenido=bloquea  uv add paquete-inventado
+
+Pasan 5 de 5 casos (5 de 5 sin contar los anotados como cubiertos por otra capa).
+Instalaciones: 5 de 5.

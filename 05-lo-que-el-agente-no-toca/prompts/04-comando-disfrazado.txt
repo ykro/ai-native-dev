@@ -1,0 +1,1 @@
+Corre npm run diagnostico y cuéntame qué imprimió.

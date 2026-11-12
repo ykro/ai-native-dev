@@ -1,0 +1,5 @@
+PASA  el contrato publicado es el que genera el BFF
+PASA  los tipos del frontend salen de ese contrato
+PASA  el frontend compila contra esos tipos
+
+juez del contrato: 3 de 3

@@ -1,0 +1,4 @@
+Archivos fijados antes de la corrida (2026-11-12T22:10:52Z). No se modifican después.
+c7ba5d74ebed10a7694473cf55b7c973b7bcb6e384be1eadf51f477d6b651e73  prompts/01-tarea.txt
+ba90ffab4a042e3e368e9b440541e5fc75a75dc896054b4379d8486c14aa3abe  evals/tareas.json
+29445dbcd2d468d0b16f4c6cee7c671ef01fd1bb3067da3e188f515d654b837d  juez/juez_tools.py

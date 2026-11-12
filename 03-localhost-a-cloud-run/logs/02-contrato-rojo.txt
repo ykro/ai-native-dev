@@ -1,0 +1,19 @@
+$ sed -i "s/cambio_pct/variacion_pct/g" traderpulse/backend/traderpulse_api/{modelos,mercado}.py traderpulse/backend/tests/test_api.py
+$ make contrato
+cd traderpulse/backend && uv run -q python scripts/exportar_openapi.py
+contrato escrito en openapi.json: 6 rutas, 10 esquemas
+cd traderpulse/frontend && npm run -s tipos:api
+openapi-typescript 7.13.0
+../contrato/openapi.json → src/lib/api-schema.d.ts [56.9ms]
+$ (cd traderpulse/backend && uv run pytest -q)
+.......                                                                  [100%]
+7 passed in 0.06s
+$ python3 juez/juez_contrato.py
+PASA  el contrato publicado es el que genera el BFF
+PASA  los tipos del frontend salen de ese contrato
+FALLA  el frontend compila contra esos tipos
+       src/app/page.tsx(52,18): error TS2339: Property 'cambio_pct' does not exist on type '{ fecha: string; nombre: string; precio: number; simbolo: string; variacion_pct: number; volumen: number; }'.
+       src/app/page.tsx(63,21): error TS2339: Property 'cambio_pct' does not exist on type '{ fecha: string; nombre: string; precio: number; simbolo: string; variacion_pct: number; volumen: number; }'.
+       tests/contrato.test.ts(15,7): error TS2353: Object literal may only specify known properties, and 'cambio_pct' does not exist in type '{ fecha: string; nombre: string; precio: number; simbolo: string; variacion_pct: number; volumen: number; }'.
+
+juez del contrato: 2 de 3

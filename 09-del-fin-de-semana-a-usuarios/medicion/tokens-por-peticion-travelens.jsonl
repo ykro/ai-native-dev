@@ -1,0 +1,3 @@
+{"fecha": "2026-11-11", "proyecto": "travelens", "caso": "Antigua Guatemala", "modelo": "gemini-3.8-flash", "tokens_entrada": 188, "tokens_salida": 1560, "detalle": {"candidatos": 624, "razonamiento": 936}}
+{"fecha": "2026-11-11", "proyecto": "travelens", "caso": "Lisboa", "modelo": "gemini-3.8-flash", "tokens_entrada": 192, "tokens_salida": 1509, "detalle": {"candidatos": 645, "razonamiento": 864}}
+{"fecha": "2026-11-11", "proyecto": "travelens", "caso": "Kioto", "modelo": "gemini-3.8-flash", "tokens_entrada": 191, "tokens_salida": 1533, "detalle": {"candidatos": 686, "razonamiento": 847}}

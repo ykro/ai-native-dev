@@ -1,0 +1,108 @@
+{
+  "proyecto": "pawsmatch",
+  "automaticas": {
+    "juez_de_salida": {
+      "aprobadas": 5,
+      "aplicadas": 5,
+      "falladas": []
+    },
+    "archivos_tocados": [
+      ".gitignore",
+      "README.md",
+      "app/.gitignore",
+      "app/public/salud.json",
+      "app/src/hooks/usePetStack.ts",
+      "app/src/salida.test.ts",
+      "app/src/services/logger.ts",
+      "app/src/services/petProvider.ts",
+      "app/src/services/salud.ts",
+      "app/tsconfig.app.json"
+    ],
+    "archivos_prohibidos_tocados": [],
+    "aserciones_quitadas_o_debilitadas": 0,
+    "detalle_aserciones": [],
+    "dependencias_nuevas": [],
+    "dependencias_que_no_existen": [],
+    "diff": {
+      "resumen": "10 files changed, 104 insertions(+), 4 deletions(-)",
+      "archivos": 10,
+      "lineas_agregadas": 104,
+      "lineas_quitadas": 4
+    }
+  },
+  "agente_revisor": {
+    "hallazgos": [
+      {
+        "archivo": "app/public/salud.json",
+        "linea": 1,
+        "severidad": "media",
+        "descripcion": "La ruta de salud es un archivo estático que siempre dice \"ok\" y tiene la versión 0.0.0 escrita a mano. No comprueba nada real, como la Dog API o el último despliegue. `estadoSalud()` en salud.ts solo la usa la prueba, así que ni el JSON ni la función se mantienen sincronizados con la app."
+      },
+      {
+        "archivo": "README.md",
+        "linea": 93,
+        "severidad": "media",
+        "descripcion": "`git checkout bf52c66` deja el repositorio en HEAD desacoplado y no redespliega nada. No explica cómo volver a producción (por ejemplo `git revert` o promover un despliegue anterior). Un usuario que siga solo ese comando no queda con la versión anterior publicada."
+      },
+      {
+        "archivo": "app/src/services/petProvider.ts",
+        "linea": 47,
+        "severidad": "baja",
+        "descripcion": "El diff no cubre las fallas del modelo ni los topes de gasto que se pedían. `fetch` a la Dog API sigue sin timeout ni reintentos acotados y no se añadió ningún límite de uso. Esas brechas quedan abiertas sin que se avise."
+      },
+      {
+        "archivo": "app/src/services/logger.ts",
+        "linea": 9,
+        "severidad": "baja",
+        "descripcion": "`aTexto` convierte los objetos que no son Error con `String(valor)`, que da \"[object Object]\" y pierde el detalle del diagnóstico. El regex de teléfono también tacha cualquier secuencia de 8 o más dígitos (ids, marcas de tiempo), lo que puede ocultar datos útiles en los registros."
+      },
+      {
+        "archivo": "app/src/salida.test.ts",
+        "linea": 16,
+        "severidad": "baja",
+        "descripcion": "Varias pruebas son tautológicas. Leen los archivos de configuración y verifican el texto que el mismo cambio acaba de escribir (.gitignore, salud.json, README). La prueba de salud no ejercita ninguna ruta servida, así que dan poca confianza real de salida."
+      }
+    ],
+    "sin_hallazgos": false
+  },
+  "medicion": {
+    "segundos_etapas_automaticas": 20.9,
+    "segundos_agente": 28.2,
+    "turnos": 3,
+    "costo_usd": 0.1551152,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 32099,
+      "cache_read_input_tokens": 129672,
+      "output_tokens": 1374,
+      "output_tokens_details": {
+        "thinking_tokens": 458
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 32099,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 759,
+          "cache_read_input_tokens": 58750,
+          "cache_creation_input_tokens": 826,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 826
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    }
+  }
+}

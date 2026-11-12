@@ -1,0 +1,47 @@
+{
+  "log": "03-integrar.jsonl",
+  "segundos": 163.5,
+  "salida": 0,
+  "jueces": {
+    "juez/ai-plan.juez.test.ts": {
+      "aprobadas": 7,
+      "total": 7,
+      "ok": true
+    },
+    "juez/presupuesto.juez.test.ts": {
+      "aprobadas": 8,
+      "total": 8,
+      "ok": true
+    },
+    "juez/descarga.juez.test.ts": {
+      "aprobadas": 3,
+      "total": 3,
+      "ok": true
+    },
+    "juez/api.juez.test.ts": {
+      "aprobadas": 15,
+      "total": 15,
+      "ok": true
+    },
+    "juez/ui.juez.test.ts": {
+      "aprobadas": 5,
+      "total": 5,
+      "ok": true
+    }
+  },
+  "check": true,
+  "commits": [
+    "4b282f4 Fusiona tarea/ui",
+    "00e4a61 Tolera costUsd ausente (cuenta 0) para mantener ai-plan.juez en verde tras fusionar api",
+    "5fa4742 Fusiona tarea/api",
+    "29af3fb Fusiona tarea/descarga",
+    "9cd394e Fusiona tarea/presupuesto",
+    "e7acd6a tarea ui",
+    "6cd8593 Merge branch 'tarea/descarga' into base/ui",
+    "834f03e Merge branch 'tarea/api' into base/ui",
+    "0dc41cb tarea api",
+    "f2f97f9 Merge branch 'tarea/presupuesto' into base/api",
+    "0f7d562 tarea presupuesto",
+    "419c638 tarea descarga"
+  ]
+}

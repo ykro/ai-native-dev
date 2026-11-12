@@ -1,0 +1,10 @@
+.env
+.env.*
+**/.env
+**/.env.*
+node_modules
+.next
+tests
+coverage
+Dockerfile
+.dockerignore

@@ -1,0 +1,379 @@
+
+== APIs
+Operation "operations/acat.p2-{{PROJECT_NUMBER}}-96c5b229-3c2f-40cf-86d2-1b1436827784" finished successfully.
+
+== registro de imágenes
+Create request issued for: [traderpulse]
+Waiting for operation [projects/{{PROJECT_ID}}/locations/us-central1/operations/5f69a6b0-33fa-404a-bff0-7954c3910c21] to complete...
+...........done.
+Created repository [traderpulse].
+
+== secreto con un valor aleatorio (no se imprime)
+Created version [1] of the secret [traderpulse-token].
+
+== cuentas de servicio y permiso de lectura del secreto
+Created service account [traderpulse-api].
+Service account email: traderpulse-api@{{PROJECT_ID}}.iam.gserviceaccount.com
+Updated IAM policy for secret [traderpulse-token].
+Created service account [traderpulse-web].
+Service account email: traderpulse-web@{{PROJECT_ID}}.iam.gserviceaccount.com
+Updated IAM policy for secret [traderpulse-token].
+INICIO_DESPLIEGUE 1794417127
+
+== construir y subir las imágenes con Cloud Build
+Creating temporary archive of 2545 file(s) totalling 61.9 MiB before compression.
+Uploading tarball of [traderpulse/backend] to [gs://{{PROJECT_ID}}_cloudbuild/source/1794417128.231794-d477956bb2dd4d63a99ab8debe2dd255.tgz]
+Created [https://cloudbuild.googleapis.com/v1/projects/{{PROJECT_ID}}/locations/global/builds/b1df4d92-4a36-44de-9aa8-5524afca9bc7].
+Logs are available at [ https://console.cloud.google.com/cloud-build/builds/b1df4d92-4a36-44de-9aa8-5524afca9bc7?project={{PROJECT_NUMBER}} ].
+Waiting for build to complete. Polling interval: 1 second(s).
+----------------------------- REMOTE BUILD OUTPUT ------------------------------
+starting build "b1df4d92-4a36-44de-9aa8-5524afca9bc7" using release legacy
+
+FETCHSOURCE
+Fetching storage object: gs://{{PROJECT_ID}}_cloudbuild/source/1794417128.231794-d477956bb2dd4d63a99ab8debe2dd255.tgz#1794417164530175
+Copying gs://{{PROJECT_ID}}_cloudbuild/source/1794417128.231794-d477956bb2dd4d63a99ab8debe2dd255.tgz#1794417164530175...
+/ [0 files][    0.0 B/ 19.8 MiB]                                                -- [1 files][ 19.8 MiB/ 19.8 MiB]                                                
+Operation completed over 1 objects/19.8 MiB.
+BUILD
+Already have image (with digest): gcr.io/cloud-builders/gcb-internal
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  205.3kB
+Step 1/13 : FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS build
+python3.13-bookworm-slim: Pulling from astral-sh/uv
+4831516dd0cb: Pulling fs layer
+fbc0dcc63d77: Pulling fs layer
+2da24cd4b4cd: Pulling fs layer
+ec1a19ed825f: Pulling fs layer
+07bbad0c9f20: Pulling fs layer
+ec1a19ed825f: Verifying Checksum
+ec1a19ed825f: Download complete
+2da24cd4b4cd: Verifying Checksum
+2da24cd4b4cd: Download complete
+fbc0dcc63d77: Verifying Checksum
+fbc0dcc63d77: Download complete
+4831516dd0cb: Verifying Checksum
+4831516dd0cb: Download complete
+07bbad0c9f20: Verifying Checksum
+07bbad0c9f20: Download complete
+4831516dd0cb: Pull complete
+fbc0dcc63d77: Pull complete
+2da24cd4b4cd: Pull complete
+ec1a19ed825f: Pull complete
+07bbad0c9f20: Pull complete
+Digest: sha256:531f855bda2c73cd6ef67d56b733b357cea384185b3022bd09f05e002cd144ca
+Status: Downloaded newer image for ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+ ---> c4dcad67a4c6
+Step 2/13 : ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never
+ ---> Running in f0a97a9f4f14
+Removing intermediate container f0a97a9f4f14
+ ---> 468f943d3ed1
+Step 3/13 : WORKDIR /app
+ ---> Running in 7365ef801e8e
+Removing intermediate container 7365ef801e8e
+ ---> 99044c501ca0
+Step 4/13 : COPY pyproject.toml uv.lock ./
+ ---> 8c63c71ff38e
+Step 5/13 : RUN uv sync --frozen --no-dev --no-install-project
+ ---> Running in 124d4b900d9c
+[91mUsing CPython 3.13.11 interpreter at: /usr/local/bin/python3
+[0m[91mCreating virtual environment at: .venv
+[0m[91mDownloading google-genai (1.2MiB)
+[0m[91mDownloading pydantic-core (2.1MiB)
+[0m[91mDownloading cryptography (4.5MiB)
+[0m[91m Downloaded pydantic-core
+[0m[91m Downloaded cryptography
+[0m[91m Downloaded google-genai
+[0m[91mPrepared 33 packages in 697ms
+[0m[91mInstalled 33 packages[0m[91m in 132ms
+[0m[91mBytecode compiled 1539 files in 4.03s
+[0m[91m + annotated-doc==0.0.5[0m[91m
+ + annotated-types==0[0m[91m.8.[0m[91m0
+ + anyio==4.16.0
+ + certifi==2026.10.23
+ + cffi==2.1.1
+ + charset-normalizer==3.5.2
+ + click==8.5.0
+ + cryptography==50.0.2
+ + distro==1.9.0[0m[91m
+ + fastapi==0.162.0
+ + google-auth==2.62.0
+ + google-genai==2.34.0
+ + h11==0.16.0
+ + httpcore[0m[91m==1.0.9
+ + httpx==[0m[91m0.[0m[91m28.1
+ + idna==3.20
+ + opentelemetry-api==1.45.2
+ + pyasn1[0m[91m==0.6.5[0m[91m
+ + pyasn1-modules[0m[91m==0.4.2
+[0m[91m + pycparser==3.12
+ + pydantic==2.14.2
+ + pydantic-core==2.50.2
+ + pydantic-settings==2.16.2
+ + python-dotenv[0m[91m==1.2[0m[91m.4
+ + requests==2.34.2
+ + sniffio==1.3.1
+ + starlette==1.10.0
+ +[0m[91m tenacity==[0m[91m9.1.4
+ + typing-extensions==4.16.0
+ [0m[91m+ typing-inspection==0.4.4
+ + urllib3==2.8.0[0m[91m
+ + uvicorn==0.54.0
+ [0m[91m+ websockets==17.4
+[0mRemoving intermediate container 124d4b900d9c
+ ---> eecba87b171a
+Step 6/13 : COPY traderpulse_api ./traderpulse_api
+ ---> 22053c34ad77
+Step 7/13 : RUN uv sync --frozen --no-dev --no-editable
+ ---> Running in 0b35ae31ed6e
+[91m   Building traderpulse-api @ file:///app
+[0m[91m      Built traderpulse-api @ file:///app
+[0m[91mPrepared 1 package in 1.09s
+[0m[91mInstalled 1 package in 1ms
+[0m[91mBytecode compiled 1545 files in 217ms
+ + traderpulse-api==2027.1.0 (from file:///app)
+[0mRemoving intermediate container 0b35ae31ed6e
+ ---> fc5c3bddf0f9
+Step 8/13 : FROM python:3.13-slim-bookworm
+3.13-slim-bookworm: Pulling from library/python
+dd051e1b8c92: Pulling fs layer
+a2e654eaec5b: Pulling fs layer
+a3e87ca60ef5: Pulling fs layer
+f565bd0f3fa6: Pulling fs layer
+f565bd0f3fa6: Verifying Checksum
+f565bd0f3fa6: Download complete
+a2e654eaec5b: Verifying Checksum
+a2e654eaec5b: Download complete
+a3e87ca60ef5: Verifying Checksum
+a3e87ca60ef5: Download complete
+dd051e1b8c92: Verifying Checksum
+dd051e1b8c92: Download complete
+dd051e1b8c92: Pull complete
+a2e654eaec5b: Pull complete
+a3e87ca60ef5: Pull complete
+f565bd0f3fa6: Pull complete
+Digest: sha256:a5a7017efc5969e00ae2b91c8eb0631049a569652aa4ffc4501769049ae45c72
+Status: Downloaded newer image for python:3.13-slim-bookworm
+ ---> c7ea9065843c
+Step 9/13 : ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
+ ---> Running in 0de2a28e67b5
+Removing intermediate container 0de2a28e67b5
+ ---> 0dea29d3db0d
+Step 10/13 : WORKDIR /app
+ ---> Running in e99408528c2a
+Removing intermediate container e99408528c2a
+ ---> e784bfb0b738
+Step 11/13 : COPY --from=build /app/.venv /app/.venv
+ ---> c1b8bd3d91eb
+Step 12/13 : USER 10001
+ ---> Running in cfe001a5ada9
+Removing intermediate container cfe001a5ada9
+ ---> f6a2de887ad3
+Step 13/13 : CMD ["sh", "-c", "exec uvicorn traderpulse_api.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+ ---> Running in ebd1b2bc523f
+Removing intermediate container ebd1b2bc523f
+ ---> c7ab70e58860
+Successfully built c7ab70e58860
+Successfully tagged us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/api:v1
+PUSH
+Pushing us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/api:v1
+The push refers to repository [us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/api]
+c9e86e911fe4: Preparing
+c04da63aa58a: Preparing
+8c7f8256728e: Preparing
+00d998d1ba03: Preparing
+2fd6871b68f3: Preparing
+1d7b9dd8778e: Preparing
+c04da63aa58a: Pushed
+8c7f8256728e: Pushed
+2fd6871b68f3: Pushed
+00d998d1ba03: Pushed
+1d7b9dd8778e: Pushed
+c9e86e911fe4: Pushed
+v1: digest: sha256:4cd8c112f9092377839036fc2b241cf9443b80e148aeaaca1f14317dd96a56e4 size: 1578
+DONE
+--------------------------------------------------------------------------------
+ID                                    CREATE_TIME                DURATION  SOURCE                                                                                               IMAGES                                                               STATUS
+b1df4d92-4a36-44de-9aa8-5524afca9bc7  2026-11-11T17:12:45+00:00  48S       gs://{{PROJECT_ID}}_cloudbuild/source/1794417128.231794-d477956bb2dd4d63a99ab8debe2dd255.tgz  us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/api:v1  SUCCESS
+Creating temporary archive of 15 file(s) totalling 104.3 KiB before compression.
+Some files were not included in the source upload.
+
+Check the gcloud log [~/.config/gcloud/logs/2026.11.11/12.13.40.574314.log] to see which files and the contents of the
+default gcloudignore file used (see `$ gcloud topic gcloudignore` to learn
+more).
+
+Uploading tarball of [traderpulse/frontend] to [gs://{{PROJECT_ID}}_cloudbuild/source/1794417220.740762-0c51a05aa2be4d4a936e7dee6989c645.tgz]
+Created [https://cloudbuild.googleapis.com/v1/projects/{{PROJECT_ID}}/locations/global/builds/aac0d715-255d-4c46-96ee-c5e63683fd38].
+Logs are available at [ https://console.cloud.google.com/cloud-build/builds/aac0d715-255d-4c46-96ee-c5e63683fd38?project={{PROJECT_NUMBER}} ].
+Waiting for build to complete. Polling interval: 1 second(s).
+----------------------------- REMOTE BUILD OUTPUT ------------------------------
+starting build "aac0d715-255d-4c46-96ee-c5e63683fd38" using release legacy
+
+FETCHSOURCE
+Fetching storage object: gs://{{PROJECT_ID}}_cloudbuild/source/1794417220.740762-0c51a05aa2be4d4a936e7dee6989c645.tgz#1794417222239529
+Copying gs://{{PROJECT_ID}}_cloudbuild/source/1794417220.740762-0c51a05aa2be4d4a936e7dee6989c645.tgz#1794417222239529...
+/ [0 files][    0.0 B/ 23.8 KiB]                                                / [1 files][ 23.8 KiB/ 23.8 KiB]                                                
+Operation completed over 1 objects/23.8 KiB.
+BUILD
+Already have image (with digest): gcr.io/cloud-builders/gcb-internal
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  118.3kB
+Step 1/13 : FROM node:24-slim AS build
+24-slim: Pulling from library/node
+dd051e1b8c92: Pulling fs layer
+67dd44e03538: Pulling fs layer
+0485e61ce465: Pulling fs layer
+ed61b9f2bb56: Pulling fs layer
+f3db01672604: Pulling fs layer
+67dd44e03538: Verifying Checksum
+67dd44e03538: Download complete
+f3db01672604: Verifying Checksum
+f3db01672604: Download complete
+ed61b9f2bb56: Verifying Checksum
+ed61b9f2bb56: Download complete
+dd051e1b8c92: Verifying Checksum
+dd051e1b8c92: Download complete
+0485e61ce465: Verifying Checksum
+0485e61ce465: Download complete
+dd051e1b8c92: Pull complete
+67dd44e03538: Pull complete
+0485e61ce465: Pull complete
+ed61b9f2bb56: Pull complete
+f3db01672604: Pull complete
+Digest: sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9
+Status: Downloaded newer image for node:24-slim
+ ---> 280af3207172
+Step 2/13 : WORKDIR /app
+ ---> Running in f46cdce665dd
+Removing intermediate container f46cdce665dd
+ ---> 46b5d4064c56
+Step 3/13 : COPY package.json package-lock.json ./
+ ---> 8cd43e068b8c
+Step 4/13 : RUN npm ci
+ ---> Running in c8f205ab730d
+
+added 93 packages, and audited 94 packages in 15s
+
+23 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+[91mnpm notice
+npm notice New major version of npm available! 11.19.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice
+[0mRemoving intermediate container c8f205ab730d
+ ---> a083dcbcb650
+Step 5/13 : COPY . .
+ ---> aea47b3701c7
+Step 6/13 : RUN npm run build
+ ---> Running in 21c90667a10c
+
+> traderpulse-web@2027.1.0 build
+> next build
+
+▲ Next.js 16.4.4 (Turbopack)
+✓ Running next.config.ts took 64ms
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 8.1s
+  Running TypeScript ...
+  Finished TypeScript in 4.8s ...
+  Collecting page data using 1 worker ...
+  Generating static pages using 1 worker (0/3) ...
+✓ Generating static pages using 1 worker (3/3) in 163ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+└ ○ /_not-found
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+Removing intermediate container 21c90667a10c
+ ---> 8f7c8eaf7594
+Step 7/13 : FROM node:24-slim
+ ---> 280af3207172
+Step 8/13 : ENV NODE_ENV=production HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
+ ---> Running in 56fb62f930bd
+Removing intermediate container 56fb62f930bd
+ ---> a6549e6b0b8d
+Step 9/13 : WORKDIR /app
+ ---> Running in 5d55440577c1
+Removing intermediate container 5d55440577c1
+ ---> 4618c29ba949
+Step 10/13 : COPY --from=build /app/.next/standalone ./
+ ---> 6e9da4b83ecc
+Step 11/13 : COPY --from=build /app/.next/static ./.next/static
+ ---> 4775672007c0
+Step 12/13 : USER 10001
+ ---> Running in 228c58436245
+Removing intermediate container 228c58436245
+ ---> eb5ee1d359fe
+Step 13/13 : CMD ["node", "server.js"]
+ ---> Running in 5d2c04782505
+Removing intermediate container 5d2c04782505
+ ---> 6bc0c5861fd1
+Successfully built 6bc0c5861fd1
+Successfully tagged us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/web:v1
+PUSH
+Pushing us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/web:v1
+The push refers to repository [us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/web]
+12ad361a3703: Preparing
+35042c7dde71: Preparing
+32233a01889c: Preparing
+ed69dff2fef5: Preparing
+5629b0a98f65: Preparing
+726b606e916f: Preparing
+35ba73637985: Preparing
+1d7b9dd8778e: Preparing
+35ba73637985: Pushed
+32233a01889c: Pushed
+12ad361a3703: Pushed
+ed69dff2fef5: Pushed
+5629b0a98f65: Pushed
+35042c7dde71: Pushed
+1d7b9dd8778e: Pushed
+726b606e916f: Pushed
+v1: digest: sha256:e44f8dc7488075f2971bab8fefdc30ba43460ff36c5e40a1e4f954ad6f37121d size: 1996
+DONE
+--------------------------------------------------------------------------------
+ID                                    CREATE_TIME                DURATION  SOURCE                                                                                               IMAGES                                                               STATUS
+aac0d715-255d-4c46-96ee-c5e63683fd38  2026-11-11T17:13:42+00:00  1M18S     gs://{{PROJECT_ID}}_cloudbuild/source/1794417220.740762-0c51a05aa2be4d4a936e7dee6989c645.tgz  us-central1-docker.pkg.dev/{{PROJECT_ID}}/traderpulse/web:v1  SUCCESS
+
+== servicio del API
+Applying new configuration to Cloud Run service [traderpulse-api] in project [{{PROJECT_ID}}] region [us-central1]
+Deploying new service...
+Creating Revision................................................................................................................................................................................done
+Routing traffic.....done
+Done.
+New configuration has been applied to service [traderpulse-api].
+URL: {{URL_API}}
+Updated IAM policy for service [traderpulse-api].
+
+== servicio de la web con la dirección del API
+Applying new configuration to Cloud Run service [traderpulse-web] in project [{{PROJECT_ID}}] region [us-central1]
+Deploying new service...
+Creating Revision..............................................................................................done
+Routing traffic.....done
+Done.
+New configuration has been applied to service [traderpulse-web].
+URL: {{URL_WEB}}
+Updated IAM policy for service [traderpulse-web].
+
+== esperar a que ambos servicios respondan
+FIN_DESPLIEGUE 1794417359
+DURACION_DESPLIEGUE_S 232
+rc=0

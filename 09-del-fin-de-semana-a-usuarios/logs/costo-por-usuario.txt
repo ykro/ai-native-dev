@@ -1,0 +1,15 @@
+Tarifa de gemini-3.8-flash consultada el 2026-11-11: 0.75 USD entrada y 3.75 USD salida por millón de tokens (https://aistudio.google.com/docs/pricing)
+SUPUESTOS (no son mediciones): [3, 10] peticiones por persona al día, [100, 1000] personas, 30 días
+
+traderpulse: 3 peticiones medidas; entrada 125 tokens y salida 504 tokens en promedio; 0.001984 USD por petición
+   personas  pet./persona/día  USD al mes
+        100                 3       17.85
+        100                10       59.51
+       1000                 3      178.54
+       1000                10      595.12
+travelens: 3 peticiones medidas; entrada 190 tokens y salida 1534 tokens en promedio; 0.005895 USD por petición
+   personas  pet./persona/día  USD al mes
+        100                 3       53.06
+        100                10      176.86
+       1000                 3      530.57
+       1000                10     1768.58

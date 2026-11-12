@@ -1,0 +1,309 @@
+diff --git a/backend/README.md b/backend/README.md
+index edcf6b1..aafa2ef 100644
+--- a/backend/README.md
++++ b/backend/README.md
+@@ -66,4 +66,17 @@ The backend is designed to run serverless on Cloud Run.
+       --set-secrets="GEMINI_API_KEY=traderpulse-gemini-key:latest"
+     ```
+ 
++## Cómo volver atrás
++
++Si un despliegue nuevo falla, devuelve todo el tráfico a la revisión anterior de Cloud Run. Primero lista las revisiones y elige la que funcionaba; después mueve el tráfico (reemplaza `REVISION_ANTERIOR` por su nombre):
++
++```bash
++gcloud run revisions list --service traderpulse-api --region us-central1
++gcloud run services update-traffic traderpulse-api \
++  --region us-central1 \
++  --to-revisions=REVISION_ANTERIOR=100
++```
++
++Comprueba que volvió con `curl https://<URL-DEL-SERVICIO>/health`, que debe responder `{"status":"ok"}`.
++
+ For setup and running instructions, please see the **[Onboarding Guide](./ONBOARDING.md)**.
+diff --git a/backend/config.py b/backend/config.py
+index 1d28e7a..78a6c76 100644
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -11,6 +11,13 @@ class Settings(BaseSettings):
+     # CORS (comma separated list of origins)
+     CORS_ORIGINS: str = "http://localhost:3000"
+ 
++    # Model guards
++    MODEL_TIMEOUT_SECONDS: float = 15.0
++    MAX_OUTPUT_TOKENS: int = 256
++
++    # Max requests per client per minute
++    RATE_LIMIT_PER_MINUTE: int = 30
++
+     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+ 
+ @lru_cache
+diff --git a/backend/main.py b/backend/main.py
+index 5b56d94..9b94a4a 100644
+--- a/backend/main.py
++++ b/backend/main.py
+@@ -28,6 +28,10 @@ app.include_router(api.router)
+ def read_root():
+     return {"message": "TraderPulse API is running"}
+ 
++@app.get("/health")
++def health():
++    return {"status": "ok"}
++
+ if __name__ == "__main__":
+     import uvicorn
+     uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
+diff --git a/backend/routers/api.py b/backend/routers/api.py
+index 86c71c5..402b0a3 100644
+--- a/backend/routers/api.py
++++ b/backend/routers/api.py
+@@ -1,7 +1,34 @@
+-from fastapi import APIRouter, HTTPException
++import logging
++import time
++from collections import defaultdict, deque
++
++from fastapi import APIRouter, Depends, HTTPException, Request
++from ..config import get_settings
+ from ..services import market_service, ai_service
+ 
+-router = APIRouter(prefix="/api/v1")
++settings = get_settings()
++logger = logging.getLogger(__name__)
++
++_requests: dict[str, deque] = defaultdict(deque)
++
++
++def reset_rate_limit():
++    _requests.clear()
++
++
++def rate_limit(request: Request):
++    """Allows at most RATE_LIMIT_PER_MINUTE requests per client IP per minute."""
++    client_id = request.client.host if request.client else "unknown"
++    now = time.monotonic()
++    window = _requests[client_id]
++    while window and now - window[0] > 60:
++        window.popleft()
++    if len(window) >= settings.RATE_LIMIT_PER_MINUTE:
++        raise HTTPException(status_code=429, detail="Demasiadas peticiones. Intenta de nuevo en un minuto.")
++    window.append(now)
++
++
++router = APIRouter(prefix="/api/v1", dependencies=[Depends(rate_limit)])
+ 
+ @router.get("/stocks/{symbol}")
+ async def get_stock_data(symbol: str):
+@@ -12,13 +39,15 @@ async def get_stock_data(symbol: str):
+         realtime_data = await market_service.get_realtime_stock_data(symbol)
+         if not realtime_data:
+             raise HTTPException(status_code=404, detail="Symbol not found")
+-            
++
+         historical_data = await market_service.get_historical_data(symbol)
+-        
++
+         return {
+             "realtime": realtime_data,
+             "historical": historical_data
+         }
++    except HTTPException:
++        raise
+     except Exception as e:
+         raise HTTPException(status_code=500, detail=str(e))
+ 
+@@ -32,9 +61,16 @@ async def get_sentiment(symbol: str):
+         realtime_data = await market_service.get_realtime_stock_data(symbol)
+         if not realtime_data:
+             raise HTTPException(status_code=404, detail="Symbol not found")
+-            
++
+         analysis = await ai_service.analyze_sentiment(symbol, realtime_data)
+         return analysis
++    except HTTPException:
++        raise
++    except ai_service.AnalysisUnavailable:
++        raise HTTPException(
++            status_code=503,
++            detail="El análisis no está disponible en este momento. Intenta de nuevo más tarde.",
++        )
+     except Exception as e:
+         raise HTTPException(status_code=500, detail=str(e))
+ 
+diff --git a/backend/services/ai_service.py b/backend/services/ai_service.py
+index 1206bdb..68a7044 100644
+--- a/backend/services/ai_service.py
++++ b/backend/services/ai_service.py
+@@ -1,10 +1,19 @@
+ from google import genai
+ from google.genai import types
+ from ..config import get_settings
++import asyncio
+ import json
++import logging
+ 
++logger = logging.getLogger(__name__)
+ settings = get_settings()
+ 
++VALID_SENTIMENTS = {"Bullish", "Bearish", "Neutral"}
++
++
++class AnalysisUnavailable(Exception):
++    """The model timed out or returned an unusable answer."""
++
+ client = genai.Client(api_key=settings.GEMINI_API_KEY)
+ 
+ async def analyze_sentiment(symbol: str, market_data: dict):
+@@ -25,20 +34,27 @@ async def analyze_sentiment(symbol: str, market_data: dict):
+     """
+     
+     try:
+-        response = client.models.generate_content(
+-            model="gemini-2.0-flash", # Using Flash as requested (2.0 is current flash version usually)
+-            contents=prompt,
+-            config=types.GenerateContentConfig(
+-                response_mime_type="application/json"
+-            )
++        response = await asyncio.wait_for(
++            asyncio.to_thread(
++                client.models.generate_content,
++                model="gemini-2.0-flash",
++                contents=prompt,
++                config=types.GenerateContentConfig(
++                    response_mime_type="application/json",
++                    max_output_tokens=settings.MAX_OUTPUT_TOKENS,
++                ),
++            ),
++            timeout=settings.MODEL_TIMEOUT_SECONDS,
+         )
+-        
+         result = json.loads(response.text)
++        if (
++            not isinstance(result, dict)
++            or result.get("sentiment") not in VALID_SENTIMENTS
++            or not isinstance(result.get("justification"), str)
++        ):
++            raise ValueError("unexpected model output shape")
+         return result
+     except Exception as e:
+-        # Mock response on failure
+-        print(f"Gemini API Error: {e}")
+-        return {
+-            "sentiment": "Neutral",
+-            "justification": "No se pudo obtener el análisis en este momento. Datos simulados."
+-        }
++        # Log only the error type: messages can echo user data or keys.
++        logger.error("Sentiment model call failed: %s", type(e).__name__)
++        raise AnalysisUnavailable() from None
+diff --git a/backend/tests/test_salida.py b/backend/tests/test_salida.py
+new file mode 100644
+index 0000000..4270313
+--- /dev/null
++++ b/backend/tests/test_salida.py
+@@ -0,0 +1,106 @@
++import logging
++import time
++
++import pytest
++from fastapi.testclient import TestClient
++
++from backend.main import app
++from backend.routers import api
++from backend.services import ai_service
++
++client = TestClient(app)
++
++REALTIME = {"symbol": "AAPL", "price": 150.0, "change": 1.0, "change_percent": 0.5, "volume": 1}
++
++
++class FakeResponse:
++    def __init__(self, text):
++        self.text = text
++
++
++@pytest.fixture(autouse=True)
++def datos_de_mercado(monkeypatch):
++    async def fake_realtime(symbol):
++        return REALTIME
++
++    monkeypatch.setattr(api.market_service, "get_realtime_stock_data", fake_realtime)
++    api.reset_rate_limit()
++    yield
++    api.reset_rate_limit()
++
++
++def _patch_model(monkeypatch, fn):
++    monkeypatch.setattr(ai_service.client.models, "generate_content", fn)
++
++
++def test_modelo_timeout_devuelve_error_controlado(monkeypatch):
++    def lento(**kwargs):
++        time.sleep(0.5)
++        return FakeResponse('{"sentiment": "Neutral", "justification": "x"}')
++
++    monkeypatch.setattr(ai_service.settings, "MODEL_TIMEOUT_SECONDS", 0.05)
++    _patch_model(monkeypatch, lento)
++    response = client.get("/api/v1/sentiment/AAPL")
++    assert response.status_code == 503
++    assert "análisis" in response.json()["detail"]
++
++
++def test_modelo_respuesta_rota_devuelve_error_controlado(monkeypatch):
++    _patch_model(monkeypatch, lambda **kwargs: FakeResponse("esto no es json"))
++    response = client.get("/api/v1/sentiment/AAPL")
++    assert response.status_code == 503
++    assert "análisis" in response.json()["detail"]
++
++
++def test_modelo_respuesta_rota_con_sentimiento_invalido(monkeypatch):
++    _patch_model(
++        monkeypatch,
++        lambda **kwargs: FakeResponse('{"sentiment": "Moon", "justification": "x"}'),
++    )
++    assert client.get("/api/v1/sentiment/AAPL").status_code == 503
++
++
++def test_tope_de_salida_del_modelo_se_envia(monkeypatch):
++    vistos = {}
++
++    def captura(**kwargs):
++        vistos.update(kwargs)
++        return FakeResponse('{"sentiment": "Bullish", "justification": "ok"}')
++
++    _patch_model(monkeypatch, captura)
++    response = client.get("/api/v1/sentiment/AAPL")
++    assert response.status_code == 200
++    assert vistos["config"].max_output_tokens == ai_service.settings.MAX_OUTPUT_TOKENS
++
++
++def test_limite_peticiones_por_cliente(monkeypatch):
++    monkeypatch.setattr(api.settings, "RATE_LIMIT_PER_MINUTE", 2)
++    codigos = [client.get("/api/v1/gamification/status").status_code for _ in range(3)]
++    assert codigos == [200, 200, 429]
++
++
++def test_salud_responde_ok():
++    response = client.get("/health")
++    assert response.status_code == 200
++    assert response.json() == {"status": "ok"}
++
++
++def test_registros_sin_datos_personales(monkeypatch, caplog):
++    def falla(**kwargs):
++        raise RuntimeError("usuario secreto@example.com clave sk-123")
++
++    _patch_model(monkeypatch, falla)
++    with caplog.at_level(logging.DEBUG):
++        response = client.get("/api/v1/sentiment/AAPL")
++    assert response.status_code == 503
++    assert "secreto@example.com" not in caplog.text
++    assert "sk-123" not in caplog.text
++    assert "secreto@example.com" not in response.text
++
++
++def test_simbolo_inexistente_sigue_siendo_404(monkeypatch):
++    async def nada(symbol):
++        return None
++
++    monkeypatch.setattr(api.market_service, "get_realtime_stock_data", nada)
++    assert client.get("/api/v1/sentiment/ZZZZ").status_code == 404

@@ -1,0 +1,129 @@
+{
+  "tareas": [
+    "presupuesto",
+    "descarga",
+    "api",
+    "ui"
+  ],
+  "solapes_declarados": [],
+  "fuera_de_lo_asignado": {
+    "presupuesto": [],
+    "descarga": [],
+    "api": [],
+    "ui": []
+  },
+  "por_pares": [
+    {
+      "ramas": [
+        "tarea/presupuesto",
+        "tarea/descarga"
+      ],
+      "limpia": true,
+      "archivos_en_conflicto": [],
+      "bloques": 0,
+      "rama_que_choco": null
+    },
+    {
+      "ramas": [
+        "tarea/presupuesto",
+        "tarea/api"
+      ],
+      "limpia": true,
+      "archivos_en_conflicto": [],
+      "bloques": 0,
+      "rama_que_choco": null
+    },
+    {
+      "ramas": [
+        "tarea/presupuesto",
+        "tarea/ui"
+      ],
+      "limpia": true,
+      "archivos_en_conflicto": [],
+      "bloques": 0,
+      "rama_que_choco": null
+    },
+    {
+      "ramas": [
+        "tarea/descarga",
+        "tarea/api"
+      ],
+      "limpia": true,
+      "archivos_en_conflicto": [],
+      "bloques": 0,
+      "rama_que_choco": null
+    },
+    {
+      "ramas": [
+        "tarea/descarga",
+        "tarea/ui"
+      ],
+      "limpia": true,
+      "archivos_en_conflicto": [],
+      "bloques": 0,
+      "rama_que_choco": null
+    },
+    {
+      "ramas": [
+        "tarea/api",
+        "tarea/ui"
+      ],
+      "limpia": true,
+      "archivos_en_conflicto": [],
+      "bloques": 0,
+      "rama_que_choco": null
+    }
+  ],
+  "secuencia": {
+    "ramas": [
+      "tarea/presupuesto",
+      "tarea/descarga",
+      "tarea/api",
+      "tarea/ui"
+    ],
+    "limpia": true,
+    "archivos_en_conflicto": [],
+    "bloques": 0,
+    "rama_que_choco": null
+  },
+  "jueces_en_su_rama": {
+    "juez/presupuesto.juez.test.ts": true,
+    "juez/descarga.juez.test.ts": true,
+    "juez/api.juez.test.ts": true,
+    "juez/ui.juez.test.ts": true,
+    "juez/ai-plan.juez.test.ts": true
+  },
+  "jueces_juntos": {
+    "juez/ai-plan.juez.test.ts": {
+      "aprobadas": 5,
+      "total": 7,
+      "ok": false
+    },
+    "juez/presupuesto.juez.test.ts": {
+      "aprobadas": 8,
+      "total": 8,
+      "ok": true
+    },
+    "juez/descarga.juez.test.ts": {
+      "aprobadas": 3,
+      "total": 3,
+      "ok": true
+    },
+    "juez/api.juez.test.ts": {
+      "aprobadas": 15,
+      "total": 15,
+      "ok": true
+    },
+    "juez/ui.juez.test.ts": {
+      "aprobadas": 5,
+      "total": 5,
+      "ok": true
+    },
+    "check": {
+      "ok": true
+    }
+  },
+  "regresiones": [
+    "juez/ai-plan.juez.test.ts"
+  ]
+}
