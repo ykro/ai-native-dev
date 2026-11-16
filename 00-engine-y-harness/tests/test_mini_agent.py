@@ -75,6 +75,13 @@ def test_run_bash_blocks_destructive_commands() -> None:
     assert res["codigo"] == "COMANDO_BLOQUEADO"
 
 
+def test_run_bash_timeout_returns_actionable_dict() -> None:
+    res = run_bash("sleep 2", timeout_sec=1)
+    assert res["ok"] is False
+    assert res["codigo"] == "TIEMPO_AGOTADO"
+    assert "accion_sugerida" in res
+
+
 def test_agent_loop_recovers_from_ambiguous_edit_and_passes_pytest(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     # El loop corre sobre una copia: así correr pytest dentro del repo nunca toca sandbox_app/ real.
     shutil.copytree(ROOT_DIR / "sandbox_app", tmp_path / "sandbox_app", ignore=shutil.ignore_patterns("__pycache__"))

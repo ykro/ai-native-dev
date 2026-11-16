@@ -14,8 +14,12 @@ def read_file(path, max_lines=200):
 
 
 def run_bash(command, timeout_sec=15):
-    r = subprocess.run(command, shell=True, capture_output=True, text=True,
-                       timeout=timeout_sec, check=False)
+    try:
+        r = subprocess.run(command, shell=True, capture_output=True, text=True,
+                           timeout=timeout_sec, check=False)
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "codigo": "TIEMPO_AGOTADO",
+                "accion_sugerida": "Corre un comando más corto o sube timeout_sec"}
     return {"ok": r.returncode == 0, "exit_code": r.returncode,
             "stdout": r.stdout[-2000:], "stderr": r.stderr[-2000:]}
 

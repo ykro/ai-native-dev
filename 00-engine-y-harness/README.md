@@ -20,7 +20,7 @@ La carpeta `practica/` tiene los fragmentos que se escriben en el video de prác
 | `practica/editar.py` | `edit_file` con reemplazo exacto: se niega si el texto aparece cero o más de una vez |
 | `practica/editar_roto.py` | El error a propósito: pedir un cambio sobre un texto que aparece dos veces (`BLOQUE_AMBIGUO`) |
 | `practica/agente.py` | El loop: pedir el siguiente paso al engine, ejecutar la tool y repetir; imprime cuánto crece cada turno |
-| `practica/agente_gemini.py` | El mismo loop con Gemini en Vertex AI como engine (necesita `gcloud auth application-default login` y `GOOGLE_CLOUD_PROJECT`) |
+| `practica/agente_gemini.py` | El mismo loop con Gemini en Vertex AI como engine (antes: los tres comandos de `gcloud` del bloque de abajo) |
 
 ```bash
 git clone https://github.com/ykro/ai-native-dev.git
@@ -32,7 +32,12 @@ python -m practica.herramientas
 python -m practica.editar_roto     # BLOQUE_AMBIGUO
 python -m practica.editar          # con contexto: un solo reemplazo
 python -m practica.agente
-python -m practica.agente_gemini   # opcional, llama a Gemini
+
+# Opcional, llama a Gemini en Vertex AI (la forma de usar Gemini desde un proyecto de Google Cloud)
+gcloud auth application-default login
+gcloud services enable aiplatform.googleapis.com
+export GOOGLE_CLOUD_PROJECT=tu-proyecto
+python -m practica.agente_gemini
 make all
 ```
 
@@ -70,7 +75,7 @@ cd 00-engine-y-harness
 # 1. Práctica A: probar las 4 primitivas y sus contratos de error como datos
 python3 src/mini_agent.py --demo-primitives
 
-# 2. Práctica A: ejecutar el loop determinista de 4 turnos (lectura -> BLOQUE_AMBIGUO -> edición -> pytest)
+# 2. Práctica A: ejecutar el loop determinista de 5 turnos (lectura -> BLOQUE_AMBIGUO -> edición -> pytest)
 python3 src/mini_agent.py --demo-loop
 
 # 3. Práctica A (opcional con credenciales ADC): correr el loop contra Gemini en Vertex AI
@@ -82,7 +87,7 @@ python3 src/http_trace_inspector.py
 # 5. Práctica B: comparar las trazas reales de Codex y AGI CLI (agy) sobre PawsMatch
 python3 src/harness_trace_compare.py
 
-# 6. Correr toda la suite de pruebas (17 tests)
+# 6. Correr toda la suite de pruebas (19 tests)
 python3 -m pytest -v tests/test_mini_agent.py tests/test_practica.py sandbox_app/test_catalog_filter.py
 ```
 

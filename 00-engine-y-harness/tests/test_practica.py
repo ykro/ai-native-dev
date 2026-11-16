@@ -23,6 +23,12 @@ def test_herramientas_devuelven_diccionarios(monkeypatch) -> None:
     assert roto["ok"] is False and roto["exit_code"] == 1 and "ZeroDivisionError" in roto["stderr"]
 
 
+def test_run_bash_pasado_de_tiempo_devuelve_datos() -> None:
+    r = herramientas.run_bash("sleep 2", timeout_sec=1)
+    assert r == {"ok": False, "codigo": "TIEMPO_AGOTADO",
+                 "accion_sugerida": "Corre un comando más corto o sube timeout_sec"}
+
+
 def test_editar_roto_se_niega(capsys) -> None:
     runpy.run_module("practica.editar_roto", run_name="__main__")
     out = capsys.readouterr().out

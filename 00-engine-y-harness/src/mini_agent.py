@@ -89,7 +89,14 @@ def run_bash(command: str, timeout_sec: int = 15) -> dict[str, Any]:
             "accion_sugerida": "Ejecuta únicamente comandos de inspección, compilación o pruebas dentro del workspace",
         }
     env = {**os.environ, "PYTHONPATH": str(WORKSPACE_ROOT), "PATH": f"{_VENV_BIN}:{os.environ.get('PATH', '')}"}
-    proc = subprocess.run(command, shell=True, cwd=WORKSPACE_ROOT, env=env, capture_output=True, text=True, timeout=timeout_sec, check=False)
+    try:
+        proc = subprocess.run(command, shell=True, cwd=WORKSPACE_ROOT, env=env, capture_output=True, text=True, timeout=timeout_sec, check=False)
+    except subprocess.TimeoutExpired:
+        return {
+            "ok": False,
+            "codigo": "TIEMPO_AGOTADO",
+            "accion_sugerida": "Corre un comando más corto o sube timeout_sec",
+        }
     return {
         "ok": proc.returncode == 0,
         "exit_code": proc.returncode,
@@ -101,7 +108,19 @@ def run_bash(command: str, timeout_sec: int = 15) -> dict[str, Any]:
 TOOLS_SCHEMAS: list[dict[str, Any]] = [
     {"name": "read_file", "description": "Lee un archivo acotando max_lines.", "input_schema": {"type": "object", "properties": {"path": {"type": "string"}, "max_lines": {"type": "integer", "default": 200}}, "required": ["path"]}},
     {"name": "write_file", "description": "Crea o sobrescribe un archivo en el workspace.", "input_schema": {"type": "object", "properties": {"path": {"type": "string"}, "content": {"type": "string"}, "dry_run": {"type": "boolean"}}, "required": ["path", "content"]}},
-    {"name": "edit_file", "description": "Reemplaza una coincidencia exacta y única de old_str por new_str.", "input_schema": {"type": "object", "properties": {"path": {"type": "string"}, "old_str": {"type": "string"}, "new_str": {"type": "string"}}, "required": ["path", "old_str", "new_str"]}},
+    {
+        "name": "edit_file",
+        "description": "Reemplaza una coincidencia exacta y única de old_str por new_str.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string"},
+                "old_str": {"type": "string"},
+                "new_str": {"type": "string"},
+            },
+            "required": ["path", "old_str", "new_str"],
+        },
+    },
     {"name": "run_bash", "description": "Ejecuta un comando en terminal con timeout de 15s.", "input_schema": {"type": "object", "properties": {"command": {"type": "string"}, "timeout_sec": {"type": "integer", "default": 15}}, "required": ["command"]}},
 ]
 
@@ -156,7 +175,7 @@ def run_agent_loop(
 
 
 def _scripted_demo_engine(messages: list[dict[str, Any]], _tools: list[dict[str, Any]]) -> dict[str, Any]:
-    """Engine determinista de 4 turnos para demostrar lectura, BLOQUE_AMBIGUO, edición con contexto y pytest."""
+    """Engine determinista de 5 turnos (4 con tools y la respuesta final) para demostrar lectura, BLOQUE_AMBIGUO, edición con contexto y pytest."""
     turns = sum(1 for m in messages if m["role"] == "assistant")
     if turns == 0:
         return {"tool_calls": [{"id": "call_01", "name": "read_file", "input": {"path": "sandbox_app/catalog_filter.py"}}, {"id": "call_02", "name": "read_file", "input": {"path": "sandbox_app/test_catalog_filter.py"}}]}
@@ -192,5 +211,5 @@ if __name__ == "__main__":
             print(f"=== AGENTIC LOOP · ENGINE REAL {model} SOBRE SANDBOX_APP ===")
             run_agent_loop(task, make_gemini_engine(model, trace_path=str(WORKSPACE_ROOT / "traces" / "gemini_run.jsonl")), max_turns=12)
         else:
-            print("=== DEMO AGENTIC LOOP · ENGINE GUIONIZADO DE 4 TURNOS SOBRE SANDBOX_APP ===")
+            print("=== DEMO AGENTIC LOOP · ENGINE GUIONIZADO DE 5 TURNOS SOBRE SANDBOX_APP ===")
             run_agent_loop(task, _scripted_demo_engine)

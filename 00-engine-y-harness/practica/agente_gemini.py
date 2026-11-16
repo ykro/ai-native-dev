@@ -1,5 +1,6 @@
 """El mismo loop con un engine real: Gemini en Vertex AI.
-Necesita gcloud auth application-default login y GOOGLE_CLOUD_PROJECT."""
+Antes: gcloud auth application-default login, habilitar Vertex AI y
+export GOOGLE_CLOUD_PROJECT=tu-proyecto (los comandos están en el README)."""
 from src.gemini_engine import make_gemini_engine
 from src.mini_agent import run_agent_loop
 
