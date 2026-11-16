@@ -13,6 +13,6 @@ compare-harnesses:
 	python3 src/harness_trace_compare.py
 
 test:
-	python3 -m pytest -v tests/test_mini_agent.py sandbox_app/test_catalog_filter.py
+	python3 -m pytest -v tests/test_mini_agent.py tests/test_practica.py sandbox_app/test_catalog_filter.py
 
 all: demo-primitives demo-loop trace compare-harnesses test

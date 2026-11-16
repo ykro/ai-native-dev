@@ -10,6 +10,32 @@ Este paquete cubre las dos prácticas del tema:
 - **Práctica A · Construir el Coding Agent mínimo**: implementación desde cero en Python puro (`src/mini_agent.py`) de las cuatro primitivas (`read_file`, `write_file`, `edit_file`, `run_bash`), sus contratos de error como datos accionables (`BLOQUE_AMBIGUO`, `BLOQUE_NO_COINCIDE`, `ARCHIVO_NO_ENCONTRADO`, `COMANDO_BLOQUEADO`), el adaptador para un *Engine* real en Vertex AI (`src/gemini_engine.py`) y el inspector de *payload* HTTP y *Prompt Caching* (`src/http_trace_inspector.py`).
 - **Práctica B · La misma tarea en Harnesses reales (`Codex` y `AGI CLI`)**: comparación directa sobre **PawsMatch** (`2026/week1/pawsmatch`, evitando mascotas repetidas en `usePetStack` con pruebas en Vitest) ejecutada en modo *headless* con **Codex** (`0.166.0-alpha.5.1`, modelo `gpt-6-luna`) y **AGI CLI** (`agy 1.4.12`, modelo `Gemini 4 Argon (Medium)`), auditando sus trazas reales de sesión (`src/harness_trace_compare.py`).
 
+## Práctica: escribe tu propio agente mínimo
+
+La carpeta `practica/` tiene los fragmentos que se escriben en el video de práctica, en este orden. Cada uno tiene su test en `tests/test_practica.py`.
+
+| Archivo | Qué hace |
+|---|---|
+| `practica/herramientas.py` | Dos tools (`read_file`, `run_bash`) que devuelven un diccionario, también cuando fallan |
+| `practica/editar.py` | `edit_file` con reemplazo exacto: se niega si el texto aparece cero o más de una vez |
+| `practica/editar_roto.py` | El error a propósito: pedir un cambio sobre un texto que aparece dos veces (`BLOQUE_AMBIGUO`) |
+| `practica/agente.py` | El loop: pedir el siguiente paso al engine, ejecutar la tool y repetir; imprime cuánto crece cada turno |
+| `practica/agente_gemini.py` | El mismo loop con Gemini en Vertex AI como engine (necesita `gcloud auth application-default login` y `GOOGLE_CLOUD_PROJECT`) |
+
+```bash
+git clone https://github.com/ykro/ai-native-dev.git
+cd ai-native-dev/00-engine-y-harness
+python3 -m venv .venv && source .venv/bin/activate
+pip install pytest google-genai
+
+python -m practica.herramientas
+python -m practica.editar_roto     # BLOQUE_AMBIGUO
+python -m practica.editar          # con contexto: un solo reemplazo
+python -m practica.agente
+python -m practica.agente_gemini   # opcional, llama a Gemini
+make all
+```
+
 ## Estructura del Paquete
 
 ```text
@@ -21,6 +47,7 @@ Este paquete cubre las dos prácticas del tema:
 │   ├── gemini_engine.py            # Adaptador de Engine real (Gemini en Vertex AI con google-genai)
 │   ├── http_trace_inspector.py     # Analizador de preámbulo oculto y Prompt Caching en 5 turnos
 │   └── harness_trace_compare.py    # Comparador de trazas reales entre Codex y AGI CLI (agy)
+├── practica/                       # Fragmentos del video de práctica (agente mínimo paso a paso)
 ├── sandbox_app/
 │   ├── catalog_filter.py           # Módulo de catálogo usado como objetivo en la Práctica A
 │   └── test_catalog_filter.py      # Suite pytest de verificación cerrada
@@ -31,7 +58,8 @@ Este paquete cubre las dos prácticas del tema:
 │   ├── codex_turns.jsonl           # Registros de turno, apply_patch y tokens de la sesión de Codex
 │   └── agy_events.jsonl            # Stream JSON real de AGI CLI (agy) sobre la misma tarea
 └── tests/
-    └── test_mini_agent.py          # Suite pytest determinista del Harness, adaptador y comparador
+    ├── test_mini_agent.py          # Suite pytest determinista del Harness, adaptador y comparador
+    └── test_practica.py            # Un test por cada fragmento de practica/
 ```
 
 ## Ejecución Rápida
@@ -54,8 +82,8 @@ python3 src/http_trace_inspector.py
 # 5. Práctica B: comparar las trazas reales de Codex y AGI CLI (agy) sobre PawsMatch
 python3 src/harness_trace_compare.py
 
-# 6. Correr toda la suite de pruebas (12 tests)
-python3 -m pytest -v tests/test_mini_agent.py sandbox_app/test_catalog_filter.py
+# 6. Correr toda la suite de pruebas (17 tests)
+python3 -m pytest -v tests/test_mini_agent.py tests/test_practica.py sandbox_app/test_catalog_filter.py
 ```
 
 **Nos vemos en el código.**
