@@ -11,7 +11,7 @@ La serie se organiza en **10 temas** (00 a 09) que crecen en espiral. El hilo so
 ## Videos y Lecturas en Substack
 
 - **Playlist en YouTube** · [AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
-- **Tema 00 en YouTube** · [Teoría · Modelo mental](https://youtu.be/L7MwTArreqw) · [Práctica · Harness desde cero](https://youtu.be/tFTEsbVYQvE)
+- **En YouTube** · [Teoría · Modelo mental](https://youtu.be/L7MwTArreqw) · [Práctica · Harness desde cero](https://youtu.be/tFTEsbVYQvE)
 - **Artículos relacionados en Substack (`ykro1.substack.com`)**
   - [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente)
   - [Primero la spec](https://ykro1.substack.com/p/primero-la-spec)

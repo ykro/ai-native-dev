@@ -1,6 +1,6 @@
-# 00 · Lo que pasa cuando le pides algo a un Coding Agent
+# Lo que pasa cuando le pides algo a un Coding Agent
 
-Código ejecutable del **Tema 00** de la serie **AI Native Dev** por **Adrián Catalán** (`@adriancs.tech`).
+Código ejecutable de **Lo que pasa cuando le pides algo a un Coding Agent**, de la serie **AI Native Dev**, por **Adrián Catalán** (`@adriancs.tech`).
 
 - **YouTube** · [Video de Teoría](https://youtu.be/L7MwTArreqw) · [Video de Práctica](https://youtu.be/tFTEsbVYQvE) · [Playlist AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
 - **Substack** · [Gemini 4 Argon trabajando en auditar, construir y deployear código](https://ykro1.substack.com/p/gemini-4-argon-trabajando-en-auditar) · [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente)
