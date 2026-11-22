@@ -41,7 +41,7 @@ La carpeta `practica/` tiene los fragmentos que se escriben en el video de prác
 
 Las sesiones grabadas están en `sesiones/` (una línea por turno: tokens y tools que pidió Gemini). Con `--grabada`, el harness repite esas respuestas del modelo sin cuenta de Google Cloud, pero las tools corren de verdad en tu máquina: el juez pasa de rojo a verde en tu copia de Rent My Gear. Sin `--grabada`, la sesión llama a Gemini y guarda su traza en `sesiones/tuya-<sesion>.jsonl`.
 
-Necesitas Python 3.11 o más nuevo y Node 20 o más nuevo.
+Necesitas Python 3.11 o más nuevo y Node 22 o más nuevo.
 
 ```bash
 git clone https://github.com/ykro/ai-native-dev.git
@@ -55,6 +55,7 @@ python -m practica.juez                     # el mismo rojo, en un diccionario c
 python -m practica.permisos
 
 # Opcional, llama a Gemini en Vertex AI (la forma de usar Gemini desde un proyecto de Google Cloud)
+gcloud auth login
 gcloud auth application-default login
 gcloud services enable aiplatform.googleapis.com --project tu-proyecto
 export GOOGLE_CLOUD_PROJECT=tu-proyecto

@@ -1,6 +1,6 @@
 """Reglas del harness: qué puede leer y escribir el agente en cada sesión."""
 PROTEGIDO = ("juez/", "vitest.juez.config.ts")
-TODAVIA_NO = PROTEGIDO + ("contrato.md",)  # en la sesión directa aún no existen
+TODAVIA_NO = PROTEGIDO + ("contrato.md",)  # la sesión directa todavía no los ve
 
 
 def permitido(ruta, accion, sesion):
