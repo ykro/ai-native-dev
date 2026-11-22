@@ -3,7 +3,7 @@
 Código ejecutable de **Lo que pasa cuando le pides algo a un Coding Agent**, de la serie **AI Native Dev**, por **Adrián Catalán** (`@adriancs.tech`).
 
 - **YouTube** · [Video de Teoría](https://youtu.be/L7MwTArreqw) · [Video de Práctica](https://youtu.be/lDB4Uw_k9X4) · [Playlist AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
-- **Substack** · [Gemini 4 Argon trabajando en auditar, construir y deployear código](https://ykro1.substack.com/p/gemini-4-argon-trabajando-en-auditar) · [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente)
+- **Substack** · [Cuando el agente no encuentra el texto que acaba de leer](https://ykro1.substack.com/p/cuando-el-agente-no-encuentra-el-texto) (amplía la práctica) · [Gemini 4 Argon trabajando en auditar, construir y deployear código](https://ykro1.substack.com/p/gemini-4-argon-trabajando-en-auditar) · [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente)
 
 Este paquete cubre las dos prácticas del tema:
 

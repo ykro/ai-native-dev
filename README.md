@@ -13,6 +13,8 @@ La serie se organiza en **10 temas** que crecen en espiral. El hilo son los cuat
 - **Playlist en YouTube** · [AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
 - **En YouTube** · [Teoría · Modelo mental](https://youtu.be/L7MwTArreqw) · [Práctica · Harness desde cero](https://youtu.be/lDB4Uw_k9X4) · [Práctica · Sesiones largas y un juez antes del código](https://youtu.be/FUN_xw-XOI8)
 - **Artículos relacionados en Substack (`ykro1.substack.com`)**
+  - [Cuando el agente no encuentra el texto que acaba de leer](https://ykro1.substack.com/p/cuando-el-agente-no-encuentra-el-texto)
+  - [El archivo que el agente leyó cuatro veces y nunca vio completo](https://ykro1.substack.com/p/el-archivo-que-el-agente-leyo-cuatro-veces)
   - [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente)
   - [Primero la spec](https://ykro1.substack.com/p/primero-la-spec)
   - [Gemini 4 Argon trabajando en auditar, construir y deployear código](https://ykro1.substack.com/p/gemini-4-argon-trabajando-en-auditar)

@@ -3,7 +3,7 @@
 Código ejecutable de **Sesiones largas, contexto limpio y un juez antes del código**, de la serie **AI Native Dev** por **Adrián Catalán** (`@adriancs.tech`). Proyecto hilo: **Rent My Gear** (Next.js 16, React 19, Tailwind 4, Zod 4, Vitest 5).
 
 - **YouTube** · [Video de Práctica](https://youtu.be/FUN_xw-XOI8) · [Playlist AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
-- **Lecturas relacionadas en Substack** · [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente) · [Primero la spec](https://ykro1.substack.com/p/primero-la-spec)
+- **Lecturas relacionadas en Substack** · [El archivo que el agente leyó cuatro veces y nunca vio completo](https://ykro1.substack.com/p/el-archivo-que-el-agente-leyo-cuatro-veces) (amplía la práctica) · [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente) · [Primero la spec](https://ykro1.substack.com/p/primero-la-spec)
 
 El demo agrega una cobertura por daños por categoría con **Judge-First**: primero se escribe un juez ejecutable que hoy falla, el agente mapea el repo sin editar, se acuerda un contrato corto y una sesión limpia itera contra el juez hasta entregar con evidencia.
 
