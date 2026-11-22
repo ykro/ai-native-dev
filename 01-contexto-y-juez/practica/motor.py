@@ -29,8 +29,15 @@ def grabado(ruta, sesion):
 
 
 def gemini(modelo="gemini-3.8-flash"):
+    import google.auth
     from google import genai
     from google.genai import types
+
+    try:
+        google.auth.default()
+    except google.auth.exceptions.DefaultCredentialsError:
+        raise SystemExit("No encontré credenciales de Google Cloud. Sin cuenta, agrega --grabada para repetir la "
+                         "corrida grabada. Con cuenta, corre primero gcloud auth application-default login (ver el README).")
 
     os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "true")
     os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")

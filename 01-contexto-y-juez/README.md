@@ -56,7 +56,7 @@ python -m practica.permisos
 
 # Opcional, llama a Gemini en Vertex AI (la forma de usar Gemini desde un proyecto de Google Cloud)
 gcloud auth application-default login
-gcloud services enable aiplatform.googleapis.com
+gcloud services enable aiplatform.googleapis.com --project tu-proyecto
 export GOOGLE_CLOUD_PROJECT=tu-proyecto
 python -m practica.sesion directo           # sin cuenta: agrega --grabada
 python -m practica.contexto sesiones/directo.jsonl   # mi corrida; la tuya queda en sesiones/tuya-directo.jsonl
@@ -70,6 +70,8 @@ make all
 ```
 
 ## Cómo correrlo
+
+Esta sección y la de `logs/` cuentan otra corrida, hecha con Claude Code antes de la práctica: 21 turnos en la sesión directa y el cambio guardado en `entrega/cobertura.patch`. La práctica del video usa Gemini y las sesiones de `sesiones/` (72 turnos en la directa).
 
 ```bash
 cd 01-contexto-y-juez

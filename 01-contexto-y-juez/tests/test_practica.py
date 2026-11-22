@@ -98,3 +98,10 @@ def test_contexto_dibuja_cada_turno(capsys) -> None:
     pasos = _repetir("directo")
     assert out[0].startswith(f"turno  1  {pasos[0]['input_tokens']:6}")
     assert out[-1] == f"{len(pasos)} turnos, {sum(p['input_tokens'] for p in pasos)} tokens de entrada en total"
+
+
+def test_sin_credenciales_sugiere_grabada(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("GOOGLE_APPLICATION_CREDENTIALS", str(tmp_path / "no-existe.json"))
+    with pytest.raises(SystemExit) as exc:
+        motor.gemini()
+    assert "--grabada" in str(exc.value)
