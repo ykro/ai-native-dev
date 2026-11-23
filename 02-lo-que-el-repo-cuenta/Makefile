@@ -1,7 +1,8 @@
-# Tema 02 · Lo que el repo le cuenta al agente (TraveLens)
+# Lo que el repo le cuenta al agente (TraveLens)
 APP := travelens
+PYTEST := $(shell [ -x .venv/bin/pytest ] && echo .venv/bin/pytest || echo "python3 -m pytest")
 
-.PHONY: instalar check juez evidencia resumen volver-al-inicio aplicar-entrega
+.PHONY: instalar check juez evidencia resumen volver-al-inicio aplicar-entrega test all
 
 instalar:
 	cd $(APP) && npm ci
@@ -32,3 +33,9 @@ volver-al-inicio:
 # Vuelve a aplicar el cambio entregado por el agente en la corrida después
 aplicar-entrega:
 	patch -d $(APP) -p1 < medicion/entrega.patch
+
+# Un test por fragmento de practica/ y cada «prueba esto»
+test:
+	$(PYTEST) -v tests/test_practica.py
+
+all: check juez test
