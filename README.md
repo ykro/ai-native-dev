@@ -11,13 +11,15 @@ La serie se organiza en **10 temas** que crecen en espiral. El hilo son los cuat
 ## Videos y Lecturas en Substack
 
 - **Playlist en YouTube** · [AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
-- **En YouTube** · [Teoría · Modelo mental](https://youtu.be/L7MwTArreqw) · [Práctica · Harness desde cero](https://youtu.be/lDB4Uw_k9X4) · [Práctica · Sesiones largas y un juez antes del código](https://youtu.be/FUN_xw-XOI8)
-- **Artículos relacionados en Substack (`ykro1.substack.com`)**
-  - [Cuando el agente no encuentra el texto que acaba de leer](https://ykro1.substack.com/p/cuando-el-agente-no-encuentra-el-texto)
-  - [El archivo que el agente leyó cuatro veces y nunca vio completo](https://ykro1.substack.com/p/el-archivo-que-el-agente-leyo-cuatro-veces)
-  - [Cómo delegarle un proyecto a un agente de IA sin perder el control](https://ykro1.substack.com/p/delegar-a-un-agente)
-  - [Primero la spec](https://ykro1.substack.com/p/primero-la-spec)
-  - [Gemini 4 Argon trabajando en auditar, construir y deployear código](https://ykro1.substack.com/p/gemini-4-argon-trabajando-en-auditar)
+- **Lo que pasa cuando le pides algo a un Coding Agent (`00-engine-y-harness`)**
+  - **YouTube** · [Video de Teoría](https://youtu.be/L7MwTArreqw) · [Video de Práctica](https://youtu.be/lDB4Uw_k9X4)
+  - **Substack** · [Un Coding Agent completo en 180 líneas](https://ykro1.substack.com/p/un-coding-agent-completo-en-180-lineas) · [Cuando el agente no encuentra el texto que acaba de leer](https://ykro1.substack.com/p/cuando-el-agente-no-encuentra-el-texto)
+- **Sesiones largas, contexto limpio y un juez antes del código (`01-contexto-y-juez`)**
+  - **YouTube** · [Video de Práctica](https://youtu.be/FUN_xw-XOI8)
+  - **Substack** · [Tu sesión pierde precisión antes de llenar la ventana](https://ykro1.substack.com/p/tu-sesion-pierde-precision-antes-de-llenar-la-ventana) · [El archivo que el agente leyó cuatro veces y nunca vio completo](https://ykro1.substack.com/p/el-archivo-que-el-agente-leyo-cuatro-veces)
+- **Lo que el repo le cuenta al agente (`02-lo-que-el-repo-cuenta`)**
+  - **YouTube** · [Video de Práctica](https://youtu.be/RVuZikv8u5Y)
+  - **Substack** · [El repositorio es la interfaz de tu Coding Agent](https://ykro1.substack.com/p/el-repositorio-es-la-interfaz-de-tu-coding-agent) · [Cuando AGENTS.md pide Zod y nadie lo importa](https://ykro1.substack.com/p/cuando-agents-md-pide-zod-y-nadie-lo-importa)
 
 ## Índice de temas
 
@@ -25,7 +27,7 @@ La serie se organiza en **10 temas** que crecen en espiral. El hilo son los cuat
 | :--- | :--- | :--- | :--- |
 | **Lo que pasa cuando le pides algo a un Coding Agent** | [`00-engine-y-harness/`](./00-engine-y-harness/) | PawsMatch | Disponible ([Teoría](https://youtu.be/L7MwTArreqw) · [Práctica](https://youtu.be/lDB4Uw_k9X4) · [`src/mini_agent.py`](./00-engine-y-harness/src/mini_agent.py)) |
 | **Sesiones largas, contexto limpio y un juez antes del código** | [`01-contexto-y-juez/`](./01-contexto-y-juez/) | Rent My Gear | Disponible ([Práctica](https://youtu.be/FUN_xw-XOI8) · [`rent-my-gear/juez/`](./01-contexto-y-juez/rent-my-gear/juez/), [`rent-my-gear/`](./01-contexto-y-juez/rent-my-gear/)) |
-| **Lo que el repo le cuenta al agente** | [`02-lo-que-el-repo-cuenta/`](./02-lo-que-el-repo-cuenta/) | TraveLens | Disponible ([`AGENTS.md`](./02-lo-que-el-repo-cuenta/AGENTS.md), [`travelens/`](./02-lo-que-el-repo-cuenta/travelens/), [`medicion/`](./02-lo-que-el-repo-cuenta/medicion/)) |
+| **Lo que el repo le cuenta al agente** | [`02-lo-que-el-repo-cuenta/`](./02-lo-que-el-repo-cuenta/) | TraveLens | Disponible ([Práctica](https://youtu.be/RVuZikv8u5Y) · [`AGENTS.md`](./02-lo-que-el-repo-cuenta/AGENTS.md), [`travelens/`](./02-lo-que-el-repo-cuenta/travelens/), [`medicion/`](./02-lo-que-el-repo-cuenta/medicion/)) |
 | **De localhost a Cloud Run con contratos tipados** | [`03-localhost-a-cloud-run/`](./03-localhost-a-cloud-run/) | TraderPulse | Próximamente |
 | **Tools hechas para agentes, MCP y computer use** | [`04-tools-para-agentes/`](./04-tools-para-agentes/) | TraderPulse | Próximamente |
 | **Lo que el agente no puede tocar** | [`05-lo-que-el-agente-no-toca/`](./05-lo-que-el-agente-no-toca/) | Rent My Gear | Próximamente |

@@ -2,6 +2,10 @@
 
 Código ejecutable de **Lo que el repo le cuenta al agente**, de la serie **AI Native Dev** por **Adrián Catalán** (`@adriancs.tech`). Proyecto hilo: **TraveLens** (Next.js 16, React 19, Tailwind 4, Zod 4, Vitest 5 y `@google/genai`).
 
+- **YouTube** · [Video de Práctica](https://youtu.be/RVuZikv8u5Y) · [Playlist AI Native Dev](https://www.youtube.com/playlist?list=PLADgjqdtJ3Bc)
+- **Substack** · [El repositorio es la interfaz de tu Coding Agent](https://ykro1.substack.com/p/el-repositorio-es-la-interfaz-de-tu-coding-agent) · [Cuando AGENTS.md pide Zod y nadie lo importa](https://ykro1.substack.com/p/cuando-agents-md-pide-zod-y-nadie-lo-importa) (amplía la práctica)
+- **Índice de la serie** · [AI Native Dev en GitHub](https://github.com/ykro/ai-native-dev)
+
 Este repositorio mide qué cambia en el trabajo de un *Coding Agent* en modo *headless* cuando el proyecto pasa de no tener comandos de prueba ni fronteras tipadas a exponer comandos únicos no interactivos (`npm run typecheck`, `npm run lint`, `npm run test:run`), esquemas con Zod (`src/services/schemas.ts`), datos semilla deterministas (`src/services/__fixtures__/itinerary.fixture.ts`) y un archivo `AGENTS.md` de una página (31 líneas, importado desde `CLAUDE.md` con `@AGENTS.md`). También muestra por qué `AGENTS.md` es contexto y cuándo necesitas una compuerta ejecutable.
 
 ## Qué hay aquí
